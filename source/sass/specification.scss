@@ -1,0 +1,215 @@
+@import 'vars';
+
+#machine-diagrams img {
+  width: 100%;
+  height: auto;
+}
+
+// For specification page
+#content{
+  #introduction { 
+    padding-top:20px;
+  }
+  #introduction-section {
+    margin-right:20px;
+  }
+  #toc {
+    padding-left:30px;
+    padding-bottom:10px;
+    margin-top:10px;
+    counter-reset: h2countertoc;
+    .table-of-contents {
+      ul {
+        padding: 0;
+        li {
+          margin: 0 0 0.25em 0;
+        }  
+      }
+      a {
+        text-decoration: none;
+      }
+      a:hover, a:active {
+        text-decoration: underline;
+      }
+      h1 {
+        counter-reset: h2countertoc;
+      }     
+      h2 {
+        margin:0px;
+        padding:0px;
+        padding-top:15px;
+        font-size:15px;
+        counter-reset: h3countertoc;
+      }
+      h3 {
+        margin:0px;
+        padding-left:15px;
+        font-size:14px;
+        counter-reset: h4countertoc;
+      }   
+      h4 {
+        margin:0px;
+        padding-left:30px;
+        font-weight:normal;
+        font-size:14px;
+        counter-reset: h5countertoc;
+      }   
+      h2:before {
+        content: counter(h2countertoc) ". ";
+        counter-increment: h2countertoc;
+        counter-reset: h3countertoc;
+        color: $dark-colour;
+      }
+      h3:before {
+        content: counter(h2countertoc) "." counter(h3countertoc) ". ";
+        counter-increment: h3countertoc;
+        color: $dark-colour;
+      }
+      h4:before {
+        content: counter(h2countertoc) "." counter(h3countertoc) "." counter(h4countertoc) " ";
+        counter-increment: h4countertoc;
+        color: $dark-colour;
+      }
+      h5:before {
+        content: counter(h2countertoc) "." counter(h3countertoc) "." counter(h4countertoc) "." counter(h5countertoc) " ";
+        counter-increment: h5countertoc;
+        color: $dark-colour;
+      }
+    }
+  }
+}
+
+.toc-content1 {
+  counter-reset: h2counter;
+  h2 {
+    counter-reset: h3counter;
+  }
+  h3 {
+    counter-reset: h4counter;
+  }
+
+  h2:before {
+    content: counter(h2counter) ". ";
+    counter-increment: h2counter;
+    counter-reset: h3counter;
+    color: $dark-colour;
+  }
+  h3:before {
+    content: counter(h2counter) "." counter(h3counter) ". ";
+    counter-increment: h3counter;
+    color: $dark-colour;
+  }
+  h4:before {
+    content: counter(h2counter) "." counter(h3counter) "." counter(h4counter) " ";
+    counter-increment: h4counter;
+    color: $dark-colour;
+  }
+  .back-to-top {
+    padding-top:5px;
+    text-align: right;
+    float:right;
+    font-weight:normal;
+    font-size:14px;
+  }
+  .new-data {
+    font-weight: bold;
+  }       
+}
+.toc-content2 {
+  // Starting from 1 (instead of zero) because of previous toc-content
+  counter-reset: h2counter 1;
+  h2 {
+    counter-reset: h3counter;
+  }
+  h3 {
+    counter-reset: h4counter;
+  }
+
+  h2:before {
+    content: counter(h2counter) ". ";
+    counter-increment: h2counter;
+    counter-reset: h3counter;
+    color: $dark-colour;
+  }
+  h3:before {
+    content: counter(h2counter) "." counter(h3counter) ". ";
+    counter-increment: h3counter;
+    color: $dark-colour;
+  }
+  h4:before {
+    content: counter(h2counter) "." counter(h3counter) "." counter(h4counter) " ";
+    counter-increment: h4counter;
+    color: $dark-colour;
+  }
+  .back-to-top {
+    padding-top:5px;
+    text-align: right;
+    float:right;
+    font-weight:normal;
+    font-size:14px;
+  }
+  .new-data {
+    font-weight: bold;
+  }   
+  .product-info {
+    border: 1px solid #666;
+    th, td {
+        padding: 8px;
+        text-align: left;
+    }
+    .grey {
+      background-color: #F0F0F0;
+    }
+  }  
+}
+.rules {
+  margin-left:-10px;
+  li {
+    margin-top:10px;
+    margin-left:-10px;
+  }
+  ol {
+    margin-left:-15px;
+  }
+  .subrules {
+    li {
+      margin-top:0px;
+    }
+    ol{
+      margin-left:-10px;
+    }
+  }
+}
+
+#link-icons-wrapper {
+  background-color: #fffef5;
+  margin-top: 5px;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid $light-colour;
+
+  #link-icons-header{
+    padding-bottom:10px;
+  }
+  .icon-explain {
+    width:50%;
+    float:left;
+    display:block;
+  }
+}
+#machine-diagrams-image {
+  cursor:pointer;
+}
+
+// Responsive elements
+@media only screen and (min-width: 768px) {
+  #machine-diagrams-image {
+    cursor:auto;
+  }
+  #content{
+    #introduction{
+      padding-top:5px !important;
+      padding-right:20px;
+    }
+  }
+}

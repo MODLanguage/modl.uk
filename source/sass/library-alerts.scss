@@ -1,0 +1,91 @@
+@import 'vars';
+
+// Mail chimp form
+.mc_form { 
+  margin-bottom:20px;
+  h2 {
+    margin-top:0px;
+  }
+  padding: 10px;
+  border: 1px solid $dark-colour;
+  background-color: $off-white-colour;
+  .indicates-required {
+    margin-top:10px;
+    float:right;
+  }
+  .asterisk {
+    color: red;
+  }
+  .input-group {
+    border-radius:10px;
+    border:1px solid #ccc;
+    margin-top:10px;
+    padding-top:10px;
+    padding-bottom:10px;
+    background-color:#fff;
+  }
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    li {
+      width: 120px;
+      display: inline-block;
+      input[type=checkbox] {
+        margin-left: 10px;
+        margin-right:5px;
+      }
+    }
+  }
+  .programming-language-header {
+    display:inline-block;
+    margin-top:10px;
+  }
+  .top-fields {
+    input[type=text], input[type=email] {
+      width:300px;
+    }
+    label {
+      margin-top:10px;
+      display: inline-block;
+      width:150px;
+    }
+  }
+  .button {
+    margin-top:10px;
+    padding:5px;
+    padding-top:9px;
+    height: 35px;
+    line-height:1;
+
+    margin-left:auto;
+    margin-right:0;
+    display:block;
+    border:1px solid $dark-colour;
+    margin-bottom:20px;
+    width:225px;
+    line-height:1;
+    padding:10px;
+    text-align:center;
+    background-color: $bright-colour;
+    color:#fff !important;
+    text-decoration: none !important;
+    font-weight:bold;
+    cursor:pointer;
+  }
+
+  .response {
+    margin-top:20px;
+    padding: 10px;
+  }
+
+  #mce-error-response {
+    border: 1px solid red;
+    background-color: $warning-colour;
+  }
+  #mce-success-response {
+    border: 1px solid #35931d;
+    background-color: #43db1c;
+    color:black;
+  }
+}

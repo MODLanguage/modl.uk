@@ -1,0 +1,37 @@
+<div id="header">
+  <div class="m nav sticky">
+    <img src="/images/logo.png" class="logo" alt="MODL logo">
+    <div class="name-and-menu">
+      <span class="name">MODL</span>
+      <div class="menu">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+      </div>
+      <div id="navholder" class="m" style="display:none;">
+        <%=erb(:navigation)%>
+      </div>
+    </div>
+  </div>
+  <div class="nm nav">
+    <div class="logo-header">
+      <a href="/">
+        <img src="/images/logo.png" class="logo" alt="MODL logo">
+      </a>
+    </div>
+    <div id="nm-navbar">
+      <div class="navigation-links">
+        <div id="left-placeholder" style="float:left;width:40px;height:30px;">
+          <img id="navbar-logo" src="/images/logo_reversed.png" class="logo" style="display:none;float:left;margin-left:5px;" alt="MODL logo">
+        </div>
+        <%=erb(:navigation)%>
+      </div>
+    </div>
+    <div id="nm-navbar-holding">
+      &nbsp;
+    </div>
+  </div>
+  <div class="print print-name">
+    MODL
+  </div>
+</div>

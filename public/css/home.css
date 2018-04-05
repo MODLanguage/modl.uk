@@ -1,0 +1,76 @@
+.comparison {
+  background-color: #FFFEFE;
+  border: 1px solid #F4DCDC;
+  font-family: 'Courier New';
+  padding: 4px;
+  font-size: 15px;
+  height: 100%; }
+  .comparison .count {
+    text-align: right; }
+  .comparison .header {
+    text-align: center;
+    font-weight: bold;
+    background-color: #F4DCDC;
+    padding: 0px; }
+  .comparison .shortest {
+    background-color: #c4ffc4; }
+
+.first {
+  margin: 4px 0px 0px 0px; }
+
+.second {
+  margin: 4px 0px 0px 0px; }
+
+.third {
+  margin: 4px 0px 0px 0px; }
+
+#desktop-header {
+  display: none; }
+
+#desktop-intro {
+  display: none; }
+
+@media only screen and (min-width: 600px) {
+  .first {
+    margin: 0px 4px 0px 0px; }
+
+  .second {
+    margin: 0px 2px 0px 2px; }
+
+  .third {
+    margin: 0px 0px 0px 4px; }
+
+  #mobile-intro {
+    display: none; }
+
+  #mobile-header {
+    display: none; }
+
+  #desktop-header {
+    display: block; }
+
+  #desktop-intro {
+    display: block; } }
+@media print {
+  .first {
+    margin: 0px 4px 0px 0px; }
+
+  .second {
+    margin: 0px 2px 0px 2px; }
+
+  .third {
+    margin: 0px 0px 0px 4px; }
+
+  #mobile-intro {
+    display: none; }
+
+  #mobile-header {
+    display: none; }
+
+  #desktop-header {
+    display: block; }
+
+  #desktop-intro {
+    display: block; } }
+
+/*# sourceMappingURL=home.css.map */

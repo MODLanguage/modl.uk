@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>MODL</title>
+    <meta name="description" content="Minimal Object Description Language (MODL)">
+    <meta name="author" content="Elliott Brown, NUM Technology Ltd">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="shortcut icon" href="/images/favico/favico.ico">
+    <%if @page_style then %><link rel="stylesheet" href="/css/<%=@page_name%>.css"><%end%>
+    <!--[if lt IE 9]>
+    <script src="/javascripts/html5shiv.js"></script>
+    <![endif]-->
+    <script src="/javascripts/jquery-3.2.1.min.js"></script>
+  </head>
+  <body>
+    <%= erb(:header) %>
+    <div id="content-holder">
+      <div id="content">
+        <%= yield %>
+      </div>
+    </div>
+    <%= erb(:footer) %>
+  </body>
+</html>
