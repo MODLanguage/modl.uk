@@ -31,7 +31,7 @@
     display: inline-block;
     margin-top: 10px; }
   .mc_form .top-fields input[type=text], .mc_form .top-fields input[type=email] {
-    width: 300px; }
+    width: 100%; }
   .mc_form .top-fields label {
     margin-top: 10px;
     display: inline-block;

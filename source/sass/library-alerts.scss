@@ -43,7 +43,7 @@
   }
   .top-fields {
     input[type=text], input[type=email] {
-      width:300px;
+      width:100%;
     }
     label {
       margin-top:10px;
@@ -84,8 +84,8 @@
     background-color: $warning-colour;
   }
   #mce-success-response {
-    border: 1px solid #35931d;
-    background-color: #43db1c;
+    border: 1px solid $success-dark;
+    background-color: $success-bright;
     color:black;
   }
 }

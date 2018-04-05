@@ -1,6 +1,8 @@
+@import 'vars';
+
 .comparison {
-  background-color: #FFFEFE;
-  border: 1px solid #F4DCDC;
+  background-color: $off-white-colour;
+  border: 1px solid $light-colour;
   font-family: 'Courier New';
   padding: 4px;
   font-size: 15px;
@@ -11,7 +13,7 @@
   .header {
     text-align: center;
     font-weight: bold;
-    background-color: #F4DCDC;
+    background-color: $light-colour;
     padding: 0px;
   }
   .shortest {

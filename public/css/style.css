@@ -505,8 +505,6 @@ body {
   font-family: monospace, monospace;
   font-size: 1em;
   white-space: pre; }
-  .code-shown span {
-    background-color: #ffffc7; }
 
 .json-code {
   display: none; }
