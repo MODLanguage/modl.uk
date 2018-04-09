@@ -512,6 +512,9 @@ body {
 .yaml-code {
   display: none; }
 
+.button-link {
+  text-decoration: none !important; }
+
 @media print {
   body {
     margin-top: 0px; }
