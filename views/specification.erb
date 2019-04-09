@@ -66,10 +66,10 @@
           The key words "must", "must not", "required", "shall", "shall not", "should", "should not", "recommended", "may", and "optional" are to be interpreted as described in <a href="https://www.ietf.org/rfc/rfc2119.txt" target="_blank">RFC2119</a> <%=link_icon("external")%>.
         </p>
       </div>
-      <div class="sectionh3" id="author">
-        <h3 id="author-title">Author</h3>
+      <div class="sectionh3" id="authors">
+        <h3 id="author-title">Authors</h3>
         <p>
-          MODL was created by <a href="http://www.github.com/elliottinvent" target="_blank">Elliott Brown</a> <%=link_icon("external")%> with the help of <a href="http://www.github.com/alexdalitz" target="_blank">Alex Dalitz</a> <%=link_icon("external")%>.
+          MODL was created by <a href="http://www.github.com/elliottinvent" target="_blank">Elliott Brown</a> <%=link_icon("external")%> and <a href="http://www.github.com/alexdalitz" target="_blank">Alex Dalitz</a> <%=link_icon("external")%> with the help of <a href="https://github.com/twalmsley" target="_blank">Tony Walmsley</a> <%=link_icon("external")%>.
         </p>
       </div>
     </div>
@@ -245,7 +245,7 @@
         %>
         <h5 id="valid-keys">Valid Keys</h5>
         <p>
-          Pair keys must be a string: they may contain numbers, may start with a number but must not be made up of solely numbers. Pairs cannot be given the key  <em>true</em>, <em>false</em> or <em>null</em>. All unreserved characters are valid in a key.
+          Pair keys must be a string: they may contain numbers, may start with a number but must not be made up of solely numbers. Keys must start with a letter or a number except in the case of <a href="#instructions">instructions</a>.
         </p>
       </div>
       <div class="sectionh4" id="conditionals-brief">
@@ -416,6 +416,39 @@
 
       'An example using object referencing surrounded in graves.')
       %>
+      <!--<p>
+        An object can not reference itself, for example this invalid:
+      </p>
+      <%=code_with_note('code-selfref','
+        test=foo
+        test=%test bar
+        <span class="syntax-highlighter">=> ERROR</span>',
+      'A self referential assignment example – invalid.')
+      %>-->
+    <div class="sectionh3" id="deep-object-referencing">
+      <h3 id="deep-object-referencing-title">Deep Object Referencing</h3>
+      <p>
+        It's possible to reference values within an object using the right chevron (<code>></code>), this is known as deep object referencing. Here's an array example:
+      </p>
+      <%=code_with_note('code-deep-object-referencing','
+        _test=[1;2;3]
+        second_value=%test>1',
+
+      'An example using deep object referencing on an array.')
+      %>
+      <p>
+        Here's a map:
+      </p>
+      <%=code_with_note('code-deep-object-referencing2','
+        _test=(one=1;two=2)
+        second_value=%test>two',
+
+      'An example using deep object referencing on an array.')
+      %>
+      <p>
+        There's no limit to the level of referencing.
+      </p>
+    </div>      
     <div class="sectionh3" id="object-index">
       <h3 id="object-index-title">Object Index</h3>
       <p>
@@ -769,6 +802,16 @@
         <p>
           A conditional return must be valid for the context that it's returned in. For example, a conditional used to assign a value to a key must have an <code>else</code> clause (represented by <code>/?</code>) to be valid. A conditional at the top level of a map (not assigned to a pair key) must return either a pair or nothing.
         </p>
+        <h5>Boolean conditional returns</h5>
+        <p>
+          For character efficiency, a conditional used to return a value can omit the return value and  return the boolean result of the conditional test itself. For example:
+        </p>
+        <%=code_with_note('code-conditional-boolean-return','
+          _country=uk
+          british={country.u=GB|UK?}',
+
+        'A conditional without a return value.')
+        %>
       </div>
     </div>
   </div>
@@ -807,54 +850,54 @@
       <p>
         An interpreter instruction is set using an asterisk-prefixed key, they never appear in the output object.
       </p>
-      <div class="sectionh4" id="import">
-        <h4 id="import-title">Import</h4>
+      <div class="sectionh4" id="load">
+        <h4 id="load-title">Load</h4>
         <p>
-          Other MODL files can be imported by assigning a MODL file URI to the <code>*import</code> or <code>*i</code> key. The value can be a local or remote file location with a <code>.modl</code> or <code>.txt</code> extension. The interpreter will add a <code>.modl</code> extension if one is not specified. 
+          Other MODL files can be loaded by assigning a MODL file URI to the <code>*load</code> or <code>*l</code> key. The value can be a local or remote file location with a <code>.modl</code> or <code>.txt</code> extension. The interpreter will add a <code>.modl</code> extension if one is not specified. 
         </p>
         <p>
-          Multiple files can be imported at the same point by providing the file URIs in an array, or at multiple different points in the file by using the instruction at multiple points. Imports can also be chained. This example shows one file being imported:
+          Multiple files can be loaded at the same point by providing the file URIs in an array, or at multiple different points in the file by using the instruction at multiple points. Loads can also be chained. This example shows one file being loaded:
         </p>
-        <%=code_with_note('code-import-example','
-          <span class="syntax-highlighter">*import = example-classes.modl</span>
+        <%=code_with_note('code-load-example','
+          <span class="syntax-highlighter">*load = example-classes.modl</span>
           example(
             value1 = one
             value2 = two
           )
 
           <span>## or, more character efficient:</span>
-          <span><span class="syntax-highlighter">*import=example-classes.modl</span>;example(value1=one;value2=two)</span>',
-          'An example file importing another MODL file called example-classes.modl.',nil,true,false)
+          <span><span class="syntax-highlighter">*l=example-classes.modl</span>;example(value1=one;value2=two)</span>',
+          'An example file loading another MODL file called example-classes.modl.',nil,true,false)
         %>
         <p>
-          In the following example, the <code>*IMPORT</code> / <code>*I</code> key is uppercase and therefore is <a href="#mutable-immutable-values">immutable</a> <%=link_icon("up")%> – indicating that only one import is allowed and the file being imported cannot include any further imports:
+          In the following example, the <code>*LOAD</code> / <code>*L</code> key is uppercase and therefore is <a href="#mutable-immutable-values">immutable</a> <%=link_icon("up")%> – indicating that only one load is allowed and the file being loaded cannot include any further loads:
         </p>
-        <%=code_with_note('code-import-example','
-          <span class="syntax-highlighter">*IMPORT = example-classes.modl</span>
+        <%=code_with_note('code-load-example','
+          <span class="syntax-highlighter">*LOAD = example-classes.modl</span>
           example(
             value1 = one
             value2 = two
           )
 
           <span>## or, more character efficient:</span>
-          <span><span class="syntax-highlighter">*I=example-classes.modl</span>;example(value1=one;value2=two)</span>',
-          'An example file importing another MODL file called example-classes.modl.',nil,true,false)
+          <span><span class="syntax-highlighter">*L=example-classes.modl</span>;example(value1=one;value2=two)</span>',
+          'An example file loading another MODL file called example-classes.modl.',nil,true,false)
         %>
         <p>
           It's also possible to use <a href="#object-referencing">object references</a> in URIs, like this:
         </p>
-        <%=code_with_note('code-import-example','
+        <%=code_with_note('code-load-example','
           <span class="syntax-highlighter">_country=gb
-          *IMPORT = example-classes-%country.modl</span>
+          *LOAD = example-classes-%country.modl</span>
           example(
             value1 = one
             value2 = two
           )',
-          'An example file importing another MODL file called example-classes-gb.modl.',nil,true,false)
+          'An example file loading another MODL file called example-classes-gb.modl.',nil,true,false)
         %>
         <h5>File caching</h5>
         <p>
-          It's recommended that interpreters cache imported files for one hour by default. To force an interpreter to fetch and parse the file each time the MODL is interpreted, add an exclamation mark (<code>!</code>) to the end of the URI.
+          It's recommended that interpreters cache loaded files for one hour by default. To force an interpreter to fetch and parse the file each time the MODL is interpreted, add an exclamation mark (<code>!</code>) to the end of the URI.
         </p>
       </div>
       <div class="sectionh4" id="class">
@@ -1020,17 +1063,17 @@
     <div class="sectionh3" id="class-definition-file">
     <h3 id="class-definition-file-title">Class Definition File</h3>
       <p>
-        To aid in character efficiency, it's recommended to define classes in an external file that you can import. If we move our class definitions over to a separate file called <code>classes.modl</code> and store it in the same local directory we can import it and describe multiple objects:
+        To aid in character efficiency, it's recommended to define classes in an external file that you can load. If we move our class definitions over to a separate file called <code>classes.modl</code> and store it in the same local directory we can load it and describe multiple objects:
       </p>
-      <%=code_with_note('code-class-definition-file-import','
-        <span class="syntax-highlighter">*IMPORT=classes.modl</span>
+      <%=code_with_note('code-class-definition-file-load','
+        <span class="syntax-highlighter">*LOAD=classes.modl</span>
         <span>## An employee:</span>
         e=Mr:John Smith:Sales Director:john.smith@example.com:441270987654
         <span>## A customer:</span>
         c=Mr:Joe Bloggs:joe.bloggs@example.com:441270123456
         <span>## Another customer:</span>
         c=Mrs:Jane Wilson:jane.wilson@example.com:441270321123',
-      'Importing a file.',nil,true,false)
+      'Loading a file.',nil,true,false)
       %>
         <p>
           Here's the output object:
@@ -1251,7 +1294,7 @@
         </ol>
       </li>
       <li>
-        The instruction with key <code>*import</code> or <code>*i</code> defines the URI of the MODL file to import, multiple files can be passed in an array.
+        The instruction with key <code>*load</code> or <code>*l</code> defines the URI of the MODL file to load, multiple files can be passed in an array.
         <ol type="a" class="subrules">
           <li>
             If a file does not have a <code>.modl</code> or <code>.txt</code> extension, <code>.modl</code> must be appended to the file name before attempting to load the file.
