@@ -105,6 +105,10 @@ body {
         border: 1px solid $light-colour;
         width: 100%;
         overflow: scroll;
+        span {
+          color: #000 !important;
+          background-color: $highlight-colour;          
+        }
       }
 
       div.copy-code {
@@ -121,6 +125,19 @@ body {
         }
       }
 
+      div.run-code {
+        float: right;
+        cursor: pointer;
+        position: relative;
+        width: 25px;
+        margin-bottom: -40px;
+        padding-top: 5px;
+        img {
+          width:20px;
+          height:20px;
+        }
+      }
+
       span.console {
         margin-top: 5px;
         background-color: $off-white-colour;
@@ -130,18 +147,6 @@ body {
       }
 
       // Define main body header tags
-      h2:target {
-        animation: highlight 3s ease;
-      }
-      h3:target {
-        animation: highlight 3s ease;
-      }     
-      h4:target {
-        animation: highlight 3s ease;
-      }
-      h5:target {
-        animation: highlight 3s ease;
-      }
       h1 {
         font-size: 210%;
         text-align: center;
@@ -169,6 +174,18 @@ body {
         to { color: $dark-colour; }
       }
 
+      .sectionh2:target h2:first-child {
+        animation: highlight 3s ease;
+      }
+
+      .sectionh3:target h3:first-child {
+        animation: highlight 3s ease;
+      }
+
+      .sectionh4:target h4:first-child {
+        animation: highlight 3s ease;
+      }
+      
       .content-title {
         text-align: center;
       }
@@ -193,35 +210,6 @@ body {
 
       .highlight-syntax {
         color: $syntax-highlight-colour;
-      }
-      .link-down {
-        width: 13px;
-        height: 13px;
-        margin-bottom:-2px;
-        margin-left:-2px;
-      }
-      .link-up {
-        width: 13px;
-        height: 13px;
-        margin-bottom:-2px;
-        margin-left:-2px;
-      }
-      .link-external {
-        width: 13px;
-        height: 13px;
-        margin-bottom:-2px;
-        margin-left:-2px;
-      }
-      .link-internal {
-        width: 13px;
-        height: 13px;
-        margin-bottom:-2px;
-        margin-left:-2px;
-      }
-
-      .new-window {
-        width: 13px;
-        height: 13px;
       }
       .note {
           color: $note-text-colour;
@@ -363,6 +351,10 @@ body {
     border-top: 1px solid $light-colour;
     padding: 10px 0px 10px 0px;
     text-align: center;
+    a {
+      text-decoration: underline;
+      color: #000;
+    }    
   }   
 }
 
@@ -416,6 +408,36 @@ body {
   }
 }
 
+.link-down {
+  width: 13px;
+  height: 13px;
+  margin-bottom:-2px;
+  margin-left:-2px;
+}
+.link-up {
+  width: 13px;
+  height: 13px;
+  margin-bottom:-2px;
+  margin-left:-2px;
+}
+.link-external {
+  width: 13px;
+  height: 13px;
+  margin-bottom:-2px;
+  margin-left:-2px;
+}
+.link-internal {
+  width: 13px;
+  height: 13px;
+  margin-bottom:-2px;
+  margin-left:-2px;
+}
+
+.new-window {
+  width: 13px;
+  height: 13px;
+}
+
 .nm{
   display: none;
 }
@@ -442,10 +464,6 @@ body {
       font-size:15px;
     }
   }
-}
-
-.copy-code{
-  display:none;
 }
 
 // Responsive elements
@@ -688,7 +706,7 @@ body {
   .print-header {
     font-weight:bold;
     font-size:20px;
-    padding-botton:5px;
+    padding-bottom:5px;
   }
   .language-choice {
     display:none;

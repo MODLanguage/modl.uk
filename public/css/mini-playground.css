@@ -1,0 +1,24 @@
+pre {
+  margin-top: 5px;
+  padding: 10px;
+  background-color: #eaeaea;
+  border: 1px solid #666;
+  overflow: scroll; }
+
+.error {
+  background-color: #ffe497;
+  color: #a00; }
+
+.success {
+  background-color: #bef5ad;
+  color: #000; }
+
+#status {
+  padding: 5px; }
+
+#modl {
+  font-family: monospace;
+  whitespace: pre;
+  overflow: auto; }
+
+/*# sourceMappingURL=mini-playground.css.map */

@@ -100,6 +100,9 @@ body {
         border: 1px solid #F4DCDC;
         width: 100%;
         overflow: scroll; }
+        body #content-holder #content div.console-no-note span {
+          color: #000 !important;
+          background-color: #FFFFB7; }
       body #content-holder #content div.copy-code {
         float: right;
         cursor: pointer;
@@ -111,20 +114,22 @@ body {
         body #content-holder #content div.copy-code img {
           width: 20px;
           height: 20px; }
+      body #content-holder #content div.run-code {
+        float: right;
+        cursor: pointer;
+        position: relative;
+        width: 25px;
+        margin-bottom: -40px;
+        padding-top: 5px; }
+        body #content-holder #content div.run-code img {
+          width: 20px;
+          height: 20px; }
       body #content-holder #content span.console {
         margin-top: 5px;
         background-color: #FFFEFE;
         padding: 5px;
         border: 1px solid #F4DCDC;
         line-height: 1.25; }
-      body #content-holder #content h2:target {
-        animation: highlight 3s ease; }
-      body #content-holder #content h3:target {
-        animation: highlight 3s ease; }
-      body #content-holder #content h4:target {
-        animation: highlight 3s ease; }
-      body #content-holder #content h5:target {
-        animation: highlight 3s ease; }
       body #content-holder #content h1 {
         font-size: 210%;
         text-align: center; }
@@ -144,6 +149,12 @@ body {
     color: #FD0606; }
   to {
     color: #b40000; } }
+      body #content-holder #content .sectionh2:target h2:first-child {
+        animation: highlight 3s ease; }
+      body #content-holder #content .sectionh3:target h3:first-child {
+        animation: highlight 3s ease; }
+      body #content-holder #content .sectionh4:target h4:first-child {
+        animation: highlight 3s ease; }
       body #content-holder #content .content-title {
         text-align: center; }
       body #content-holder #content .code-window {
@@ -161,29 +172,6 @@ body {
         background-color: #FFFFB7; }
       body #content-holder #content .highlight-syntax {
         color: #FD0606; }
-      body #content-holder #content .link-down {
-        width: 13px;
-        height: 13px;
-        margin-bottom: -2px;
-        margin-left: -2px; }
-      body #content-holder #content .link-up {
-        width: 13px;
-        height: 13px;
-        margin-bottom: -2px;
-        margin-left: -2px; }
-      body #content-holder #content .link-external {
-        width: 13px;
-        height: 13px;
-        margin-bottom: -2px;
-        margin-left: -2px; }
-      body #content-holder #content .link-internal {
-        width: 13px;
-        height: 13px;
-        margin-bottom: -2px;
-        margin-left: -2px; }
-      body #content-holder #content .new-window {
-        width: 13px;
-        height: 13px; }
       body #content-holder #content .note {
         color: #7C6161;
         font-style: italic;
@@ -295,6 +283,9 @@ body {
     border-top: 1px solid #F4DCDC;
     padding: 10px 0px 10px 0px;
     text-align: center; }
+    body #footer a {
+      text-decoration: underline;
+      color: #000; }
 
 #header {
   background-color: #FFF; }
@@ -339,6 +330,34 @@ body {
         background-color: #b40000;
         margin-top: 4px; }
 
+.link-down {
+  width: 13px;
+  height: 13px;
+  margin-bottom: -2px;
+  margin-left: -2px; }
+
+.link-up {
+  width: 13px;
+  height: 13px;
+  margin-bottom: -2px;
+  margin-left: -2px; }
+
+.link-external {
+  width: 13px;
+  height: 13px;
+  margin-bottom: -2px;
+  margin-left: -2px; }
+
+.link-internal {
+  width: 13px;
+  height: 13px;
+  margin-bottom: -2px;
+  margin-left: -2px; }
+
+.new-window {
+  width: 13px;
+  height: 13px; }
+
 .nm {
   display: none; }
 
@@ -359,9 +378,6 @@ body {
     text-align: center;
     font-weight: 500;
     font-size: 15px; }
-
-.copy-code {
-  display: none; }
 
 @media only screen and (min-width: 600px) {
   body {
@@ -571,7 +587,7 @@ body {
   .print-header {
     font-weight: bold;
     font-size: 20px;
-    padding-botton: 5px; }
+    padding-bottom: 5px; }
 
   .language-choice {
     display: none; }

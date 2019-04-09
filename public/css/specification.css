@@ -1,7 +1,3 @@
-#machine-diagrams img {
-  width: 100%;
-  height: auto; }
-
 #content #introduction {
   padding-top: 20px; }
 #content #introduction-section {
@@ -145,7 +141,9 @@
     display: block; }
 
 #machine-diagrams-image {
-  cursor: pointer; }
+  cursor: pointer;
+  width: 100%;
+  height: auto; }
 
 @media only screen and (min-width: 768px) {
   #machine-diagrams-image {

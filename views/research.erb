@@ -1,0 +1,443 @@
+<h1>Storing Objects in the DNS</h1>
+<p>
+  The DNS is the most efficient way to store information related to a domain name, the TXT resource record is often used to store free text. In 1993, experimental <a href="https://tools.ietf.org/html/rfc1464" target="_blank">RFC 1464</a> <%=link_icon("external")%> explored ways to store key/value pairs in the DNS. This method has since inspired ways to store security and authentication data in the DNS using <a href="https://en.wikipedia.org/wiki/Sender_Policy_Framework" target="_blank">SPF</a> <%=link_icon("external")%>, <a href="https://en.wikipedia.org/wiki/DKIM" target="_blank">DKIM</a> <%=link_icon("external")%> and <a href="https://en.wikipedia.org/wiki/DMARC" target="_blank">DMARC</a> <%=link_icon("external")%>, it can work well for storing basic information but it's unsuitable for storing more complicated objects.
+</p>
+<p>
+  In this document we will compare the effectiveness of data serialisation formats for storing objects in the DNS, we'll look at the two most popular data serialisation formats <a href="http://json.org" target="_blank">JSON</a> <%=link_icon("external")%> and <a href="http://yaml.org" target="_blank">YAML</a> <%=link_icon("external")%> and compare them with Minimal Object Description Language (<a href="/">MODL</a> <%=link_icon("internal")%>), a new data serialisation language designed specifically for DNS storage. 
+</p>
+<div class="sectionh2" id="example-object">
+  <h2 id="example-object">Example Object</h2>
+  <p>
+    To compare the three formats for storing a simple object, we'll use the example object from <a href="http://json.org/example" target="_blank">json.org</a> <%=link_icon("external")%>.
+  </p>
+  <%=compare_language("objects",
+    [
+      '
+      {
+        "glossary":{
+          "title":"example glossary",
+          "GlossDiv":{
+            "title":"S",
+            "GlossList":{
+              "GlossEntry":{
+                "ID":"SGML",
+                "SortAs":"SGML",
+                "GlossTerm":"Standard Generalized Markup Language",
+                "Acronym":"SGML",
+                "Abbrev":"ISO 8879:1986",
+                "GlossDef":{
+                  "para":"A meta-markup language, used to create markup languages such as DocBook.",
+                  "GlossSeeAlso":["GML","XML"]
+                },
+                "GlossSee":"markup"
+              }
+            }
+          }
+        }
+      }',
+      '
+      ---
+      glossary:
+        title: example glossary
+        GlossDiv:
+          title: S
+          GlossList:
+            GlossEntry:
+              ID: SGML
+              SortAs: SGML
+              GlossTerm: Standard Generalized Markup Language
+              Acronym: SGML
+              Abbrev: ISO 8879:1986
+              GlossDef:
+                para: A meta-markup language, used to create markup languages such as DocBook.
+                GlossSeeAlso:
+                - GML
+                - XML
+              GlossSee: markup',
+      '
+      glossary(
+        title=example glossary
+        GlossDiv(
+          title=S
+          GlossList(
+            GlossEntry(
+              ID=SGML
+              SortAs=SGML
+              GlossTerm=Standard Generalized Markup Language
+              Acronym=SGML
+              Abbrev=ISO 8879\:1986
+              GlossDef(
+                para=A meta-markup language, used to create markup languages such as DocBook.
+                GlossSeeAlso[GML;XML]
+              )
+              GlossSee=markup
+            )
+          )
+        )
+      )'
+    ],nil,true,false,"json")
+  %>  
+  <p>
+    Use the tabs to view how the different data serialisation languages handle this object. You'll see there's also a character count.
+  </p>
+</div>
+<div class="sectionh2" id="prepare-object">
+  <h2 id="prepare-object-title">Preparing the Object for DNS Storage</h2>
+  <p>
+    To prepare the object for storage in the DNS we must:
+  </p>
+  <ul>
+    <li>Escape illegal characters so that we can successfully store the object in DNS</li>
+    <li>Minify the object to ensure the record is as efficient as possible in storage and transport</li>
+  </ul>
+  <div class="sectionh3" id="escape-illegal-characters">
+    <h3 id="escape-illegal-characters-title">Escape Illegal Characters</h3>
+    <p>
+      Only ASCII characters are allowed in the DNS. Quotes (<code>"</code>) are used to encapsulate the TXT record contents so must be escaped.
+    </p>
+    <%=compare_language("escape-illegals",
+    [
+      '
+      {
+        \"glossary\":{
+          \"title\":\"example glossary\",
+          \"GlossDiv\":{
+            \"title\":\"S\",
+            \"GlossList\":{
+              \"GlossEntry\":{
+                \"ID\":\"SGML\",
+                \"SortAs\":\"SGML\",
+                \"GlossTerm\":\"Standard Generalized Markup Language\",
+                \"Acronym\":\"SGML\",
+                \"Abbrev\":\"ISO 8879:1986\",
+                \"GlossDef\":{
+                  \"para\":\"A meta-markup language, used to create markup languages such as DocBook.\",
+                  \"GlossSeeAlso\":[\"GML\",\"XML\"]
+                },
+                \"GlossSee\":\"markup\"
+              }
+            }
+          }
+        }
+      }',
+      '
+      ---
+      glossary:
+        title: example glossary
+        GlossDiv:
+          title: S
+          GlossList:
+            GlossEntry:
+              ID: SGML
+              SortAs: SGML
+              GlossTerm: Standard Generalized Markup Language
+              Acronym: SGML
+              Abbrev: ISO 8879:1986
+              GlossDef:
+                para: A meta-markup language, used to create markup languages such as DocBook.
+                GlossSeeAlso:
+                - GML
+                - XML
+              GlossSee: markup',
+      '
+      glossary(
+        title=example glossary
+        GlossDiv(
+          title=S
+          GlossList(
+            GlossEntry(
+              ID=SGML
+              SortAs=SGML
+              GlossTerm=Standard Generalized Markup Language
+              Acronym=SGML
+              Abbrev=ISO 8879\:1986
+              GlossDef(
+                para=A meta-markup language, used to create markup languages such as DocBook.
+                GlossSeeAlso[GML;XML]
+              )
+              GlossSee=markup
+            )
+          )
+        )
+      )'
+    ],nil,true,false,"json")
+  %>  
+    <p>
+      Only the JSON object includes quotes (<code>"</code>), escape characters are not counted towards the length of the TXT record in transport.
+    </p>
+  </div>
+  <div class="sectionh3" id="minify-object">
+    <h3 id="minify-object-title">Minify the Object</h3>
+    <p>
+      Once all illegal characters are removed, the next step is reduce the size of the object.
+    </p>
+    <h4>Reduce Repeating Data</h4>
+    <p>
+      One way to make an object more efficient is to reduce the repetition of data. JSON has no facility to do this but YAML can repeat nodes. MODL deals with repeating data with object referencing and the object index. For illustration, we've highlighted the parts that deal with repeating data in YAML and MODL:
+    </p> 
+    <%=compare_language("repeating-data",
+      [
+        '
+        {
+          "glossary":{
+            "title":"example glossary",
+            "GlossDiv":{
+              "title":"S",
+              "GlossList":{
+                "GlossEntry":{
+                  "ID":"SGML",
+                  "SortAs":"SGML",
+                  "GlossTerm":"Standard Generalized Markup Language",
+                  "Acronym":"SGML",
+                  "Abbrev":"ISO 8879:1986",
+                  "GlossDef":{
+                    "para":"A meta-markup language, used to create markup languages such as DocBook.",
+                    "GlossSeeAlso":["GML","XML"]
+                  },
+                  "GlossSee":"markup"
+                }
+              }
+            }
+          }
+        }',
+        '
+        ---
+        glossary:
+          title: example glossary
+          GlossDiv:
+            title: S
+            GlossList:
+              GlossEntry:
+                ID: <span>&s SGML</span>
+                SortAs: <span>*s</span>
+                GlossTerm: Standard Generalized Markup Language
+                Acronym: <span>*s</span>
+                Abbrev: ISO 8879:1986
+                GlossDef:
+                  para: A meta-markup language, used to create markup languages such as DocBook.
+                  GlossSeeAlso:
+                  - GML
+                  - XML
+                GlossSee: markup',
+        '
+        <span>?=SGML:language</span>
+        glossary(
+          title=example glossary
+          GlossDiv(
+            title=S
+            GlossList(
+              GlossEntry(
+                ID=<span>%0</span>
+                SortAs=<span>%0</span>
+                GlossTerm=Standard Generalized Markup <span>%1.i</span>
+                Acronym=<span>%0</span>
+                Abbrev=ISO 8879\:1986
+                GlossDef(
+                  para=A meta-markup <span>%1</span>, used to create markup <span>%1</span>s such as DocBook.
+                  GlossSeeAlso[GML;XML]
+                )
+                GlossSee=markup
+              )
+            )
+          )
+        )'
+      ],nil,true,false)
+    %>
+    <p>
+      In the MODL object above you will notice percent prefixed numbers <code>%0</code> and <code>%1</code>, these represent references to the object index. The object index is defined on the first line with the key <code>?</code>. You may also notice the reference <code>%1.i</code> this instructs the interpreter to run the method <code>i</code> on the second object in the index.
+    </p>
+    <p>
+      The character efficiency gains in this example are negligible but reducing repeating data can clearly help make larger objects more character efficient.
+    </p>
+    <h4>Minification</h4>
+    <p>
+      It's common practice to minify objects. There are two steps in minification – reducing keys and removing spaces. We've replaced the original keys with 1 or 2 character alternatives and removed all spacing from the JSON and MODL examples. YAML requires spacing for structure so it can't be fully minified:
+    </p>
+    <%
+    json_single_object = '{"g":{"t":"example glossary","d":{"t":"S","l":{"e":{"i":"SGML","s":"SGML","gt":"Standard Generalized Markup Language","a":"SGML","ab":"ISO 8879:1986","gd":{"p":"A meta-markup language, used to create markup languages such as DocBook.","sa":["GML","XML"]},"gs":"markup"}}}}}'
+    yaml_single_object = '
+      ---
+      g:
+        t: example glossary
+        d:
+          t: S
+          l:
+            e:
+              i: <span>&s SGML</span>
+              s: <span>*s</span>
+              gt: Standard Generalized Markup Language
+              a: <span>*s</span>
+              ab: ISO 8879:1986
+              gd:
+                p: A meta-markup language, used to create markup languages such as DocBook.
+                GlossSeeAlso:
+                - GML
+                - XML
+              gs: markup'
+    modl_single_object = '?=SGML:language;g(t=example glossary;d(t=S;l(e(i=%0;s=%0;gt=Standard Generalized Markup %1.i;a=%0;ab=ISO 8879\:1986;gd(p=A meta-markup %1, used to create markup %1s such as DocBook.;sa=[GML;XML]);gs=markup))))'
+    %>
+    <%=compare_language("objects-minified",
+      [ json_single_object, yaml_single_object, modl_single_object ],70,true,false)%> 
+    <p>
+      We've had to make significant sacrifices in readability to achieve these character savings. This makes our object difficult for developers to work with. MODL interpreters can automatically unpack this data, returning it to it's original developer friendly state using classes, to learn more read our <a href="/">introduction</a>. 
+    </p>
+  </div>  
+</div>
+<div class="sectionh2" id="store-object">
+  <h2 id="store-object-title">Storing the Object in DNS</h2>
+  <p>
+    We will now demonstrate how these objects can be retrieved from the DNS using a test zone.
+  </p>
+  <div class="sectionh3" id="store-json">
+    <h3 id="store-json-title">Using JSON</h3>
+    <p>
+      First, let's retrieve the JSON object stored in DNS:
+    </p>
+      <%=platform_choice("jsonquery",
+        [
+          [
+            'nslookup -type=TXT json.testobject.modl.uk',
+            'Retrieve the JSON object from the DNS using a Windows command.'
+          ],
+          [
+            'dig json.testobject.modl.uk TXT',
+            'Retrieve the JSON object from the DNS using a Unix command.'
+          ]
+        ]
+      )
+      %> 
+      <p>
+        This is how it's returned from a Unix dig command:
+      </p>
+      <%=code_with_note("note",'
+  ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 55540
+  ;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+  ;; OPT PSEUDOSECTION:
+  ; EDNS: version: 0, flags:; udp: 4096
+  ;; QUESTION SECTION:
+  ;json.testobject.modl.uk. IN  TXT
+
+  ;; ANSWER SECTION:
+  json.testobject.modl.uk. 300  IN  TXT "{\"g\":{\"t\":\"example glossary\",\"d\":{\"t\":\"S\",\"l\":{\"e\":{\"i\":\"SGML\",\"s\":\"SGML\",\"gt\":\"Standard Generalized Markup Language\",\"a\":\"SGML\",\"ab\":\"ISO 8879:1986\",\"gd\":{\"p\":\"A meta-markup language, used to create markup languages such as DocBook.\",\"sa\":[\"GML\",\"XML\"]}," "\"gs\":\"markup\"}}}}}"
+
+  ;; Query time: 5 msec
+  ;; SERVER: 208.67.222.222#53(208.67.222.222)
+  ;; WHEN: Mon Jan 15 19:29:08 GMT 2018
+  ;; MSG SIZE  rcvd: 339',"The JSON object retrieved from the DNS",false,true,false)%>
+    <p>
+      Notice that the total packet size is 339 bytes.
+    </p>
+  </div>
+  <div class="sectionh3" id="store-yaml">
+    <h3 id="store-yaml-title">Using YAML</h3>
+    <p>
+      Next, let's retrieve the YAML object stored in DNS:
+    </p>
+      <%=platform_choice("yamlquery",
+        [
+          [
+            'nslookup -type=TXT yaml.testobject.modl.uk',
+            'Retrieve the YAML object from the DNS using a Windows command.'
+          ],
+          [
+            'dig yaml.testobject.modl.uk TXT',
+            'Retrieve the YAML object from the DNS using a Unix command.'
+          ]
+        ]
+      )
+      %> 
+      <p>
+      With this DNS response we notice some inconsistencies with DNS implementations. AWS Route 53 treats new lines as a way to split records and offers no way to escape a newline in a DNS TXT record. YAML needs newlines and spaces for structure so they cannot be removed. In this test, we stored the object in AWS TXT resource record set in the correct order but the response is delivered in the wrong order:
+      </p>
+      <%=code_with_note("note",'
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 43593
+;; flags: qr rd ra; QUERY: 1, ANSWER: 18, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 4096
+;; QUESTION SECTION:
+;yaml.testobject.modl.uk. IN  TXT
+
+;; ANSWER SECTION:
+yaml.testobject.modl.uk. 300  IN  TXT "          - GML"
+yaml.testobject.modl.uk. 300  IN  TXT "          - XML"
+yaml.testobject.modl.uk. 300  IN  TXT "          GlossSeeAlso:"
+yaml.testobject.modl.uk. 300  IN  TXT "          para: A meta-markup language, used to create markup languages such as DocBook."
+yaml.testobject.modl.uk. 300  IN  TXT "        Abbrev: ISO 8879:1986"
+yaml.testobject.modl.uk. 300  IN  TXT "        Acronym: *s"
+yaml.testobject.modl.uk. 300  IN  TXT "        GlossDef:"
+yaml.testobject.modl.uk. 300  IN  TXT "        GlossSee: markup"
+yaml.testobject.modl.uk. 300  IN  TXT "        GlossTerm: Standard Generalized Markup Language"
+yaml.testobject.modl.uk. 300  IN  TXT "        ID: &s SGML"
+yaml.testobject.modl.uk. 300  IN  TXT "        SortAs: *s"
+yaml.testobject.modl.uk. 300  IN  TXT "      GlossEntry:"
+yaml.testobject.modl.uk. 300  IN  TXT "    GlossList:"
+yaml.testobject.modl.uk. 300  IN  TXT "    title: S"
+yaml.testobject.modl.uk. 300  IN  TXT "  GlossDiv:"
+yaml.testobject.modl.uk. 300  IN  TXT "  title: example glossary"
+yaml.testobject.modl.uk. 300  IN  TXT "---"
+yaml.testobject.modl.uk. 300  IN  TXT "glossary:"
+
+;; Query time: 145 msec
+;; SERVER: 208.67.222.222#53(208.67.222.222)
+;; WHEN: Mon Jan 15 19:34:01 GMT 2018
+;; MSG SIZE  rcvd: 699',"The YAML object retrieved from the DNS",false,true,false)%>
+    <p>
+      This object is invalid. Also notice that the total packet size is 699 bytes.
+    </p>
+  </div>  
+  <div class="sectionh3" id="store-modl">
+    <h3 id="store-modl-title">Using MODL</h3>
+    <p>
+      Finally, let's retrieve the MODL object stored in DNS:
+    </p>
+      <%=platform_choice("modlquery",
+        [
+          [
+            'nslookup -type=TXT modl.testobject.modl.uk',
+            'Retrieve the MODL object from the DNS using a Windows command.'
+          ],
+          [
+            'dig modl.testobject.modl.uk TXT',
+            'Retrieve the MODL object from the DNS using a Unix command.'
+          ]
+        ]
+      )
+      %> 
+      <p>
+      The MODL object does not require any escapes:
+      </p>
+      <%=code_with_note("note",'
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 59841
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 4096
+;; QUESTION SECTION:
+;modl.testobject.modl.uk. IN  TXT
+
+;; ANSWER SECTION:
+modl.testobject.modl.uk. 300  IN  TXT "?=SGML:language;g(t=example glossary;d(t=S;l(e(i=%0;s=%0;gt=Standard Generalized Markup %1.i;a=%0;ab=ISO 8879:1986;gd(p=A meta-markup %1, used to create markup %1s such as DocBook.;sa=[GML;XML]);gs=markup))))"
+
+;; Query time: 5 msec
+;; SERVER: 208.67.222.222#53(208.67.222.222)
+;; WHEN: Mon Jan 15 19:51:08 GMT 2018
+;; MSG SIZE  rcvd: 273',"The MODL object retrieved from the DNS",false,true,false)%>
+    <p>
+      The total packet size is 273 bytes.
+    </p>
+  </div>  
+</div> 
+<div class="sectionh2" id="conclusion">
+  <h2 id="conclusion">Conclusion</h2>
+  <p>
+    From the evidence above it's clear that YAML is unsuitable for storing objects in the DNS. Firstly, because it's inefficient – it requires spaces and newlines which make it almost twice the size of the MODL object – and secondly because newline characters create problems in DNS implementations.
+  </p>
+  <p>
+    It's certainly possible to store JSON objects in DNS TXT records but DNS implementations at registrars vary and it is sometimes not possible to escape characters with DNS providers. JSON's use of quotes make the language more verbose than MODL and also difficult to store in the DNS because of the amount of characters that need to be escaped.
+  </p>
+  <p>
+    MODL is able to serialise our simple test object in 20% less characters than JSON, these savings increase with more complex objects or when using the MODL class system. Additionally, with MODL's optional punycode encoding of Unicode characters, it's clearly the data serialisation language best suited to storing objects in the DNS. For more information about MODL and the features mentioned in this article see the <a href="/specification">specification</a> <%=link_icon("internal")%>.
+  </p>
+</div>

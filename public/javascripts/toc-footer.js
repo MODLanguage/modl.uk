@@ -54,7 +54,7 @@ $( '.toc-content h2' ).each(function() {
               el = $(this);
               title = el.text();
               id = el.attr( 'id' ).replace('-title','')
-              link = '#' + el.attr('id');
+              link = '#' + id;
 
               newLine +=
               '<h4>' +

@@ -85,7 +85,7 @@ def compare_formats(header,code_samples)
   print_comparison << "</div></div>" 
 end
 
-def compare_language(divname,code_array,div_height=nil)
+def compare_language(divname,code_array,div_height=nil,show_copy=nil,show_run=nil,selected_code="modl")
   most_newlines = 0
   for code in code_array
     if code!=nil
@@ -96,29 +96,29 @@ def compare_language(divname,code_array,div_height=nil)
     end
   end
 
-  if div_height != nil then
-    style_addition = " style='height:#{div_height}px;overflow:scroll;'"
-  else
-    style_addition = ""
-  end
-
   output = ""
   output_li = ""
-  code_name = ""
 
   code_array.each_with_index do |code,i|
+    code_name = ""
     if i == 0 then
       code_name = "json"
     elsif i == 1 then
       code_name = "yaml"
     elsif i == 2 then
       code_name = "modl"
-    end if
+    end
 
-    if i == 2 then
+    if code_name == selected_code then
       selected_addition = " selected"
+      if div_height != nil then
+        style_addition = " style='height:#{div_height}px;overflow:scroll;display:block'"
+      else
+        style_addition = " style='display:block'"
+      end
     else
       selected_addition = ""      
+      style_addition = " style='display:none'"
     end
 
     if code != nil then
@@ -126,6 +126,7 @@ def compare_language(divname,code_array,div_height=nil)
 
       code_stripped = code.gsub("<span>","") 
       code_stripped = code_stripped.gsub("</span>","") 
+      code_stripped = code_stripped.gsub('\"','"') 
 
       character_count = code_stripped.length.to_i
 
@@ -139,9 +140,9 @@ def compare_language(divname,code_array,div_height=nil)
       end
 
       output <<   '<div class="print print-header">' + code_name.upcase + '</div><div id="' + divname + '-' + code_name + '-code" class="code-shown ' + code_name + '-code"' + style_addition + '>' +
-                    code_with_note(divname+"-"+code_name+"-code",code+extra_newlines,nil,div_height) +
+                    code_with_note(divname+"-"+code_name+"-code",code+extra_newlines,nil,div_height,show_copy,show_run) +
                   '</div>'
-      output_li << '<li id="' + divname + '-' + code_name + '" class="' + code_name + selected_addition + '" data-which="' + code_name + '">' + code_name.upcase + '<span class="nm">&nbsp;(' + character_count.to_s + ' chars)</span></li>'
+      output_li << '<li id="' + divname + '-' + code_name + '" class="' + code_name + selected_addition + '"data-which="' + code_name + '">' + code_name.upcase + '<span class="nm">&nbsp;(' + character_count.to_s + ' chars)</span></li>'
       extra_newlines = newline_count - code.count("\n")
     end
   end
@@ -165,7 +166,7 @@ def remove_indenting(code)
   code = code.sub(/\A\n/,"")
 end
 
-def code_with_note(code_id,code,note=nil,div_height=nil,show_copy=true)
+def code_with_note(code_id,code,note=nil,div_height=nil,show_copy=true,show_run=true)
   # The code passed to this function may be prefixed with a newline and extra spacing
   # (for code readibility) but we don't want that to appear in the output because it's in an
   # HTML pre element
@@ -186,14 +187,27 @@ def code_with_note(code_id,code,note=nil,div_height=nil,show_copy=true)
     style_addition = ""
   end
 
+  if show_copy and show_run
+    copy_style = " style='margin-right: 20px;'"
+    run_style = " style='margin-right: 0px;'"
+  end
+
   if show_copy
-    copy_div = "<div class='copy-code' data-code='#{code_id}'><img src='/images/copy-icon.png'></div>"
+    copy_div = "<div class='copy-code code_name' data-code='#{code_id}'#{copy_style}><img src='/images/copy-icon.png'></div>"
+  else
+    copy_div = ""
+  end
+
+  if show_run
+    run_div = "<div class='run-code' data-code='#{code_id}'#{run_style}><img src='/images/run-icon.png'></div>"
+  else
+    run_div = ""
   end
 
   if note == nil
-    to_print = "#{copy_div}<div class='console-no-note'#{style_addition}>#{code}</div>"
+    to_print = "#{run_div}#{copy_div}<div class='console-no-note'#{style_addition}>#{code}</div>"
   else
-    to_print = "#{copy_div}<div class='console' id='#{code_id}'>#{code}</div>\n<div class='note'>#{note}</div>"
+    to_print = "#{run_div}#{copy_div}<div class='console' id='#{code_id}'>#{code}</div>\n<div class='note'>#{note}</div>"
   end
 end
 
@@ -240,15 +254,18 @@ def platform_choice(divname,code)
     </lu>
   </div>
   <div id="' + divname + '-win-code" class="win-code">' +
-    code_with_note("code-"+divname+"-win",code[0][0],code[0][1]) +
+    code_with_note("code-"+divname+"-win",code[0][0],code[0][1],false,true,false) +
   '</div>
-  <div id="' + divname + '-unix-code" class="unix-code">' + 
-    code_with_note("code-"+divname+"-linux",code[1][0],code[1][1]) + 
+  <div id="' + divname + '-unix-code" class="unix-code">' +
+    code_with_note("code-"+divname+"-linux",code[1][0],code[1][1],false,true,false) + 
   '</div>'
 end
 
 before do
   full_route = request.env['PATH_INFO']
+  if !request.secure? && request.host != "localhost" && request.host != "0.0.0.0"
+    redirect "https://#{request.host}#{full_route}"
+  end
   page_name = full_route.reverse.chop.reverse
   if page_name == ""
     page_name = "home"
@@ -257,6 +274,8 @@ before do
   @page_style = false
 end
 
+@author_name = "Elliott Brown"
+
 get '/' do
   @page_style = true
   erb :home
@@ -264,6 +283,7 @@ end
 
 get '/specification' do
   @page_style = true
+  @mini_playground = true
   erb :specification
 end
 
@@ -271,7 +291,33 @@ get '/libraries' do
   erb :libraries
 end
 
+get '/playground' do
+  @page_style = true
+  erb :playground
+end
+
+post '/playground' do
+  @page_style = true
+  erb :playground
+end
+
+get '/mini-playground' do
+  @page_style = true
+  erb :mini_playground, :layout => false
+end
+
+post '/mini-playground' do
+  @page_style = true
+  erb :mini_playground, :layout => false
+end
+
 get '/library-alerts' do
   @page_style = true
   erb :library_alerts
+end
+
+get '/research/2018/05/dalitz' do
+  @page_style = true
+  @author_name = "Alex Dalitz"
+  erb :research
 end

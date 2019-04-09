@@ -1,0 +1,53 @@
+#playground-window {
+  float: left;
+  position: fixed;
+  bottom: 0px;
+  right: 10px;
+  height: 400px;
+  width: 300px;
+  border-top: 1px solid #b40000;
+  border-left: 1px solid #b40000;
+  border-right: 1px solid #b40000;
+  background-color: #fffef5;
+  -moz-box-shadow: 2px 0 5px 2px #ccc;
+  -webkit-box-shadow: 2px 0 5px 2px #ccc;
+  min-height: 100px;
+  min-width: 250px;
+  display: none; }
+
+.playground-content {
+  float: left;
+  display: inline-block;
+  width: 100%;
+  min-height: 300px;
+  height: 100%; }
+
+.playground-title {
+  background-color: #b40000;
+  color: white;
+  float: left;
+  display: block;
+  width: 100%;
+  padding: 5px; }
+
+.window-options {
+  float: right; }
+
+.title, .window, .full, .reduce, .enlarge, .close {
+  float: left;
+  text-align: center; }
+
+.window-options a {
+  text-decoration: underline;
+  cursor: pointer; }
+
+#playground-iframe {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border: 0px; }
+
+.reduce {
+  display: none; }
+
+/*# sourceMappingURL=playground-header.css.map */

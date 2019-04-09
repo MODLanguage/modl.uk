@@ -1,6 +1,6 @@
 <h1>Minimal&nbsp;Object Description&nbsp;Language</h1>
 <p>
-  MODL (<em>sounds like "doddle"</em>) is a plain text data serialisation language for describing objects in as few characters as possible.
+  MODL (<em>sounds like "doddle"</em>) is a compact, plain text data serialisation language for describing objects in as few characters as possible.
   It's designed to be character efficient when stored or in transport and developer friendly to receive and work with. In this introduction we compare MODL with other data serialisation formats and demonstrate how MODL can store an identical collection of objects using 61% fewer characters than JSON.
 </p>
 <div class="sectionh2" id="example-modl-object">
@@ -9,26 +9,26 @@
     This is a basic MODL example: 
   </p>
   <%=code_with_note('example-modl-object-code','
-    <span>## A map is assigned to a pair with the key \'car\'</span>
+    <span>## A pair with the key \'car\' is assigned a value containing a map</span>
     car(
       <span>## The map is made up of pairs</span>
       make=Bentley
       model=Continental GT <span>## Comments can be added anywhere</span>
       styles[
-        <span>## An array is assigned to a pair with the key \'styles\', it contains two items</span>
+        <span>## A pair with the key \'styles\' is assigned a value containing an array, it contains two items</span>
         fastback
         convertible
       ]
     )',
 
-  'An example MODL object')
+  'An example MODL object',nil,true,false)
   %>
   <p>
-   MODL can be minified using semi-colons to separate pairs and array items (where JSON has commas) with comments removed: 
+   MODL can be minified by removing comments and using semi-colons to separate pairs and array items (where JSON has commas): 
   </p>
   <%=code_with_note('example-modl-object-code-min','
     car(make=Bentley;model=Continental GT;styles[fastback;convertible])',
-    'An example MODL object minified')
+    'An example MODL object minified',nil,true,false)
   %>
 </div>
 <div class="sectionh2" id="data-serialisation-comparison">
@@ -122,7 +122,7 @@
             )
           )
         )'
-      ])
+      ],nil,true,false)
     %>  
     <h4>Reduce Repeating Data</h4>
     <p>
@@ -194,7 +194,7 @@
             )
           )
         )'
-      ])
+      ],nil,true,false)
     %>
     <p>
       In the MODL object above you will notice percent prefixed numbers <code>%0</code> and <code>%1</code>, these represent references to the object index. The object index is defined on the first line with the key <code>?</code>. You may also notice the reference <code>%1.i</code> this instructs the interpreter to run the method <code>i</code> on the second object in the index.
@@ -230,9 +230,9 @@
     modl_single_object = '?=SGML:language;g(t=example glossary;d(t=S;l(e(i=%0;s=%0;gt=Standard Generalized Markup %1.i;a=%0;ab=ISO 8879\:1986;gd(p=A meta-markup %1, used to create markup %1s such as DocBook.;sa=[GML;XML]);gs=markup))))'
     %>
     <%=compare_language("objects-minified",
-      [ json_single_object, yaml_single_object, modl_single_object ],70)%> 
+      [ json_single_object, yaml_single_object, modl_single_object ],70,true,false)%> 
     <p>
-      We've had to make significant sacrifices in readability to achieve these character savings. This makes our object less intuitive for developers to work with. MODL interpreters can automatically unpack this data, returning it to it's original developer friendly state using classes, which we'll come to in a moment. 
+      We've had to make significant sacrifices in readability to achieve these character savings. This makes our object difficult for developers to work with. MODL interpreters can automatically unpack this data, returning it to it's original developer friendly state using classes, which we'll come to in a moment. 
     </p>
     <p>
       As a data serialisation format for storing a single object, we've demonstrated that MODL is more character efficient than JSON and YAML – in this example we've seen a 23% reduction when compared to JSON and over 50% reduction compared to YAML.
@@ -276,7 +276,7 @@
         "launch_year" : 2018,
         "requires_spacing" : false,
         "spec_url" : "https://www.modl.uk",
-        "structures" : [ "pair", map", "array", "conditional" ],
+        "structures" : [ "pair", "map", "array", "conditional" ],
         "primitives" : [ "string", "number", "boolean", "null" ]
       }
     } ]'
@@ -363,7 +363,7 @@
         json_df,
         yaml_df,
         modl_df
-      ],610)
+      ],610,true,false)
     %>  
     <h4>Classes</h4>
     <p>
@@ -380,7 +380,7 @@
     )
     ',
 
-  'A MODL class')
+  'A MODL class',nil,true,false)
   %>
     <p>
       In MODL, asterisk prefixed keys provide instructions to the interpreter and never appear in the output object. In the class above, we're instructing the interpreter to create a new <code>class</code> with the <code>id=l</code> and <code>name=language</code>. We're telling it that this class is a child of the <code>map</code> class. We're also telling it how to <code>assign</code> values that are passed to it by multi-value pairs. Now we can describe our languages like this:
@@ -401,7 +401,7 @@
     ]
     ',
 
-    'Describing our objects using MODL classes')
+    'Describing our objects using MODL classes',nil,true,false)
     %>
     <h5>Minifying Classes</h5>
     <p>
@@ -410,7 +410,7 @@
     <%=code_with_note('minified-class','
     *c(*i=l;*n=language;*s=map;*a=[[name;full_name;launch_year;requires_spacing;spec_url;structures;primitives]])
     ',
-    'A MODL class minified')
+    'A MODL class minified',nil,true,false)
     %>    
     <h5>Importing a Class File</h5>
     <p>
@@ -469,7 +469,7 @@
     modl_multiple_objects = '*I=c;?=object:array:string:number:boolean:language;[l=JSON:JavaScript %0.i Notation:2001:false:"https://www.json.org":[%0;%1]:[%2;%3;%4;"null"];l=YAML:YAML Ain\'t Markup %5.i:2001:true:"http://www.yaml.org":[mappings;sequences]:[%2;%3;date;%4;"null"];l=MODL:Minimal %0.i Description %5.i:2018:false:"http://www.modl.uk":[[pair;map;%1;conditional]:[%2;%3;%4;"null"]]'
     %>
     <%=compare_language("multiple-objects-minified",
-      [json_multiple_objects,yaml_multiple_objects,modl_multiple_objects],70)
+      [json_multiple_objects,yaml_multiple_objects,modl_multiple_objects],70,true,false)
     %>
     <%=compare_formats("Storing Multiple Objects",
       [json_multiple_objects,yaml_multiple_objects,modl_multiple_objects])
@@ -485,7 +485,7 @@
       <p>
         As we saw above, the MODL input to describe our three languages is 364 characters with an imported MODL class file. It's 468 characters to include the class definition in the file itself. Here it is using the import:
       </p>
-      <%=code_with_note("modl-multiple-objects",modl_multiple_objects,"MODL Input (364 characters)")%>
+      <%=code_with_note("modl-multiple-objects",modl_multiple_objects,"MODL Input (364 characters)",nil,true,false)%>
       <h4 id="json-output-title">MODL / JSON Output</h4>
       <p>
         After being processed by the MODL interpreter, the output object is unpacked and developer friendly.
@@ -524,7 +524,7 @@
               primitives=[string;number;boolean;"null"]
             )
           ]'
-        ],640)
+        ],640,true,false)
       %>  
       <%=compare_formats("Developer Friendly Objects",
         [json_df,yaml_df,modl_multiple_objects])
@@ -539,17 +539,24 @@
     MODL offers extra functionality that typical data serialisation formats don't, including the ability to describe an object conditionally. For detailed information about how MODL works, read the <em>Technical Specification</em>. To get started on your own project take a look at the <em>Developer Libraries</em>.
   </p>
   <div class="row" id="button-row">
-    <div class="col-6 col-s-6">
+    <div class="col-4 col-s-4">
       <a href="specification" class="button-link">
         <div class="button first">
           View Technical Specification
         </div>
       </a>      
     </div>
-    <div class="col-6 col-s-6">
+    <div class="col-4 col-s-4">
       <a href="libraries" class="button-link">
-        <div class="button first">      
+        <div class="button second">      
           View Developer Libraries
+        </div>
+      </a>
+    </div>  
+    <div class="col-4 col-s-4">
+      <a href="playground" class="button-link">
+        <div class="button third">      
+          View MODL Playground
         </div>
       </a>
     </div>  

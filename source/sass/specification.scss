@@ -1,10 +1,5 @@
 @import 'vars';
 
-#machine-diagrams img {
-  width: 100%;
-  height: auto;
-}
-
 // For specification page
 #content{
   #introduction { 
@@ -199,6 +194,8 @@
 }
 #machine-diagrams-image {
   cursor:pointer;
+  width: 100%;
+  height: auto;  
 }
 
 // Responsive elements

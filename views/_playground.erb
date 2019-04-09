@@ -1,0 +1,60 @@
+<script>
+function convertToJSON(){
+  $("#json").html("");
+  modl = $("#modl").val();
+  if(modl==""){
+    return displayError({"responseText":"MODL string was empty"});
+  }
+  else{
+    modlData = { modl: modl }
+    $.ajax({
+      type: "POST",
+      //url: "https://api.modl.uk",
+      url: "http://99.80.54.47",
+      data: modlData,
+      success: function(data){
+        displayJson(data);
+      },
+      error: function(error){
+        displayError(error);
+      }
+    });
+  }
+}
+function displayJson(jsonResponse){
+  jsonResponse = JSON.stringify(jsonResponse, null, 4);
+  $("#json").html(jsonResponse);
+  $("#status").html("Valid MODL");
+  $("#status").removeClass("error");
+  $("#status").addClass("success");
+}
+function displayError(jsonError){
+  jsonErrorMessage = jsonError.responseText;
+  if(jsonErrorMessage=="\n"){
+    jsonErrorMessage = "JSON response was blank."
+  }
+  $("#status").html(jsonErrorMessage);
+  $("#status").removeClass("success");
+  $("#status").addClass("error");
+}
+</script>
+<div>
+  <p style="margin-bottom:0px;">
+    <textarea name="modl" id="modl"><%=params[:modl]%></textarea>
+  </p>
+  <div style="padding-top:5px;"><input type="button" value="Convert to JSON" style="float:right;" onclick="convertToJSON();"></div>
+</div>
+<div style="margin-top:10px;">
+  <h3>JSON output</h3>
+  <div id="status"><%=@default_text%></div>
+  <div>  
+    <pre id="json">&nbsp;</pre>
+  </div>
+</div>
+<%
+if !params[:modl].nil?
+%>
+  <script>convertToJSON()</script>
+<%
+end
+%>
