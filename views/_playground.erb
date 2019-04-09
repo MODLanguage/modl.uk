@@ -9,8 +9,7 @@ function convertToJSON(){
     modlData = { modl: modl }
     $.ajax({
       type: "POST",
-      //url: "https://api.modl.uk",
-      url: "http://99.80.54.47",
+      url: "https://api.modl.uk",
       data: modlData,
       success: function(data){
         displayJson(data);
