@@ -476,7 +476,7 @@
         </thead>
         <tr>
           <td class="id-header">u</td>
-          <td>Upcase</td>
+          <td>upcase</td>
           <td>%x.u</td>
           <td class="nm">
             <code><%=var1%></code> => <code><%=var1.upcase%></code>
@@ -484,7 +484,7 @@
         </tr>
         <tr>
           <td class="id-header">d</td>
-          <td>Downcase</td>
+          <td>downcase</td>
           <td>%x.d</td>
           <td class="nm">
             <code><%=var1%></code> => <code><%=var1.downcase%></code>
@@ -492,7 +492,7 @@
         </tr>
         <tr>
           <td class="id-header">s</td>
-          <td>Sentence</td>
+          <td>sentence</td>
           <td>%x.s</td>
           <td class="nm">
             <code><%=var1%></code> => <code><%=var1.capitalize%></code>
@@ -500,7 +500,7 @@
         </tr>
         <tr>
           <td class="id-header">i</td>
-          <td>Initcap</td>
+          <td>initcap</td>
           <td>%x.i</td>
           <td class="nm">
             <code><%=var1%></code> => <code><%=var1.split.map(&:capitalize).join(' ')%></code>
@@ -508,7 +508,7 @@
         </tr>
         <tr>
           <td class="id-header">e</td>
-          <td><a href="https://en.wikipedia.org/wiki/Percent-encoding" target="_blank">URL Encode</a> <%=link_icon("external")%></td>
+          <td><a href="https://en.wikipedia.org/wiki/Percent-encoding" target="_blank">urlencode</a> <%=link_icon("external")%></td>
           <td>%1.e</td>
           <td class="nm">
             <code><%=var1%></code> => <code><%=CGI.escape(var1)%></code>
@@ -516,7 +516,7 @@
         </tr>
         <tr>
           <td class="id-header">r<span style="font-weight:normal;">(<em>this</em>,<em>that</em>)</span></td>
-          <td>Replace</td>
+          <td>replace</td>
           <td>`%x.r(test,foo)`</td>
           <td class="nm">
             <code><%=var1%></code> => <code><%=var1.gsub("test","foo")%></code>
@@ -524,7 +524,7 @@
         </tr>
         <tr>
           <td class="id-header">t<span style="font-weight:normal;">(<em>this</em>)</span></td>
-          <td>Trim</td>
+          <td>trim</td>
           <td>`%x.t(REF)`</td>
           <td class="nm">
             <code><%=var1%></code> => <code>Here's a&nbsp;</code>
@@ -532,8 +532,8 @@
         </tr>
       </table>
       <p>
-        Methods that take arguments (<code>replace</code> and <code>trim</code>) must be called with <code>`graves`</code>. To replace with an empty string, use an empty graved string: <code>`string.replace(foo,``)`</code>.
-        Methods can be chained. It's possible to define <a href="#custom-methods">custom methods</a>. <%=link_icon("down")%>
+        Methods that take arguments (<code>replace</code> and <code>trim</code>) must be called with graves, e.g. <code>`%string.replace(this,that)`</code>. To replace with an empty string, use an empty graved string: <code>`%string.replace(foo,``)`</code>.
+        Methods can be chained, e.g. <code>`%string.replace(this,that).upcase`</code>. It's possible to define <a href="#custom-methods">custom methods</a>. <%=link_icon("down")%>
       </p>
     </div>
     <div class="sectionh3" id="scope">
@@ -961,7 +961,7 @@
           *id=p
           *name=person
           *superclass=map
-          actions=[call,email]
+          actions=[call;email]
         )
         *class(
           *id=c
@@ -980,7 +980,7 @@
         Each <code>customer</code> and <code>employee</code> will now inherit the <code>actions</code> array.
       </p>
       <p>
-        Core superclasses are <code>str</code>, <code>number</code>, <code>arr</code> and <code>map</code>, if a superclass is not provided it will be determined by the interpreter using superclass inference.
+        Core superclasses are <code>str</code>, <code>num</code>, <code>arr</code> and <code>map</code>, if a superclass is not provided it will be determined by the interpreter using superclass inference.
       </p>
     </div>      
     <div class="sectionh3" id="key-assignment">
@@ -1190,7 +1190,7 @@
                 The values of inherited mutable pairs can be changed.
               </li>
               <li>
-                If a superclass if not defined the interpreter must use superclass inference to determine whether it is <code>str</code>, <code>number</code>, <code>arr</code> or <code>map</code>.
+                If a superclass if not defined the interpreter must use superclass inference to determine whether it is <code>str</code>, <code>num</code>, <code>arr</code> or <code>map</code>.
               </li>
             </ol>
           </li>
