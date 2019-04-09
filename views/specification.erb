@@ -533,7 +533,9 @@
       </table>
       <p>
         Methods that take arguments (<code>replace</code> and <code>trim</code>) must be called with graves, e.g. <code>`%string.replace(this,that)`</code>. To replace with an empty string, use an empty graved string: <code>`%string.replace(foo,``)`</code>.
-        Methods can be chained, e.g. <code>`%string.replace(this,that).upcase`</code>. It's possible to define <a href="#custom-methods">custom methods</a>. <%=link_icon("down")%>
+      </p>
+      <p>
+        Methods can be chained, e.g. <code>`%string.replace(this,that).upcase`</code> and it's also possible to define <a href="#custom-methods">custom methods</a>. <%=link_icon("down")%>
       </p>
     </div>
     <div class="sectionh3" id="scope">
@@ -864,7 +866,7 @@
       <div class="sectionh4" id="custom-methods">
         <h4 id="custom-methods-title">Method</h4>
         <p>
-          Custom methods can be created using the key <code>*m</code> or <code>*method</code> and can be called by method name or ID. The method name is set using the key <code>*name</code> or <code>*n</code>, the method ID is set using the key <code>*id</code> or <code>*i</code>. Custom methods can only be composed using core methods with the <code>*transform</code> key.
+          Custom methods can be created using the key <code>*m</code> or <code>*method</code> and can be called by method name or ID. The method name is set using the key <code>*name</code> or <code>*n</code>, the method ID is set using the key <code>*id</code> or <code>*i</code>. Custom methods can only be composed using core methods with the <code>*transform</code> or <code>*t</code> key.
         </p>
         <p>
           For example, this method could be created to hyphenate a name:
@@ -882,8 +884,11 @@
           hyphenated_name = %name.hy
 
           <span>## or, more character efficient:</span>
-          <span>## *m(*i=hy;*n=hyphenate;*t=`replace( ,-)`);_name=John Smith;hyphenated_name=%name.hy</span>",
+          <span>## *m(*i=hy;*n=hyphenate;*t=`r( ,-)`);_name=John Smith;hyphenated_name=%name.hy</span>",
         'Defining a custom method.')%>
+        <p>
+          Note in the example above that method IDs (e.g. <code>*r</code>) or names (e.g. <code>*replace</code>) can be used when defining a custom method.
+        </p>
       </div>
       <div class="sectionh4" id="syntax-version">      
         <h4 id="syntax-version-title">Syntax Version</h4>
