@@ -145,6 +145,13 @@
           <span>##[fastback;convertible]</span>',
 
         'An example array.')
+        %>
+        <p>
+          When an array is a value of a pair, it can also be defined in a more character efficient way by splitting values with a colon (<code>:</code>), like this:
+        </p>
+        <%=code_with_note('code-example-array2','
+          models=fastback:convertible',
+        'An example array.')
         %>        
       </div>
       <div class="sectionh4" id="pair">
@@ -216,33 +223,6 @@
 
         'An array assigned to a key in a pair.')
         %>  
-        <h5 id="multi-value-pair">Multi-value Pair</h5>
-        <p>
-          A multi-value pair is a way to make map declaration more character efficient. Take this example map pair with the key <code>car</code>:
-        </p>
-        <%=code_with_note('code-mv-pair','
-          car(make=Bentley;model=Continental GT)',
-        
-        'An example map pair containing two pairs – using 38 characters.')
-        %>
-        <p>
-          If cars are described regularly and always include a <code>make</code> and <code>model</code> pair in that order, we can assign the keys automatically using a MODL class and just provide the values as a multi-value pair, this is a multi-value pair:
-        </p>
-        <%=code_with_note('code-mv-pair2','
-          car=Bentley:Continental GT',
-
-        'An example multi-value pair – using 26 characters.')
-        %>
-        <p>
-          There's information about how to define classes in the <a href="#classes">classes section</a>.<%=link_icon("down")%>
-        </p>
-        <p>
-          When multi-value pairs are nested, inner multi-value pairs must be enclosed in brackets.
-        </p>
-        <%=code_with_note('code-mv-pair3','
-          car=Bentley:Continental GT:(nested_value1:nested_value2)',
-        'Example nested multi-value pairs.')
-        %>
         <h5 id="valid-keys">Valid Keys</h5>
         <p>
           Pair keys must be a string: they may contain numbers, may start with a number but must not be made up of solely numbers. Keys must start with a letter or a number except in the case of <a href="#instructions">instructions</a>.
@@ -443,7 +423,7 @@
         _test=(one=1;two=2)
         second_value=%test>two',
 
-      'An example using deep object referencing on an array.')
+      'An example using deep object referencing on a map.')
       %>
       <p>
         There's no limit to the level of referencing.
@@ -452,10 +432,10 @@
     <div class="sectionh3" id="object-index">
       <h3 id="object-index-title">Object Index</h3>
       <p>
-        An object index is set using the key <code>?</code>. Values must be provided in a pair, a <a href="#multi-value-pair">multi-value pair</a> <%=link_icon("up")%> or an array and can be referenced using their position in the index. This serves as a character efficient way to reference an object. For example:
+        An object index is set using the key <code>?</code>. Values must be provided in a pair or an array and can be referenced using their position in the index. This serves as a character efficient way to reference an object. For example:
       </p>
       <%=code_with_note('object-index-example','
-        <span>## We create an object index using a multi-value pair, assigning "foo" to index 0 and "bar" to index 1:</span>
+        <span>## We create an object index using an array, assigning "foo" to index 0 and "bar" to index 1:</span>
         ?=foo:bar
 
         <span>## We can reference the values using the index</span>
@@ -548,6 +528,14 @@
           </td>
         </tr>
         <tr>
+          <td class="id-header">p<span style="font-weight:normal;"></span></td>
+          <td><a href="#encoding-for-ascii-systems">punydecode</a> <%=link_icon("external")%></td>
+          <td>`%x.p`</td>
+          <td class="nm">
+            <code>e1afmkfd</code> => <code>пример</code>
+          </td>
+        </tr>
+        <tr>
           <td class="id-header">r<span style="font-weight:normal;">(<em>this</em>,<em>that</em>)</span></td>
           <td>replace</td>
           <td>`%x.r(test,foo)`</td>
@@ -614,7 +602,7 @@
       'An example conditional.')
       %>
       <p>
-        As you can see from the character efficient version above, it's possible to omit <code>%</code> when using an object reference as a variable, it's also possible to omit <code>_</code> from hidden objects. After interpretation, our MODL object looks like this:
+        As you can see from the character efficient version above, it's possible to omit <code>%</code> when using an object reference in a conditional test, it's also possible to omit <code>_</code> from hidden objects. After interpretation, our MODL object looks like this:
       </p>
       <%=code_with_note('code-conditional-output','
         country = gb
@@ -632,15 +620,12 @@
     <div class="sectionh3" id="conditional-parts">
     <h3 id="conditional-parts-title">Parts</h3>
     <p>
-      Conditionals are made up of a test <code>(e.g. country=us)</code> and it's return value (e.g. <code>United States</code>) separated by a question mark <code>?</code>. Each condition is separated by a forward slash <code>/</code>. In our <a href="#conditionals-example">previous example</a> <%=link_icon("up")%> a user variable called country is used (note: user variables are set by the client): 
+      Conditionals are made up of a test <code>(e.g. country=us)</code> and it's return value (e.g. <code>United States</code>) separated by a question mark <code>?</code>. Each condition is separated by a forward slash <code>/</code>. In our <a href="#conditionals-example">previous example</a> <%=link_icon("up")%> a user variable called country is used. 
     </p>
     <div class="sectionh4" id="conditional-tests">
       <h4 id="conditional-tests-title">Conditional Tests</h4>
       <p>
-         Conditional tests are made up of a variable and a value separated by an operator. Variables can be any values but are typically object references,
-      </p>
-      <p>
-        Tests can use a range of operators. 
+         Conditional tests are made up of an object reference and a value separated by an operator. Object references used in conditional tests are called variables.
       </p>
       <h5 id="operators">Operators</h5>
       <p>
@@ -823,7 +808,7 @@
     <div class="sectionh3" id="hidden-objects">
       <h3 id="hidden-objects-title">Hidden Objects</h3>
       <p>
-        Use an underscore-prefixed key to tell the MODL interpreter that this object should not be included in the output object. Underscore prefixed keys are typically used for objects that will be <a href="#object-referencing">referenced later</a> <%=link_icon("down")%>.
+        Use an underscore-prefixed key to tell the MODL interpreter that this object should not be included in the output object. Underscore prefixed keys are typically used for objects that will be <a href="#object-referencing">referenced later</a> <%=link_icon("up")%>.
       </p>
     </div>
     <div class="sectionh3" id="mutable-immutable-values">
@@ -853,7 +838,7 @@
       <div class="sectionh4" id="load">
         <h4 id="load-title">Load</h4>
         <p>
-          Other MODL files can be loaded by assigning a MODL file URI to the <code>*load</code> or <code>*l</code> key. The value can be a local or remote file location with a <code>.modl</code> or <code>.txt</code> extension. The interpreter will add a <code>.modl</code> extension if one is not specified. 
+          Other MODL files can be loaded into another by assigning a MODL file URI to the <code>*load</code> or <code>*l</code> key. The value can be a local (to the interpreter) or remote file location with a <code>.modl</code> or <code>.txt</code> extension. The interpreter will add a <code>.modl</code> extension if one is not specified. 
         </p>
         <p>
           Multiple files can be loaded at the same point by providing the file URIs in an array, or at multiple different points in the file by using the instruction at multiple points. Loads can also be chained. This example shows one file being loaded:
@@ -884,7 +869,7 @@
           'An example file loading another MODL file called example-classes.modl.',nil,true,false)
         %>
         <p>
-          It's also possible to use <a href="#object-referencing">object references</a> in URIs, like this:
+          It's also possible to use <a href="#object-referencing">object references</a> <%=link_icon("up")%> in URIs, like this:
         </p>
         <%=code_with_note('code-load-example','
           <span class="syntax-highlighter">_country=gb
@@ -950,15 +935,15 @@
       Classes can help make object description more efficient. Classes are defined with the key <code>*c</code> or <code>*class</code>. The class name is set using the key <code>*name</code> or <code>*n</code>, the class ID is set using the key <code>*id</code> or <code>*i</code>.
     </p>
     <p>
-      If a key in a pair matches a class ID or class name, the pair must be transformed according to the class definition and the class name will be used as the key for the output object.
+      If a key in a pair matches a class ID or class name, the pair is transformed according to the class definition and the class name will be used as the key for the output object.
     </p>
     <p>
-      The <code>*superclass</code> or <code>*s</code> key is used within a class definition to declare a superclass. Objects with a superclass inherit all pairs defined in parent classes in the class hierarchy. There's more <a href="#class-inheritance">about class inheritance</a> <%=link_icon("down")%>. The <code>*assign</code> or <code>*a</code> key is used within a class definition to assign keys to a <a href="#multi-value-pair">multi-value pair</a> <%=link_icon("up")%>. Key assignment is <a href="#key-assignment">covered here</a> <%=link_icon("down")%>.
+      The <code>*superclass</code> or <code>*s</code> key is used within a class definition to declare a superclass. Objects with a superclass inherit all pairs defined in parent classes in the class hierarchy. There's more <a href="#class-inheritance">about class inheritance</a> <%=link_icon("down")%>. The <code>*assign</code> or <code>*a</code> key is used within a class definition for <a href="#key-assignment">key assignment</a> <%=link_icon("down")%>.
     </p>
     <div class="sectionh3" id="class-example">
       <h3 id="class-example-title">Example</h3>
       <p>
-        This basic example shows how classes can be used with multi-value pairs to make object description more efficient:
+        This basic example shows how classes can be used with arrays to make object description more efficient:
       </p>
     <%=code_with_note('code-example-class','
       *class(
@@ -966,7 +951,7 @@
         *name=employee
         <span>## *superclass tells the interpreter what type of object to create</span>
         *superclass=map
-        <span>## *assign tells the interpreter how to assign the values of a multi-value pair</span>
+        <span>## *assign tells the interpreter how to assign the values of an array with the key e</span>
         *assign=[
           [title;name;job_title]
         ]
@@ -974,7 +959,7 @@
         actions=[call;email]
       )
 
-      <span>## This simple MODL object uses the class defined above</span>
+      <span>## This simple array is transformed into a map using key assignment in the class defined above</span>
       e=Mr:John Smith:Sales Director',
       
       'An example file defining a simple class.')
@@ -999,7 +984,52 @@
     <p>
       We could now use this class to describe thousands of employees using as few characters as possible.
     </p>
-    <div id="class-inheritance" class="sectionh3">
+    <div class="sectionh3" id="key-assignment">
+    <h3 id="key-assignment-title">Key Assignment</h3>
+      <p>
+        If a map always includes the same pairs in the same order, we can use key assignment in the class to make defining the map more character efficient. The&nbsp;<code>*assign</code> (or <code>*a</code>) key must be an array of arrays. 
+      </p>
+      <%=code_with_note('code-assign_key','
+        *class(
+          *id=e
+          *name=employee
+          <span class="syntax-highlighter">*assign=[</span>
+            <span class="syntax-highlighter">[name]</span>
+            <span class="syntax-highlighter">[title;name]</span>
+            <span class="syntax-highlighter">[title;name;job_title]</span>
+          <span class="syntax-highlighter">]</span>
+        )',
+        'Key assignment in a class.',nil,true,false)
+      %>
+      <p>
+        The <code>*assign</code> array shows the different permutations of values that it will accept for key assignment: 
+      </p>
+      <ul>
+        <li>It can accept one value – it will assign the value to the key <code>name</code>.</li>
+        <li>It can accept two values – it will assign the values to <code>title</code> and <code>name</code></li>
+        <li>It can accept three values – it will assign the values to <code>title</code>, <code>name</code> and <code>job_title</code>.</li>
+      </ul>
+      <p>
+        Now we can define our map using an <a href="#array">array</a> <%=link_icon("up")%> assigned to a key that matches the class ID or name, like this:
+      </p>
+      <%=code_with_note('code-assign_key','
+        *class(
+          *id=e
+          *name=employee
+          *assign=[
+            [name]
+            [title;name]
+            [title;name;job_title]
+          ]
+        )
+        <span class="syntax-highlighter">e=Mr:John Smith:Sales Director:john.smith@example.com</span>
+        ',
+        'The assign key in a class.',nil,true,false)
+      %>
+      <p>
+        The output object is identical to that shown at the end of the previous section.
+      </p>
+    </div>    <div id="class-inheritance" class="sectionh3">
     <h3 id="class-inheritance-title">Class Inheritance</h3>
       <p>
         Class inheritance can be used to make complex class definitions simpler and more efficient. For example, if we wanted to introduce a new class called <code>customer</code>, we could have <code>employee</code> and <code>customer</code> both inherit from a new <code>person</code> class:
@@ -1015,64 +1045,41 @@
           *id=c
           *name=customer
           *superclass=person
+          *assign=[
+            [title;name;email]
+          ]
         )
         *class(
           *id=e
           *name=employee
           *superclass=person
+          *assign=[
+            [title;name;job_title;email]
+          ]
         )',
 
       'New classes demonstrating class inheritance.',nil,true,false)
       %>
       <p>
-        Each <code>customer</code> and <code>employee</code> will now inherit the <code>actions</code> array.
+        Each <code>customer</code> and <code>employee</code> will now inherit the <code>actions</code> array but notice that key assignment differs – values are assigned to different keys depending on whether an employee or customer is being defined.
       </p>
       <p>
         Core superclasses are <code>str</code>, <code>num</code>, <code>arr</code> and <code>map</code>, if a superclass is not provided it will be determined by the interpreter using superclass inference.
       </p>
     </div>      
-    <div class="sectionh3" id="key-assignment">
-    <h3 id="key-assignment-title">Key Assignment</h3>
-      <p>
-        If a map always includes the same pairs in the same order, we can use a <a href="#multi-value-pair">multi-value pair</a> <%=link_icon("up")%> to describe the object more efficiently with key assignment. The <code>*assign</code> (or <code>*a</code>) key must be an array of arrays. 
-      </p>
-      <%=code_with_note('code-assign_key','
-        *class(
-          *id=e
-          *name=employee
-          <span class="syntax-highlighter">*assign=[</span>
-            <span class="syntax-highlighter">[name]</span>
-            <span class="syntax-highlighter">[title;name]</span>
-            <span class="syntax-highlighter">[title;name;job_title]</span>
-          <span class="syntax-highlighter">]</span>
-        )',
-        'The assign key in a class.',nil,true,false)
-      %>
-      <p>
-        The array shows the different permutations of values that it will accept: 
-      </p>
-      <ul>
-        <li>It can accept one value – it will assign the value to the key <code>name</code>.</li>
-        <li>It can accept two values – it will assign the values to <code>title</code> and <code>name</code></li>
-        <li>It can accept three values - it will assign the values to <code>title</code>, <code>name</code> and <code>job_title</code>.</li>
-      </ul>
-      <p>
-        The output object is identical to that shown at the end of the previous section.
-      </p>
-    </div>
     <div class="sectionh3" id="class-definition-file">
     <h3 id="class-definition-file-title">Class Definition File</h3>
       <p>
-        To aid in character efficiency, it's recommended to define classes in an external file that you can load. If we move our class definitions over to a separate file called <code>classes.modl</code> and store it in the same local directory we can load it and describe multiple objects:
+        To aid in character efficiency, it's recommended to define classes in an external file that you can <a href="#load">load</a> <%=link_icon("up")%>. If we move our class definitions over to a separate file called <code>classes.modl</code> and store it in the same local directory we can load it and describe multiple objects:
       </p>
       <%=code_with_note('code-class-definition-file-load','
         <span class="syntax-highlighter">*LOAD=classes.modl</span>
         <span>## An employee:</span>
-        e=Mr:John Smith:Sales Director:john.smith@example.com:441270987654
+        e=Mr:John Smith:Sales Director:john.smith@example.com
         <span>## A customer:</span>
-        c=Mr:Joe Bloggs:joe.bloggs@example.com:441270123456
+        c=Mr:Joe Bloggs:joe.bloggs@example.com
         <span>## Another customer:</span>
-        c=Mrs:Jane Wilson:jane.wilson@example.com:441270321123',
+        c=Mrs:Jane Wilson:jane.wilson@example.com',
       'Loading a file.',nil,true,false)
       %>
         <p>
@@ -1085,19 +1092,28 @@
             name=John Smith
             job_title=Sales Director
             email=john.smith@example.com
-            phone_number=+441270987654
+            actions=[
+              call
+              email
+            ]
           )
           customer(
             title=Mr
             name=Joe Bloggs
             email=joe.bloggs@example.com
-            phone_number=+441270123456
+            actions=[
+              call
+              email
+            ]            
           )
           customer(
             title=Mrs
             name=Jane Wilson
             email=jane.wilson@example.com
-            phone_number=+441270321123
+            actions=[
+              call
+              email
+            ]            
           )
         ]',
 
@@ -1108,13 +1124,13 @@
   <div class="sectionh2" id="encoding-for-ascii-systems">
   <h2 id="encoding-for-ascii-systems-title">Encoding For ASCII Systems</h2>
     <p>
-      MODL is not limited to <a href="https://en.wikipedia.org/wiki/ASCII" target="_blank">ASCII characters</a> <%=link_icon("external")%> but some storage media are (e.g. DNS TXT records). Non-ASCII characters can be included in an ASCII MODL object by converting them to <a href="https://en.wikipedia.org/wiki/Punycode" target="_blank">Punycode</a> <%=link_icon("external")%> and enclosing them in grave accents <code>`</code>. Any Unicode character can be punycode encoded, providing ASCII support for almost every language on Earth and symbols like emojis.
+      MODL is not limited to <a href="https://en.wikipedia.org/wiki/ASCII" target="_blank">ASCII characters</a> <%=link_icon("external")%> but some storage media are (e.g. DNS TXT records). Non-ASCII characters can be included in an ASCII MODL object by converting them to <a href="https://en.wikipedia.org/wiki/Punycode" target="_blank">Punycode</a> <%=link_icon("external")%>, enclosing them in graves <code>`</code> and calling the <code>punydecode</code> (or <code>p</code>) method. Any Unicode character can be punycode encoded, providing ASCII support for almost every language on Earth and symbols like emojis.
     </p>
     <p>
       In the Russian language MODL object below, the <code>name</code> field uses the punycode conversion of пример (English translation: 'Example') and the <code>department</code> uses the punycode conversion of обслуживание клиентов (English: 'Customer Service'):
     </p>
     <%=code_with_note('code-punycode1','
-      (name=`e1afmkfd`;department=` -7sbcecqbdsccxfizhcp6b8ah`)',
+      (name=`e1afmkfd`.p;department=` -7sbcecqbdsccxfizhcp6b8ah`.p)',
     'An example object using punycode to represent non-ASCII characters.')
     %>
     <p>
@@ -1150,7 +1166,7 @@
         <strong>Semi-colon</strong> <code>;</code> is used in a <a href="#map">map</a> <%=link_icon("up")%> to separate <a href="#pair">pairs</a> <%=link_icon("up")%> and used in an <a href="#array">array</a> <%=link_icon("up")%> to separate items.
       </li>
       <li>
-        <strong>Colon</strong> <code>:</code> is used to separate values in a <a href="#multi-value-pair">multi-value pair</a> <%=link_icon("up")%>.
+        <strong>Colon</strong> <code>:</code> is used to separate values in an <a href="#array">array</a> <%=link_icon("up")%>.
       </li>
       <li>
         <strong>Equals</strong> <code>=</code> is used to separate the key from a value in a <a href="#pair">pair</a> <%=link_icon("up")%>.
@@ -1243,13 +1259,13 @@
             </ol>
           </li>
           <li>
-            The instruction <code>*assign</code> or <code>*a</code> defines how keys are assigned to multi-value pairs with an array of arrays:
+            The instruction <code>*assign</code> or <code>*a</code> defines how keys should be assigned to values using an array of arrays:
             <ol type="i" class="subrules">
               <li>
                 Permutations should be in ascending order by key count. If they are not, raise an error at parse time.
               </li>
               <li>
-                If a multi-value pair is used and no permutation match is found, raise an error at parse time.
+                If no permutation match is found, raise an error at parse time.
               </li>
             </ol>
           </li>
@@ -1313,7 +1329,7 @@
       <li>An interpreter instruction with key <code>?</code> defines an object index:
         <ol type="a" class="subrules">
           <li>
-            Values must be assigned using a multi-value pair or an array.
+            Values must be assigned using a pair or an array.
           </li>
           <li>
             Values must be assigned an index starting from zero.
