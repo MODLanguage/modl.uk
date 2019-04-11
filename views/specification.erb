@@ -894,7 +894,7 @@
       <div class="sectionh4" id="custom-methods">
         <h4 id="custom-methods-title">Method</h4>
         <p>
-          Custom methods can be created using the key <code>*m</code> or <code>*method</code> and can be called by method name or ID. The method name is set using the key <code>*name</code> or <code>*n</code>, the method ID is set using the key <code>*id</code> or <code>*i</code>. Custom methods can only be composed using core methods with the <code>*transform</code> or <code>*t</code> key.
+          Custom methods can be created using the key <code>*m</code> or <code>*method</code>, all methods must have an ID represented by <code>*id</code> or <code>*i</code>. Methods can also optionally have a name set using the key <code>*name</code> or <code>*n</code>. Custom methods can only be composed using core methods with the <code>*transform</code> or <code>*t</code> key.
         </p>
         <p>
           For example, this method could be created to hyphenate a name:
@@ -914,9 +914,6 @@
           <span>## or, more character efficient:</span>
           <span>## *m(*i=hy;*n=hyphenate;*t=`r( ,-)`);_name=John Smith;hyphenated_name=%name.hy</span>",
         'Defining a custom method.')%>
-        <p>
-          Note in the example above that method IDs (e.g. <code>*r</code>) or names (e.g. <code>*replace</code>) can be used when defining a custom method.
-        </p>
       </div>
       <div class="sectionh4" id="syntax-version">      
         <h4 id="syntax-version-title">Syntax Version</h4>
@@ -932,10 +929,10 @@
   <div class="sectionh2" id="classes">
     <h2 id="classes-title">Classes</h2>
     <p>
-      Classes can help make object description more efficient. Classes are defined with the key <code>*c</code> or <code>*class</code>. The class name is set using the key <code>*name</code> or <code>*n</code>, the class ID is set using the key <code>*id</code> or <code>*i</code>.
+      Classes can help make object description more efficient. Classes are defined with the key <code>*c</code> or <code>*class</code> and all classes must have an ID represented by <code>*id</code> or <code>*i</code>. Classes can also optionally have a name set using the key <code>*name</code> or <code>*n</code>.
     </p>
     <p>
-      If a key in a pair matches a class ID or class name, the pair is transformed according to the class definition and the class name will be used as the key for the output object.
+      If a key in a pair matches a class ID or class name, the pair is transformed according to the class definition. If the class has a name, it will be used as the key for the output object.
     </p>
     <p>
       The <code>*superclass</code> or <code>*s</code> key is used within a class definition to declare a superclass. Objects with a superclass inherit all pairs defined in parent classes in the class hierarchy. There's more <a href="#class-inheritance">about class inheritance</a> <%=link_icon("down")%>. The <code>*assign</code> or <code>*a</code> key is used within a class definition for <a href="#key-assignment">key assignment</a> <%=link_icon("down")%>.
@@ -989,7 +986,7 @@
       <p>
         If a map always includes the same pairs in the same order, we can use key assignment in the class to make defining the map more character efficient. The&nbsp;<code>*assign</code> (or <code>*a</code>) key must be an array of arrays. 
       </p>
-      <%=code_with_note('code-assign_key','
+      <%=code_with_note('code-assign-key','
         *class(
           *id=e
           *name=employee
@@ -1012,7 +1009,7 @@
       <p>
         Now we can define our map using an <a href="#array">array</a> <%=link_icon("up")%> assigned to a key that matches the class ID or name, like this:
       </p>
-      <%=code_with_note('code-assign_key','
+      <%=code_with_note('code-assign-key-example','
         *class(
           *id=e
           *name=employee
@@ -1227,7 +1224,7 @@
         Interpreters should use type inference for values that are not quoted, numbers can be forced as strings by quoting them.
       </li>
       <li>
-        The interpreter instruction <code>*V</code> or <code>*VERSION</code> defines the MODL syntax version used. If undefined, assume version 1. If defined, it must be the first interpreter instruction in the MODL file, defining it after another interpreter instruction must raise an error at parse time.
+        The interpreter instruction <code>*V</code> or <code>*VERSION</code> defines the MODL syntax version. If undefined, assume version 1. If defined, it must be an integer greater than zero and must be the first interpreter instruction in the MODL file, defining it after another interpreter instruction must raise an error at parse time. 
       </li>
       <li>
         The interpreter instruction <code>*class</code> or <code>*c</code> is a class definition:
