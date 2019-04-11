@@ -2,69 +2,84 @@
   margin-bottom: 20px;
   padding: 10px;
   border: 1px solid #b40000;
-  background-color: #FFFEFE; }
-  .mc_form h2 {
-    margin-top: 0px; }
-  .mc_form .indicates-required {
-    margin-top: 10px;
-    float: right; }
-  .mc_form .asterisk {
-    color: red; }
-  .mc_form .input-group {
-    border-radius: 10px;
-    border: 1px solid #ccc;
-    margin-top: 10px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    background-color: #fff; }
-  .mc_form ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0; }
-    .mc_form ul li {
-      width: 120px;
-      display: inline-block; }
-      .mc_form ul li input[type=checkbox] {
-        margin-left: 10px;
-        margin-right: 5px; }
-  .mc_form .programming-language-header {
-    display: inline-block;
-    margin-top: 10px; }
-  .mc_form .top-fields input[type=text], .mc_form .top-fields input[type=email] {
-    width: 100%; }
-  .mc_form .top-fields label {
-    margin-top: 10px;
-    display: inline-block;
-    width: 150px; }
-  .mc_form .button {
-    margin-top: 10px;
-    padding: 5px;
-    padding-top: 9px;
-    height: 35px;
-    line-height: 1;
-    margin-left: auto;
-    margin-right: 0;
-    display: block;
-    border: 1px solid #b40000;
-    margin-bottom: 20px;
-    width: 225px;
-    line-height: 1;
-    padding: 10px;
-    text-align: center;
-    background-color: #FD0606;
-    color: #fff !important;
-    text-decoration: none !important;
-    font-weight: bold;
-    cursor: pointer; }
-  .mc_form .response {
-    margin-top: 20px;
-    padding: 10px; }
-  .mc_form #mce-error-response {
-    border: 1px solid red;
-    background-color: #fbefd5; }
-  .mc_form #mce-success-response {
-    border: 1px solid #35931d;
-    background-color: #43db1c;
-    color: black; }
+  background-color: #FFFEFE;
+}
+.mc_form h2 {
+  margin-top: 0px;
+}
+.mc_form .indicates-required {
+  margin-top: 10px;
+  float: right;
+}
+.mc_form .asterisk {
+  color: red;
+}
+.mc_form .input-group {
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  margin-top: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: #fff;
+}
+.mc_form ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.mc_form ul li {
+  width: 120px;
+  display: inline-block;
+}
+.mc_form ul li input[type=checkbox] {
+  margin-left: 10px;
+  margin-right: 5px;
+}
+.mc_form .programming-language-header {
+  display: inline-block;
+  margin-top: 10px;
+}
+.mc_form .top-fields input[type=text], .mc_form .top-fields input[type=email] {
+  width: 100%;
+}
+.mc_form .top-fields label {
+  margin-top: 10px;
+  display: inline-block;
+  width: 150px;
+}
+.mc_form .button {
+  margin-top: 10px;
+  padding: 5px;
+  padding-top: 9px;
+  height: 35px;
+  line-height: 1;
+  margin-left: auto;
+  margin-right: 0;
+  display: block;
+  border: 1px solid #b40000;
+  margin-bottom: 20px;
+  width: 225px;
+  line-height: 1;
+  padding: 10px;
+  text-align: center;
+  background-color: #FD0606;
+  color: #fff !important;
+  text-decoration: none !important;
+  font-weight: bold;
+  cursor: pointer;
+}
+.mc_form .response {
+  margin-top: 20px;
+  padding: 10px;
+}
+.mc_form #mce-error-response {
+  border: 1px solid red;
+  background-color: #fbefd5;
+}
+.mc_form #mce-success-response {
+  border: 1px solid #35931d;
+  background-color: #43db1c;
+  color: black;
+}
 
 /*# sourceMappingURL=library-alerts.css.map */

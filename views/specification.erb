@@ -29,7 +29,7 @@
         </p>
         <ol>
           <li>The most character efficient way to describe an object when minified.</li>
-          <li>Unambiguous with no edge case surprises.</li>
+          <li>Unambiguous with as few surprises as possible.</li>
           <li>Human-friendly to write and read when unpacked.</li>
           <li>Easy to parse into data structures in all modern programming languages.</li>
         </ol>
@@ -37,7 +37,7 @@
           <h3 id="rules-title">Rules</h3>
           <ol>
             <li>MODL is case-sensitive</li>
-            <li>Whitespace means tab (0x09) or space (0x20).</li>
+            <li>Whitespace means space (0x20) or tab (0x09).</li>
             <li>Newline means LF (0x0A) or CRLF (0x0D0A).</li>
             <li>MODL ignores all leading and trailing whitespace.</li>
             <li>MODL files must be valid UTF-8 encoded Unicode documents.</li>
@@ -60,14 +60,23 @@
           </div>
         </div>
       </div>
-      <div class="sectionh3" id="terminology">
-        <h3 id="terminology-title">Conventions in This Document</h3>
+      <div class="sectionh3" id="examples">
+        <h3 id="examples-title">Code Examples in This Document</h3>
+        <p>
+          MODL code examples are provided throughout this document, for most examples the code can be executed in the playground by clicking the run icon (<img src="/images/run-icon.png" alt="run icon">) where a JSON representation is output.
+        </p>
+        <p>
+          In case of problems retaining the formatting of code that is copied and pasted, you can click the copy icon (<img src="/images/copy-icon.png" alt="copy icon">) to copy the MODL code to your clipboard.
+        </p>
+      </div>
+      <div class="sectionh3" id="conventions">
+        <h3 id="conventions-title">Conventions in This Document</h3>
         <p>
           The key words "must", "must not", "required", "shall", "shall not", "should", "should not", "recommended", "may", and "optional" are to be interpreted as described in <a href="https://www.ietf.org/rfc/rfc2119.txt" target="_blank">RFC2119</a> <%=link_icon("external")%>.
         </p>
       </div>
       <div class="sectionh3" id="authors">
-        <h3 id="author-title">Authors</h3>
+        <h3 id="authors-title">Authors</h3>
         <p>
           MODL was created by <a href="http://www.github.com/elliottinvent" target="_blank">Elliott Brown</a> <%=link_icon("external")%> and <a href="http://www.github.com/alexdalitz" target="_blank">Alex Dalitz</a> <%=link_icon("external")%> with the help of <a href="https://github.com/twalmsley" target="_blank">Tony Walmsley</a> <%=link_icon("external")%>.
         </p>
@@ -76,6 +85,12 @@
   </div>
 </div>
 <div class="toc-content toc-content2">
+  <div class="sectionh2" id="io">
+  <h2 id="io-title">Input Objects and Output Objects</h2>
+    <p>
+      Any valid MODL written by an author is an input object. An input object is processed by an interpreter which returns an output object. The output object can differ considerably from the input object due to object referencing, hidden objects and conditional evaluation – all are covered in detail in this specification. 
+    </p>
+  </div>
   <div class="sectionh2" id="data-types">
     <h2 id="data-types-title">Data Types</h2>
     <p>
@@ -113,6 +128,7 @@
           <p>
             A map is known in other languages as a hash table, object, record, struct, dictionary, keyed list, or associative array. A map begins with left bracket <code>(</code> and ends with right bracket <code>)</code>, it contains zero or more pairs separated by new line or semi-colon:
           </p>
+          <%=run_reminder%>
           <%=code_with_note('code-example-map','
             (
               make = Bentley
@@ -133,7 +149,7 @@
       <div class="sectionh4" id="array">
       <h4 id="array-title">Array</h4>
         <p>
-          Arrays in MODL will be familiar to most – beginning with a left square bracket <code>[</code> and ending with a right square bracket <code>]</code>. Items are separated by a new line or semi-colon. Array items can be of any data type.
+          Arrays in MODL will be familiar to most – beginning with a left square bracket <code>[</code> and ending with a right square bracket <code>]</code>. Items are separated by a new line or semi-colon. Array items can be of any data type and data types can be mixed.
         </p>
         <%=code_with_note('code-example-array','
           [
@@ -151,13 +167,13 @@
         </p>
         <%=code_with_note('code-example-array2','
           models=fastback:convertible',
-        'An example array.')
+        'An example array using colon separated values.')
         %>        
       </div>
       <div class="sectionh4" id="pair">
       <h4 id="pair-title">Pair</h4>
         <p>
-          Pairs are the primary building block of MODL objects, they can be used in a number of ways to increase character efficiency. Orphan pairs (not within a map) are allowed for character efficiency.
+          Pairs are the primary building block of MODL objects and consist of a value assigned to a <a href="#valid-keys">valid key</a> <%=link_icon("down")%>. They can be used in a number of ways to increase character efficiency. Orphan pairs (not within a map) are allowed for character efficiency. 
         </p>
         <h5 id="standard-pair">Standard Pair</h5>
         <p>
@@ -222,16 +238,12 @@
           ]',
 
         'An array assigned to a key in a pair.')
-        %>  
-        <h5 id="valid-keys">Valid Keys</h5>
-        <p>
-          Pair keys must be a string: they may contain numbers, may start with a number but must not be made up of solely numbers. Keys must start with a letter or a number except in the case of <a href="#instructions">instructions</a>.
-        </p>
+        %>
       </div>
       <div class="sectionh4" id="conditionals-brief">
         <h4 id="conditionals-brief-title">Conditionals</h4>
         <p>
-          Conditions are explained in <a href="#conditionals">detail later</a> <%=link_icon("down")%>. In the meantime, here is a simple conditional with logic based on the value of the <a href="#hidden-objects">hidden object</a> <%=link_icon("down")%> <code>country</code>:
+          Conditions are explained in <a href="#conditionals">detail later</a> <%=link_icon("down")%>. In the meantime, here is a simple conditional with logic based on the value of <code>_country</code>:
         </p>
           <%=code_with_note('code-simple-conditional','
             _country = gb
@@ -287,9 +299,10 @@
           True is represented as <code>true</code>, <code>TRUE</code> or <code>01</code>. Since <code>01</code> is an invalid number and unlikely to be required as a string, it is the most character efficient way to represent <code>true</code> unambiguously.
         </p>
         <%=code_with_note('code-true-example','
-          conventional_true = true
-          <span>## or, more character efficient:</span>
-          <span>## unconventional_true=01</span>',
+          (
+            conventional_true = true
+            unconventional_true=01
+          )',
 
         'An example true boolean value.')
         %>
@@ -298,9 +311,10 @@
           False is represented as <code>false</code>, <code>FALSE</code> or <code>00</code>. Since <code>00</code> is an invalid number and unlikely to be required as a string it is the most character efficient way to represent <code>false</code> unambiguously.
         </p>
         <%=code_with_note('code-false-example','
-          conventional_false = false
-          <span>## or, more character efficient:</span>
-          <span>## unconventional_false=00</span>',
+          (
+            conventional_false = false
+            unconventional_false=00
+          )',
 
         'An example false boolean value.')
         %>
@@ -322,8 +336,48 @@
     <div class="sectionh3" id="literals">
       <h3 id="literals-title">Literals</h3>
       <p>
-        Values enclosed in quotation marks <code>"</code> are literals, all <a href="#reserved-characters">reserved characters</a> <%=link_icon("down")%> can be used inside literals except for the quotation mark <code>"</code> which must be escaped with backslash <code>\</code> or tilde <code>~</code>. 
+        Values enclosed in quotation marks <code>"</code> are literals, all <a href="#reserved-characters">reserved characters</a> <%=link_icon("down")%> can be used inside literals except for the quotation mark <code>"</code> and the grave (<code>`</code>) which must be escaped with backslash <code>\</code> or tilde <code>~</code>. 
       </p>
+    </div>
+    <div class="sectionh3" id="keys">
+      <h3 id="keys-title">Keys</h3>
+      <p>
+        Pair keys must be a string: they may contain numbers, may start with a number but must not be made up of solely numbers. The question mark <code>?</code> key is reserved for the <a href="#object-index">object index</a> <%=link_icon("down")%>. Uppercase keys are immmutable, underscore  prefixed and asterix prefixed keys are allowed but have special meaning.
+      </p>
+      <div class="sectionh4" id="mutable-immutable-values">
+       <h4 id="mutable-immutable-values-title">Mutable / Immutable Values</h4>
+        <p>
+          Assign a value to an uppercase key to tell the interpreter that this object can only be defined once.
+          </p>
+          <%=code_with_note('code-mutable-example','
+            <span>## This mutable value with a lower (or mixed) case key can be changed:</span>
+            mutable_key = 1
+            <span>## This immutable value with an uppercase key can only be set once:</span>
+            IMMUTABLE_KEY = 1
+
+            <span>## No problem:</span>
+            mutable_key = 2
+            <span>## Results in ERROR:</span>
+            IMMUTABLE_KEY = 2',
+
+            'An example of mutable and immutable values.')
+          %>
+      </div>    
+      <p>
+        Keys must start with a letter or a number except in the following cases:
+      </p>
+      <div class="sectionh4" id="underscore-prefixed">      
+        <h4 id="underscore-prefixed-title">Underscore prefixed keys</h4>
+        <p>
+          Pairs with a key prefixed with an underscore (<code>_</code>) do not appear in the output object, they are typically used for <a href="#object-referencing">object referencing</a> <%=link_icon("down")%>.
+        </p>
+      </div>
+      <div class="sectionh4" id="asterisk-prefixed">      
+        <h4 id="asterix-prefixed-title">Asterix prefixed keys</h4>
+        <p>
+          Pairs with a key prefixed with an asterix (<code>*</code>) are <a href="#instructions">instructions</a> <%=link_icon("down")%>.
+        </p>
+      </div>
     </div>
     <div class="sectionh3" id="type-inference">
       <h3 id="type-inference-title">Type Inference</h3>
@@ -335,13 +389,13 @@
   <div class="sectionh2" id="comments">
   <h2 id="comments-title">Comments</h2>
     <p>
-      Two hash symbols mark the rest of the line as a comment.
+      Two hash symbols mark the rest of the line as a comment. Comments cannot appear at the end of lines.
     </p>
     <%=code_with_note('code-comment-example','
       <span>## This comment is allowed</span>
       car(
         <span>## So is this one</span>
-        make=Bentley <span>## This one too</span>
+        make=Bentley
         model=Continental GT
         styles[
           <span>## Inside arrays is fine too</span>
@@ -367,7 +421,7 @@
   <div class="sectionh2" id="object-referencing">
   <h2 id="object-referencing-title">Object Referencing</h2>
     <p>
-      MODL can reference any object previously described in the same file, an object can be described once and used multiple times. Objects are referenced using percent-prefixing. For character efficiency it's possible to omit the <code>_</code> when referencing hidden objects, as shown in the second example below:
+      MODL can reference any object previously described in the same file, an object can be described once and referenced multiple times. Objects are referenced using percent-prefixing. For character efficiency it's possible to omit the <code>_</code> when referencing hidden objects, as shown in the second example below:
     </p>
       <%=code_with_note('code-setvars','
         <span class="syntax-highlighter">_manufacturer=Bentley</span>
@@ -384,7 +438,7 @@
       'An example using object referencing.')
       %>
       <p>
-        Percent prefixing is character efficient because it has no terminator. In circumstances where the variable needs to be interpolated without spacing, the variable (and any methods) can be enclosed in grave accents <code>`</code>. Take the following example:
+        Percent prefixing is character efficient because it has no terminator. In circumstances where the variable needs to be interpolated without spacing, the variable can be enclosed in grave accents <code>`</code>. Take the following example:
       </p>
       <%=code_with_note('code-setvars2','
         test=foo
@@ -392,7 +446,8 @@
         <span>## Set value 1 to use the value of the variable "test"</span>
         value1=%test
         <span>## Set value 2 to use the value of the variable "test" appended with "bar"</span>
-        value2=<span class="syntax-highlighter">`%test`</span>bar',
+        value2=<span class="syntax-highlighter">`%test`</span>bar
+        <span>## resulting in "foobar"</span>',
 
       'An example using object referencing surrounded in graves.')
       %>
@@ -408,8 +463,9 @@
     <div class="sectionh3" id="deep-object-referencing">
       <h3 id="deep-object-referencing-title">Deep Object Referencing</h3>
       <p>
-        It's possible to reference values within an object using the right chevron (<code>></code>), this is known as deep object referencing. Here's an array example:
+        Using deep object referencing, it's possible to reference values within an object using the right chevron. Here's an example referencing an item in an array:
       </p>
+      <%=run_reminder%>
       <%=code_with_note('code-deep-object-referencing','
         _test=[1;2;3]
         second_value=%test>1',
@@ -417,7 +473,7 @@
       'An example using deep object referencing on an array.')
       %>
       <p>
-        Here's a map:
+        Here's an example referencing the value of a pair within a map:
       </p>
       <%=code_with_note('code-deep-object-referencing2','
         _test=(one=1;two=2)
@@ -432,7 +488,7 @@
     <div class="sectionh3" id="object-index">
       <h3 id="object-index-title">Object Index</h3>
       <p>
-        An object index is set using the key <code>?</code>. Values must be provided in a pair or an array and can be referenced using their position in the index. This serves as a character efficient way to reference an object. For example:
+        The object index is set using the key <code>?</code>. Values must be provided in an array and can be referenced using their position in the index. This serves as a character efficient way to reference an object. For example:
       </p>
       <%=code_with_note('object-index-example','
         <span>## We create an object index using an array, assigning "foo" to index 0 and "bar" to index 1:</span>
@@ -445,131 +501,134 @@
       'An example using the character efficient object index.')
       %>      
     </div>      
-    <div class="sectionh3" id="methods">
-      <h3 id="methods-title">Methods</h3>
-      <p>
-        Methods can be applied to objects. This can be useful in circumstances where a string is used multiple times but with varying case or spacing. Take the following example:
-      </p>
-      <%=code_with_note('code-casemodification1','
-        (
-          name = TESTING
-          description = This is an object testing variables
-          value1 = Testing123
-        )',
-
-        'An object with a word repeated multiple times in different case.')
-      %>
-      <p>
-        We can describe this object more efficiently using built-in MODL methods – <code>u</code> (upcase), <code>d</code> (downcase) and <code>s</code> (sentence). Here's the same object using methods to reduce the size of the object:
-      </p>
-      <%=code_with_note('code-casemodification2','
-        <span class="syntax-highlighter">_v=testing</span>
-        (
-          name = <span class="syntax-highlighter">%v.u</span>
-          description = This is an object <span class="syntax-highlighter">%v</span> variables
-          value = <span class="syntax-highlighter">`%v.s`</span>123
-        )',
-
-        'An object using methods to change variable case.')
-      %>        
-      <p>
-        The following methods are available, where <code>x</code> is an object previously described:
-      </p>
-      <%
-      var1 = "Here's a REF test"
-      %>
-      <table class="fields">
-        <thead>
-          <tr>
-            <th style="width:40px">Method&nbsp;ID</th>
-            <th style="width:140px">Method&nbsp;Name</th>
-            <th style="width:60px">Example</th>
-            <th class="nm">Variable&nbsp;Transformation</th>
-          </tr>
-        </thead>
-        <tr>
-          <td class="id-header">u</td>
-          <td>upcase</td>
-          <td>%x.u</td>
-          <td class="nm">
-            <code><%=var1%></code> => <code><%=var1.upcase%></code>
-          </td>
-        </tr>
-        <tr>
-          <td class="id-header">d</td>
-          <td>downcase</td>
-          <td>%x.d</td>
-          <td class="nm">
-            <code><%=var1%></code> => <code><%=var1.downcase%></code>
-          </td>
-        </tr>
-        <tr>
-          <td class="id-header">s</td>
-          <td>sentence</td>
-          <td>%x.s</td>
-          <td class="nm">
-            <code><%=var1%></code> => <code><%=var1.capitalize%></code>
-          </td>
-        </tr>
-        <tr>
-          <td class="id-header">i</td>
-          <td>initcap</td>
-          <td>%x.i</td>
-          <td class="nm">
-            <code><%=var1%></code> => <code><%=var1.split.map(&:capitalize).join(' ')%></code>
-          </td>
-        </tr>
-        <tr>
-          <td class="id-header">e</td>
-          <td><a href="https://en.wikipedia.org/wiki/Percent-encoding" target="_blank">urlencode</a> <%=link_icon("external")%></td>
-          <td>%1.e</td>
-          <td class="nm">
-            <code><%=var1%></code> => <code><%=CGI.escape(var1)%></code>
-          </td>
-        </tr>
-        <tr>
-          <td class="id-header">p<span style="font-weight:normal;"></span></td>
-          <td><a href="#encoding-for-ascii-systems">punydecode</a> <%=link_icon("external")%></td>
-          <td>`%x.p`</td>
-          <td class="nm">
-            <code>e1afmkfd</code> => <code>пример</code>
-          </td>
-        </tr>
-        <tr>
-          <td class="id-header">r<span style="font-weight:normal;">(<em>this</em>,<em>that</em>)</span></td>
-          <td>replace</td>
-          <td>`%x.r(test,foo)`</td>
-          <td class="nm">
-            <code><%=var1%></code> => <code><%=var1.gsub("test","foo")%></code>
-          </td>
-        </tr>
-        <tr>
-          <td class="id-header">t<span style="font-weight:normal;">(<em>this</em>)</span></td>
-          <td>trim</td>
-          <td>`%x.t(REF)`</td>
-          <td class="nm">
-            <code><%=var1%></code> => <code>Here's a&nbsp;</code>
-          </td>
-        </tr>
-      </table>
-      <p>
-        Methods that take arguments (<code>replace</code> and <code>trim</code>) must be called with graves, e.g. <code>`%string.replace(this,that)`</code>. To replace with an empty string, use an empty graved string: <code>`%string.replace(foo,``)`</code>.
-      </p>
-      <p>
-        Methods can be chained, e.g. <code>`%string.replace(this,that).upcase`</code> and it's also possible to define <a href="#custom-methods">custom methods</a>. <%=link_icon("down")%>
-      </p>
-    </div>
     <div class="sectionh3" id="scope">
       <h3 id="scope-title">Scope</h3>
       <p>
-        All objects described in MODL are global, they can be referenced anywhere else in the file.
+        All objects described in MODL are global, they can be referenced anywhere else in the object.
       </p>
     </div>    
   </div>
+  <div class="sectionh2" id="methods">
+    <h2 id="methods-title">Methods</h2>
+    <p>
+      Methods can be applied to object references, this can be useful in circumstances where a string is used multiple times but with varying case or spacing. Take the following example:
+    </p>
+    <%=code_with_note('code-casemodification1','
+      (
+        name = TESTING
+        description = This is an object testing variables
+        value1 = Testing123
+      )',
+
+      'An object with a word repeated multiple times in different case.')
+    %>
+    <p>
+      We can describe this object more efficiently using built-in MODL methods – <code>u</code> (upcase), <code>d</code> (downcase) and <code>s</code> (sentence). Here's the same object using methods to reduce the size of the object:
+    </p>
+    <%=code_with_note('code-casemodification2','
+      <span class="syntax-highlighter">_v=testing</span>
+      (
+        name = <span class="syntax-highlighter">%v.u</span>
+        description = This is an object <span class="syntax-highlighter">%v</span> variables
+        value = <span class="syntax-highlighter">`%v.s`</span>123
+      )',
+
+      'An object using methods to change variable case.')
+    %>
+    <p>
+      Methods can also be applied to strings, this is useful for <a href="#encoding-for-ascii-systems">encoding data for ASCII systems</a> <%=link_icon("down")%>.
+    </p>   
+    <p>
+      The following methods are available, where <code>%x</code> is an object previously described:
+    </p>
+    <%
+    var1 = "Here's a REF test"
+    %>
+    <table class="fields">
+      <thead>
+        <tr>
+          <th style="width:40px">Method&nbsp;ID</th>
+          <th style="width:140px">Method&nbsp;Name</th>
+          <th style="width:60px">Example</th>
+          <th class="nm">Variable&nbsp;Transformation</th>
+        </tr>
+      </thead>
+      <tr>
+        <td class="id-header">u</td>
+        <td>upcase</td>
+        <td>%x.u</td>
+        <td class="nm">
+          <code><%=var1%></code> => <code><%=var1.upcase%></code>
+        </td>
+      </tr>
+      <tr>
+        <td class="id-header">d</td>
+        <td>downcase</td>
+        <td>%x.d</td>
+        <td class="nm">
+          <code><%=var1%></code> => <code><%=var1.downcase%></code>
+        </td>
+      </tr>
+      <tr>
+        <td class="id-header">s</td>
+        <td>sentence</td>
+        <td>%x.s</td>
+        <td class="nm">
+          <code><%=var1%></code> => <code><%=var1.capitalize%></code>
+        </td>
+      </tr>
+      <tr>
+        <td class="id-header">i</td>
+        <td>initcap</td>
+        <td>%x.i</td>
+        <td class="nm">
+          <code><%=var1%></code> => <code><%=var1.split.map(&:capitalize).join(' ')%></code>
+        </td>
+      </tr>
+      <tr>
+        <td class="id-header">e</td>
+        <td><a href="https://en.wikipedia.org/wiki/Percent-encoding" target="_blank">urlencode</a> <%=link_icon("external")%></td>
+        <td>%1.e</td>
+        <td class="nm">
+          <code><%=var1%></code> => <code><%=CGI.escape(var1)%></code>
+        </td>
+      </tr>
+      <tr>
+        <td class="id-header">p<span style="font-weight:normal;"></span></td>
+        <td><a href="#encoding-for-ascii-systems">punydecode</a> <%=link_icon("external")%></td>
+        <td>`%x.p`</td>
+        <td class="nm">
+          <code>e1afmkfd</code> => <code>пример</code>
+        </td>
+      </tr>
+      <tr>
+        <td class="id-header">r<span style="font-weight:normal;">(<em>this</em>,<em>that</em>)</span></td>
+        <td>replace</td>
+        <td>`%x.r(test,foo)`</td>
+        <td class="nm">
+          <code><%=var1%></code> => <code><%=var1.gsub("test","foo")%></code>
+        </td>
+      </tr>
+      <tr>
+        <td class="id-header">t<span style="font-weight:normal;">(<em>this</em>)</span></td>
+        <td>trim</td>
+        <td>`%x.t(REF)`</td>
+        <td class="nm">
+          <code><%=var1%></code> => <code>Here's a&nbsp;</code>
+        </td>
+      </tr>
+    </table>
+    <p>
+      Methods that take arguments (<code>replace</code> and <code>trim</code>) must be called with graves, e.g. <code>`%string.replace(this,that)`</code>. To replace with an empty string, use an empty graved string: <code>`%string.replace(foo,``)`</code>.
+    </p>
+    <p>
+      Methods can be chained, e.g. <code>`%string.replace(this,that).upcase`</code> and it's also possible to define <a href="#custom-methods">custom methods</a>. <%=link_icon("down")%>
+    </p>
+  </div>  
   <div class="sectionh2" id="conditionals">
   <h2 id="conditionals-title">Conditionals</h2>
     <p>
-      Standard data serialisation formats contain no logic, MODL is different - allowing object authors to design logic into their object description. This means that the same object can be described differently to recipients based on client side variables. All of this is dealt with at the interpretation layer, resulting in much less work for the developer receiving the object and most importantly, consistent logic processing.
+      Standard data serialisation formats contain no logic, MODL is different - allowing object authors to design logic into their object description. This means that the same object can be described differently to recipients based on client side variables. All of this is dealt with at the interpretation layer, resulting in much less work for the developer receiving the object and most importantly: consistent logic processing.
     </p>
     <p>
       A conditional can output any primitive or structure, including a conditional. A conditional begins with the left brace <code>{</code> and ends with the right brace <code>}</code>.
@@ -577,7 +636,7 @@
     <div class="sectionh3" id="conditionals-example">
       <h3 id="conditionals-example-title">Example</h3>
       <p>
-        Conditionals are made up of a test (e.g. <code>country=us</code>) and it's return value (e.g. <code>John Doe</code>) separated by a question mark <code>?</code>. Each condition is separated by a slash <code>/</code>. In this example a variable called <code>country</code> is tested:
+        Conditionals are made up of a test (e.g. <code>country=gb</code>) and it's return value (e.g. <code>John Smith</code>) separated by a question mark <code>?</code>. Each condition is separated by a slash <code>/</code>. In this example a variable called <code>country</code> is tested:
       </p>
       <%=code_with_note('code-conditional2','
         country = gb
@@ -585,8 +644,8 @@
         support_contact = {
           <span>## Does the data in the key "country" equal "gb"?</span>
           %_country=gb?
-            <span>## Yes, assign the value "Joe Bloggs" to the key "support_contact"</span>
-            Joe Bloggs
+            <span>## Yes, assign the value "John Smith" to the key "support_contact"</span>
+            John Smith
           <span>## If not, does it equal "us"?</span>
           /%_country=us?
             <span>## Yes, assign the value "John Doe" to the key "support_contact"</span>
@@ -606,7 +665,7 @@
       </p>
       <%=code_with_note('code-conditional-output','
         country = gb
-        support_contact = Joe Bloggs',
+        support_contact = John Smith',
 
       'The object after interpretation')
       %>       
@@ -620,7 +679,7 @@
     <div class="sectionh3" id="conditional-parts">
     <h3 id="conditional-parts-title">Parts</h3>
     <p>
-      Conditionals are made up of a test <code>(e.g. country=us)</code> and it's return value (e.g. <code>United States</code>) separated by a question mark <code>?</code>. Each condition is separated by a forward slash <code>/</code>. In our <a href="#conditionals-example">previous example</a> <%=link_icon("up")%> a user variable called country is used. 
+      Conditionals are made up of a test <code>(e.g. country=us)</code> and it's return value (e.g. <code>United States</code>) separated by a question mark <code>?</code>. Each condition is separated by a forward slash <code>/</code>.
     </p>
     <div class="sectionh4" id="conditional-tests">
       <h4 id="conditional-tests-title">Conditional Tests</h4>
@@ -629,7 +688,7 @@
       </p>
       <h5 id="operators">Operators</h5>
       <p>
-        Example user variables have been used to help demonstrate operators in the table below. The user variables are: language&nbsp;(<code>l</code>), latitude (<code>gy</code>), country (<code>c</code>) and operating system (<code>os</code>). Please note, these are not MODL variables, they must be populated by a client. The table below shows the full list of operators:
+        Example user variables have been used to help demonstrate operators in the table below. The user variables are: language&nbsp;(<code>l</code>), latitude (<code>gy</code>), country (<code>c</code>) and operating system (<code>os</code>). These variables are typically defined by the client. The table below shows the full list of operators:
       </p>
       <table class="fields">
         <thead>
@@ -759,7 +818,7 @@
             <span class="syntax-highlighter">country=us|gb|au</span>?
               support_number=+441270123456
             /?
-              support_number=International Clients:+14161234567
+              support_number=+141612345678
           }',
 
           'Variable assumption')
@@ -777,7 +836,7 @@
           }
 
           <span>## or, more character efficient:</span>
-          <span>## {<span class="syntax-highlighter">{</span>country=ca&language=fr<span class="syntax-highlighter">}</span>/country=fr?company=Example SARL;telephone=Service Clients:14161234567/?company=Example Ltd;telephone=Customer Service:441270123456}</span>',
+          <span>## {<span class="syntax-highlighter">{</span>country=ca&language=fr<span class="syntax-highlighter">}</span>|country=fr?support_number=+14161234567/?support_number=+441270123456}</span>',
 
         'An example conditional with grouped tests')
         %>
@@ -793,7 +852,8 @@
         </p>
         <%=code_with_note('code-conditional-boolean-return','
           _country=uk
-          british={country.u=GB|UK?}',
+          british={country.u=GB|UK?}
+          <span>## outputs true</span>',
 
         'A conditional without a return value.')
         %>
@@ -803,144 +863,155 @@
   <div class="sectionh2" id="instructions">
   <h2 id="instructions-title">Instructions</h2>
     <p>
-      Instructions can be passed to the MODL interpreter by using certain keys. For example, earlier we looked at the <a href="#object-index">object index</a> <%=link_icon("up")%> instruction using the key <code>?</code> – this instructs the interpreter to build an index from the values passed to it, which can be referenced by number.
+      An instruction is set using an asterisk-prefixed key, these are processed by the interpreter first. Instructions never appear in the output object.
     </p>
-    <div class="sectionh3" id="hidden-objects">
-      <h3 id="hidden-objects-title">Hidden Objects</h3>
+    <div class="sectionh3" id="load">
+      <h3 id="load-title">Load</h3>
       <p>
-        Use an underscore-prefixed key to tell the MODL interpreter that this object should not be included in the output object. Underscore prefixed keys are typically used for objects that will be <a href="#object-referencing">referenced later</a> <%=link_icon("up")%>.
+        One or many MODL files can be loaded into another by assigning a MODL file URI to the <code>*load</code> or <code>*l</code> key. The value can be a local (to the interpreter) or remote file location with a <code>.modl</code> or <code>.txt</code> extension. The interpreter will add a <code>.modl</code> extension if one is not specified. 
       </p>
-    </div>
-    <div class="sectionh3" id="mutable-immutable-values">
-    <h3 id="mutable-immutable-values-title">Mutable / Immutable Values</h3>
       <p>
-        Assign a value to an uppercase key to tell the interpreter that this object can only be described once.
-        </p>
-        <%=code_with_note('code-mutable-example','
-          <span>## This mutable value with a lower (or mixed) case key can be changed:</span>
-          mutable_key = 1
-          <span>## This immutable value with an uppercase key can only be set once:</span>
-          IMMUTABLE_KEY = 1
-
-          <span>## No problem:</span>
-          mutable_key = 2
-          <span>## Results in ERROR:</span>
-          IMMUTABLE_KEY = 2',
-
-          'An example of mutable and immutable values.')
-        %>
-    </div>    
-    <div class="sectionh3" id="interpreter-instructions">
-      <h3 id="interpreter-instructions-title">Interpreter Instructions</h3>
-      <p>
-        An interpreter instruction is set using an asterisk-prefixed key, they never appear in the output object.
+        Multiple files can be loaded at the same point by providing the file URIs in an array, or at multiple different points in the file by using the instruction multiple times. Loads can also be chained. This example shows one file being loaded:
       </p>
-      <div class="sectionh4" id="load">
-        <h4 id="load-title">Load</h4>
-        <p>
-          Other MODL files can be loaded into another by assigning a MODL file URI to the <code>*load</code> or <code>*l</code> key. The value can be a local (to the interpreter) or remote file location with a <code>.modl</code> or <code>.txt</code> extension. The interpreter will add a <code>.modl</code> extension if one is not specified. 
-        </p>
-        <p>
-          Multiple files can be loaded at the same point by providing the file URIs in an array, or at multiple different points in the file by using the instruction at multiple points. Loads can also be chained. This example shows one file being loaded:
-        </p>
-        <%=code_with_note('code-load-example','
-          <span class="syntax-highlighter">*load = example-classes.modl</span>
-          example(
-            value1 = one
-            value2 = two
-          )
+      <%=code_with_note('code-load-example','
+        <span class="syntax-highlighter">*load = example-classes.modl</span>
+        example(
+          value1 = one
+          value2 = two
+        )
 
-          <span>## or, more character efficient:</span>
-          <span><span class="syntax-highlighter">*l=example-classes.modl</span>;example(value1=one;value2=two)</span>',
-          'An example file loading another MODL file called example-classes.modl.',nil,true,false)
-        %>
-        <p>
-          In the following example, the <code>*LOAD</code> / <code>*L</code> key is uppercase and therefore is <a href="#mutable-immutable-values">immutable</a> <%=link_icon("up")%> – indicating that only one load is allowed and the file being loaded cannot include any further loads:
-        </p>
-        <%=code_with_note('code-load-example','
-          <span class="syntax-highlighter">*LOAD = example-classes.modl</span>
-          example(
-            value1 = one
-            value2 = two
-          )
+        <span>## or, more character efficient:</span>
+        <span><span class="syntax-highlighter">*l=example-classes.modl</span>;example(value1=one;value2=two)</span>',
+        'An example file loading another MODL file called example-classes.modl.',nil,true,false)
+      %>
+      <p>
+        In the following example, the <code>*LOAD</code> / <code>*L</code> key is uppercase and therefore is <a href="#mutable-immutable-values">immutable</a> <%=link_icon("up")%> – indicating that only one load is allowed and the file being loaded cannot include any further loads:
+      </p>
+      <%=code_with_note('code-load-example2','
+        <span class="syntax-highlighter">*LOAD = example-classes.modl</span>
+        example(
+          value1 = one
+          value2 = two
+        )
 
-          <span>## or, more character efficient:</span>
-          <span><span class="syntax-highlighter">*L=example-classes.modl</span>;example(value1=one;value2=two)</span>',
-          'An example file loading another MODL file called example-classes.modl.',nil,true,false)
-        %>
-        <p>
-          It's also possible to use <a href="#object-referencing">object references</a> <%=link_icon("up")%> in URIs, like this:
-        </p>
-        <%=code_with_note('code-load-example','
-          <span class="syntax-highlighter">_country=gb
-          *LOAD = example-classes-%country.modl</span>
-          example(
-            value1 = one
-            value2 = two
-          )',
-          'An example file loading another MODL file called example-classes-gb.modl.',nil,true,false)
-        %>
-        <h5>File caching</h5>
+        <span>## or, more character efficient:</span>
+        <span>## <span class="syntax-highlighter">*L=example-classes.modl</span>;example(value1=one;value2=two)</span>',
+        'An example file loading another MODL file called example-classes.modl.',nil,true,false)
+      %>
+      <p>
+        It's also possible to use <a href="#object-referencing">object references</a> <%=link_icon("up")%> in URIs, like this:
+      </p>
+      <%=code_with_note('code-load-example3','
+        <span class="syntax-highlighter">_country=gb
+        *LOAD = example-classes-%country.modl</span>
+        example(
+          value1 = one
+          value2 = two
+        )',
+        'An example file loading another MODL file called example-classes-gb.modl.',nil,true,false)
+      %>
+      <div class="sectionh4" id="file-caching">
+      <h4 id="file-caching-title">File caching</h4>
         <p>
           It's recommended that interpreters cache loaded files for one hour by default. To force an interpreter to fetch and parse the file each time the MODL is interpreted, add an exclamation mark (<code>!</code>) to the end of the URI.
         </p>
       </div>
-      <div class="sectionh4" id="class">
-        <h4 id="class-title">Class</h4>
-        <p>
-          Classes can be created using the key <code>*class</code> or <code>*c</code>. Classes are used in object transformation and are covered in detail in the <a href="#classes">classes</a> <%=link_icon("down")%> section.
-        </p>
-      </div>
-      <div class="sectionh4" id="custom-methods">
-        <h4 id="custom-methods-title">Method</h4>
-        <p>
-          Custom methods can be created using the key <code>*m</code> or <code>*method</code>, all methods must have an ID represented by <code>*id</code> or <code>*i</code>. Methods can also optionally have a name set using the key <code>*name</code> or <code>*n</code>. Custom methods can only be composed using core methods with the <code>*transform</code> or <code>*t</code> key.
-        </p>
-        <p>
-          For example, this method could be created to hyphenate a name:
-        </p>
-        <%=code_with_note('code-custom-method-example',"
-          *method(
-            <span>## The method can be called by it\'s ID or name</span>
-            *id=hy
-            *name=hyphenate
-            <span>## The value of the object that the method is called on is transformed using the following methods:</span>
-            *transform=`replace( ,-)`
-          )
+    </div>
+    <div class="sectionh3" id="class">
+      <h3 id="class-title">Class</h3>
+      <p>
+        Classes can be created using the key <code>*class</code> or <code>*c</code>. Classes are used in object transformation and are covered in detail in the <a href="#classes">classes</a> <%=link_icon("down")%> section.
+      </p>
+    </div>
+    <div class="sectionh3" id="custom-methods">
+      <h3 id="custom-methods-title">Method</h3>
+      <p>
+        Custom methods can be created using the key <code>*m</code> or <code>*method</code>, all methods must have an ID represented by <code>*id</code> or <code>*i</code>. Methods can also optionally have a name set using the key <code>*name</code> or <code>*n</code>. Custom methods can only be composed using core methods with the <code>*transform</code> or <code>*t</code> key.
+      </p>
+      <p>
+        For example, this method could be created to hyphenate a name:
+      </p>
+      <%=code_with_note('code-custom-method-example',"
+        *method(
+          <span>## The method can be called by it\'s ID or name</span>
+          *id=hy
+          *name=hyphenate
+          <span>## The value of the object that the method is called on is transformed using the following methods:</span>
+          *transform=`replace( ,-)`
+        )
 
-          _name = John Smith
-          hyphenated_name = %name.hy
+        _name = John Smith
+        hyphenated_name = %name.hy
 
-          <span>## or, more character efficient:</span>
-          <span>## *m(*i=hy;*n=hyphenate;*t=`r( ,-)`);_name=John Smith;hyphenated_name=%name.hy</span>",
-        'Defining a custom method.')%>
-      </div>
-      <div class="sectionh4" id="syntax-version">      
-        <h4 id="syntax-version-title">Syntax Version</h4>
-        <p>
-          The MODL syntax version number can be supplied using the key <code>*V</code> or <code>*VERSION</code> – this allows the author to inform the interpreter which version of the MODL syntax has been used to describe the MODL object. If defined, the version number must be the first interpreter instruction in the file and is only recognised in uppercase (an immutable value) and so can't be redefined.
-        </p>
-        <p>
-          The current version is 1, revisions will be extremely rare with very careful consideration given to any breaking change.
-        </p>
-      </div>
+        <span>## or, more character efficient:</span>
+        <span>## *m(*i=hy;*n=hyphenate;*t=`r( ,-)`);_name=John Smith;hyphenated_name=%name.hy</span>",
+      'Defining a custom method.')%>
+    </div>
+    <div class="sectionh3" id="syntax-version">      
+      <h3 id="syntax-version-title">Syntax Version</h3>
+      <p>
+        The MODL syntax version number can be supplied using the key <code>*V</code> or <code>*VERSION</code> – this allows the author to inform the interpreter which version of the MODL syntax has been used to describe the MODL object. If defined, the version number must be the first instruction in the file and is only recognised in uppercase (an immutable value) and so can't be redefined.
+      </p>
+      <p>
+        The current version is 1, revisions will be extremely rare with very careful consideration given to any breaking change.
+      </p>
     </div>
   </div>
   <div class="sectionh2" id="classes">
     <h2 id="classes-title">Classes</h2>
     <p>
-      Classes can help make object description more efficient. Classes are defined with the key <code>*c</code> or <code>*class</code> and all classes must have an ID represented by <code>*id</code> or <code>*i</code>. Classes can also optionally have a name set using the key <code>*name</code> or <code>*n</code>.
+      Classes can help make object description more efficient. A class is defined by assigning a map to the key <code>*c</code> or <code>*class</code>.
     </p>
-    <p>
-      If a key in a pair matches a class ID or class name, the pair is transformed according to the class definition. If the class has a name, it will be used as the key for the output object.
-    </p>
-    <p>
-      The <code>*superclass</code> or <code>*s</code> key is used within a class definition to declare a superclass. Objects with a superclass inherit all pairs defined in parent classes in the class hierarchy. There's more <a href="#class-inheritance">about class inheritance</a> <%=link_icon("down")%>. The <code>*assign</code> or <code>*a</code> key is used within a class definition for <a href="#key-assignment">key assignment</a> <%=link_icon("down")%>.
-    </p>
+    <div class="sectionh3" id="class-instructions">
+      <h3 id="classes-title">Class Instructions</h3>
+      <p>
+        Classes have their own set of instructions. If the key of a pair in a MODL object matches a class ID or class name, the pair is transformed according to the class definition. If the class has a name, it will be used as the key for the output object.
+      </p>
+      <p>
+        The <code>*superclass</code> or <code>*s</code> key is used within a class definition to declare a superclass. There's more <a href="#class-inheritance">about class inheritance</a> <%=link_icon("down")%>. The <code>*assign</code> or <code>*a</code> key is used within a class definition for <a href="#key-assignment">key assignment</a> <%=link_icon("down")%>.
+      </p>
+      <p>
+        Objects with a superclass inherit all standard (non-instructional) pairs defined in parent classes in the class hierarchy. 
+      </p>
+      <table class="fields">
+        <thead>
+          <tr>
+            <th style="width:40px">Instruction&nbsp;ID</th>
+            <th style="width:140px">Instruction&nbsp;Name</th>
+            <th style="width:140px">Required</th>
+            <th>Instruction Description</th>
+          </tr>
+        </thead>
+        <tr>
+          <td class="id-header">*i</td>
+          <td>*id</td>
+          <td>Yes</td>
+          <td>When within a class object, the ID of the class</td>
+        </tr>
+        <tr>
+          <td class="id-header">*n</td>
+          <td>*name</td>
+          <td>No</td>
+          <td>When within a class object, the name of the class</td>
+        </tr>
+        <tr>
+          <td class="id-header">*s</td>
+          <td>*superclass</td>
+          <td>No</td>
+          <td>When within a class object, the ID or name of the parent of the class</td>
+        </tr>
+        <tr>
+          <td class="id-header">*a</td>
+          <td>*assign</td>
+          <td>No</td>
+          <td>Instructing how the class should assign keys to values</td>
+        </tr>
+      </table>
+    </div>
     <div class="sectionh3" id="class-example">
       <h3 id="class-example-title">Example</h3>
       <p>
-        This basic example shows how classes can be used with arrays to make object description more efficient:
+        This basic example shows how classes can be used to make object description more efficient:
       </p>
     <%=code_with_note('code-example-class','
       *class(
@@ -956,7 +1027,7 @@
         actions=[call;email]
       )
 
-      <span>## This simple array is transformed into a map using key assignment in the class defined above</span>
+      <span>## This simple array is transformed into a map by the class defined above</span>
       e=Mr:John Smith:Sales Director',
       
       'An example file defining a simple class.')
@@ -984,7 +1055,7 @@
     <div class="sectionh3" id="key-assignment">
     <h3 id="key-assignment-title">Key Assignment</h3>
       <p>
-        If a map always includes the same pairs in the same order, we can use key assignment in the class to make defining the map more character efficient. The&nbsp;<code>*assign</code> (or <code>*a</code>) key must be an array of arrays. 
+        If a map always includes the same pairs in the same order, we can use key assignment in the class to make defining the map more character efficient. The <code>*assign</code> (or <code>*a</code>) key must be an array of arrays – it instructs the class how to assign values that are passed to it.
       </p>
       <%=code_with_note('code-assign-key','
         *class(
@@ -999,15 +1070,15 @@
         'Key assignment in a class.',nil,true,false)
       %>
       <p>
-        The <code>*assign</code> array shows the different permutations of values that it will accept for key assignment: 
+        The <code>*assign</code> array above shows the different permutations of values that it will accept for key assignment. If a number of values are provided that do not match one of the permutations, the interpreter will return an error. Based on the example above:
       </p>
       <ul>
         <li>It can accept one value – it will assign the value to the key <code>name</code>.</li>
         <li>It can accept two values – it will assign the values to <code>title</code> and <code>name</code></li>
         <li>It can accept three values – it will assign the values to <code>title</code>, <code>name</code> and <code>job_title</code>.</li>
       </ul>
-      <p>
-        Now we can define our map using an <a href="#array">array</a> <%=link_icon("up")%> assigned to a key that matches the class ID or name, like this:
+      <p>        
+        Now, if we define an <a href="#array">array</a> <%=link_icon("up")%> assigned to a key that matches the class ID or name, it will be transformed according to the class, like this:
       </p>
       <%=code_with_note('code-assign-key-example','
         *class(
@@ -1024,9 +1095,23 @@
         'The assign key in a class.',nil,true,false)
       %>
       <p>
-        The output object is identical to that shown at the end of the previous section.
+        The output object is identical to that shown at the end of the previous section:
       </p>
-    </div>    <div id="class-inheritance" class="sectionh3">
+    <%=code_with_note('code-example-class-output','
+      employee(
+        title = Mr
+        name = John Smith
+        job_title = Sales Director
+        actions = [
+          call
+          email
+        ]
+      )',
+    
+    'The output from our example file.')
+    %>      
+    </div>
+    <div id="class-inheritance" class="sectionh3">
     <h3 id="class-inheritance-title">Class Inheritance</h3>
       <p>
         Class inheritance can be used to make complex class definitions simpler and more efficient. For example, if we wanted to introduce a new class called <code>customer</code>, we could have <code>employee</code> and <code>customer</code> both inherit from a new <code>person</code> class:
@@ -1058,7 +1143,7 @@
       'New classes demonstrating class inheritance.',nil,true,false)
       %>
       <p>
-        Each <code>customer</code> and <code>employee</code> will now inherit the <code>actions</code> array but notice that key assignment differs – values are assigned to different keys depending on whether an employee or customer is being defined.
+        Due to object transformation, each <code>customer</code> and <code>employee</code> will now inherit the <code>actions</code> array but notice that key assignment for these two classes differ – values are assigned to different keys depending on whether an employee or customer is being defined.
       </p>
       <p>
         Core superclasses are <code>str</code>, <code>num</code>, <code>arr</code> and <code>map</code>, if a superclass is not provided it will be determined by the interpreter using superclass inference.
@@ -1077,7 +1162,7 @@
         c=Mr:Joe Bloggs:joe.bloggs@example.com
         <span>## Another customer:</span>
         c=Mrs:Jane Wilson:jane.wilson@example.com',
-      'Loading a file.',nil,true,false)
+      'Loading classes from an external file.',nil,true,false)
       %>
         <p>
           Here's the output object:
@@ -1169,7 +1254,7 @@
         <strong>Equals</strong> <code>=</code> is used to separate the key from a value in a <a href="#pair">pair</a> <%=link_icon("up")%>.
       </li>
       <li>
-        <strong>Grave accents</strong> <code>`</code> are used for <a href="#setting-and-using-variables">variable interpolation</a> <%=link_icon("up")%> and for <a href="#punycode-encoding">punycode encoded</a> <%=link_icon("up")%> values.
+        <strong>Grave accents</strong> <code>`</code> are used for <a href="#setting-and-using-variables">variable interpolation</a> <%=link_icon("up")%> and passing strings to methods.
       </li>
       <li>
         <strong>Double quotes</strong> <code>"</code> are used for <a href="#literals">literals</a> <%=link_icon("up")%>.
@@ -1224,16 +1309,19 @@
         Interpreters should use type inference for values that are not quoted, numbers can be forced as strings by quoting them.
       </li>
       <li>
-        The interpreter instruction <code>*V</code> or <code>*VERSION</code> defines the MODL syntax version. If undefined, assume version 1. If defined, it must be an integer greater than zero and must be the first interpreter instruction in the MODL file, defining it after another interpreter instruction must raise an error at parse time. 
+        The instruction <code>*V</code> or <code>*VERSION</code> defines the MODL syntax version. If undefined, assume version 1. If defined, it must be an integer greater than zero and must be the first instruction in the MODL file, defining it after another instruction must raise an error at parse time. 
       </li>
       <li>
-        The interpreter instruction <code>*class</code> or <code>*c</code> is a class definition:
+        The instruction <code>*class</code> or <code>*c</code> is a class definition:
         <ol type="a" class="subrules">
+          <li>
+            Classes must be defined as maps.
+          </li>
           <li>
             Classes must be defined before being used.
           </li>
           <li>
-            Classes must have unique ID's and names, redefining a class must raise an error at parse time.
+            Classes must have unique IDs and names, redefining a class must raise an error at parse time.
           </li>
           <li>
             The instruction <code>*id</code> or <code>*i</code> defines the class ID.
@@ -1245,13 +1333,13 @@
             The instruction <code>*superclass</code> or <code>*s</code> defines the superclass of a class using the superclass ID or name:
             <ol type="i" class="subrules">
               <li>
-                A class must inherit all pairs from every parent class in the class hierarchy.
+                A class must inherit all non-instructional pairs from every parent class in the class hierarchy.
               </li>
               <li>
                 The values of inherited mutable pairs can be changed.
               </li>
               <li>
-                If a superclass if not defined the interpreter must use superclass inference to determine whether it is <code>str</code>, <code>num</code>, <code>arr</code> or <code>map</code>.
+                If a superclass if not defined, the interpreter must use superclass inference to determine whether it is <code>str</code>, <code>num</code>, <code>arr</code> or <code>map</code>.
               </li>
             </ol>
           </li>
@@ -1269,13 +1357,13 @@
         </ol>        
       </li>
       <li>
-        The interpreter instruction <code>*method</code> or <code>*m</code> is a method definition:
+        The instruction <code>*method</code> or <code>*m</code> is a method definition:
         <ol type="a" class="subrules">
           <li>
             Methods must be defined before being called.
           </li>
           <li>
-            Methods must have unique ID's and names, redefining a method must raise an error at parse time.
+            Methods must have unique IDs and names, redefining a method must raise an error at parse time.
           </li>
           <li>
             The instruction <code>*id</code> or <code>*i</code> defines the method ID.
@@ -1287,7 +1375,7 @@
             The instruction <code>*transform</code> or <code>*t</code> defines the method(s) to apply to the value of the object that the method is called on.
             <ol type="i" class="subsubrules">
               <li>
-                Multiple methods must be called from left to right.
+                Multiple chained methods must be called from left to right.
               </li>
               <li>
                 Methods that take arguments must be enclosed in graves <code>`</code>.
@@ -1313,6 +1401,9 @@
             If a file does not have a <code>.modl</code> or <code>.txt</code> extension, <code>.modl</code> must be appended to the file name before attempting to load the file.
           </li>
           <li>
+            When a URI is assigned to an uppercase <code>*LOAD</code> or <code>*L</code> key only one file can be loaded and loads cannot be chained.
+          </li>
+          <li>
             URIs can be local to, or remote from the interpreter.
           </li>
           <li>
@@ -1323,10 +1414,10 @@
           </li>
         </ol>        
       </li>
-      <li>An interpreter instruction with key <code>?</code> defines an object index:
+      <li>An instruction with key <code>?</code> defines an object index:
         <ol type="a" class="subrules">
           <li>
-            Values must be assigned using a pair or an array.
+            Values must be provided in an array.
           </li>
           <li>
             Values must be assigned an index starting from zero.
@@ -1336,10 +1427,11 @@
       <li>Dealing with strings:
         <ol type="a" class="subrules">
           <li>Find all parts of the string that are enclosed in graves, e.g <code>`test`</code> where neither of the graves is prefixed with an escape character (<code>~</code> or <code>\</code>).</li>
-          <li>If no parts are found, run “Object Referencing".</li>
-          <li>If parts are found loop through them in turn:
+          <li>If the graved string is followed by a dot, assume the graved string is the subject and the text following the graved string is a method chain.
+          </li>
+          <li>If any graved strings are found loop through them in turn:
             <ol type="i" class="subrules">
-              <li>If a part begins with <code>%</code> then run "Object Referencing", else run "Punycode Decoding".</li>
+              <li>If a part begins with <code>%</code> then run "Object Referencing".</li>
             </ol>
           </li>
           <li>
@@ -1350,7 +1442,7 @@
           </li>
         </ol>
       </li>
-      <li>Punycode Decoding: Prefix the punycode encoded string with <code>xn--</code> (the letters xn and two dashes) and decode using a punycode / IDN library. Replace the full part (including graves) with the decoded value.</li>
+      <li>Punycode Decoding: Prefix the punycode encoded string with <code>xn--</code> (the letters xn and two dashes) and decode using a punycode / IDN library.</li>
       <li>Object Referencing
         <ol type="a" class="subrules">
           <li>
@@ -1373,7 +1465,13 @@
           </li>
         </ol>
       </li>
-      <li>The following TXT file shows which characters must be substituted within string values: <a href="files/substitutions.txt">substitutions file</a> <%=link_icon("internal")%>.</li>
+      <li>String replacement
+        <ol type="a" class="subrules">
+          <li>
+            The following TXT file shows which characters must be substituted within string values: <a href="files/substitutions.txt">substitutions file</a> <%=link_icon("internal")%>.
+          </li>
+        </ol>
+      </li>
     </ol>
   </div>
 </div>

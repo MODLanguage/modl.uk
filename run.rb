@@ -85,6 +85,10 @@ def compare_formats(header,code_samples)
   print_comparison << "</div></div>" 
 end
 
+def run_reminder()
+  "<p class='reminder'>Tip: Wherever you see the run icon (<img src='/images/run-icon.png' alt='run icon'>) you can click the icon to run the code in a mini playground window.</p>"
+end
+
 def compare_language(divname,code_array,div_height=nil,show_copy=nil,show_run=nil,selected_code="modl")
   most_newlines = 0
   for code in code_array
@@ -193,13 +197,13 @@ def code_with_note(code_id,code,note=nil,div_height=nil,show_copy=true,show_run=
   end
 
   if show_copy
-    copy_div = "<div class='copy-code code_name' data-code='#{code_id}'#{copy_style}><img src='/images/copy-icon.png'></div>"
+    copy_div = "<div class='copy-code code_name' data-code='#{code_id}'#{copy_style}><img src='/images/copy-icon.png' alt='copy to clipboard'></div>"
   else
     copy_div = ""
   end
 
   if show_run
-    run_div = "<div class='run-code' data-code='#{code_id}'#{run_style}><img src='/images/run-icon.png'></div>"
+    run_div = "<div class='run-code' data-code='#{code_id}'#{run_style}><img src='/images/run-icon.png' alt='run code'></div>"
   else
     run_div = ""
   end

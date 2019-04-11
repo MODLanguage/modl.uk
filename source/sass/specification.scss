@@ -108,7 +108,14 @@
   }
   .new-data {
     font-weight: bold;
-  }       
+  }
+  #examples{
+    img{
+      margin-bottom:-5px;
+      height:20px;
+      width:20px;
+    }
+  }  
 }
 .toc-content2 {
   // Starting from 1 (instead of zero) because of previous toc-content
@@ -155,7 +162,17 @@
     .grey {
       background-color: #F0F0F0;
     }
-  }  
+  }
+  .reminder{
+    text-align: center;
+    padding:5px;
+    border:1px solid $light-colour;
+    img{
+      margin-bottom:-5px;
+      height:20px;
+      width:20px;
+    }
+  }
 }
 .rules {
   margin-left:-10px;
