@@ -85,7 +85,7 @@ $(document).ready(
       shiftWindow();
     }
     $("#machine-diagrams-image").click(function() {
-      location.href='/images/machine-diagrams-big.png'
+      location.href='/images/machine-diagrams.png'
     })
 
     $( '.platform-choice > ul > li' ).click(

@@ -116,7 +116,7 @@
       <p>
         MODL can be explained using machine diagrams (in the same style as <a href="http://www.json.org" target="_blank">JSON</a> <%=link_icon("external")%>):
       </p>
-      <img src="images/machine-diagrams-big.png" id="machine-diagrams-image" alt="MODL machine diagrams">
+      <img src="images/machine-diagrams.png" id="machine-diagrams-image" alt="MODL machine diagrams">
     </div>
     <div class="sectionh3" id="structures">
     <h3 id="structures-title">Structures</h3>
@@ -342,7 +342,7 @@
     <div class="sectionh3" id="keys">
       <h3 id="keys-title">Keys</h3>
       <p>
-        Pair keys must be a string: they may contain numbers, may start with a number but must not be made up of solely numbers. The question mark <code>?</code> key is reserved for the <a href="#object-index">object index</a> <%=link_icon("down")%>. Uppercase keys are immmutable, underscore  prefixed and asterix prefixed keys are allowed but have special meaning.
+        Pair keys must be a string: they may contain numbers, may start with a number but must not be made up of solely numbers. The question mark <code>?</code> key is reserved for the <a href="#object-index">object index</a> <%=link_icon("down")%>. Uppercase keys are immmutable, underscore  prefixed and asterisk prefixed keys are allowed but have special meaning.
       </p>
       <div class="sectionh4" id="mutable-immutable-values">
        <h4 id="mutable-immutable-values-title">Mutable / Immutable Values</h4>
@@ -367,15 +367,15 @@
         Keys must start with a letter or a number except in the following cases:
       </p>
       <div class="sectionh4" id="underscore-prefixed">      
-        <h4 id="underscore-prefixed-title">Underscore prefixed keys</h4>
+        <h4 id="underscore-prefixed-title">Underscore Prefixed Keys</h4>
         <p>
           Pairs with a key prefixed with an underscore (<code>_</code>) do not appear in the output object, they are typically used for <a href="#object-referencing">object referencing</a> <%=link_icon("down")%>.
         </p>
       </div>
-      <div class="sectionh4" id="asterisk-prefixed">      
-        <h4 id="asterix-prefixed-title">Asterix prefixed keys</h4>
+      <div class="sectionh4" id="asterisk-prefixed-keys">      
+        <h4 id="asterisk-prefixed-keys-title">Asterisk Prefixed Keys</h4>
         <p>
-          Pairs with a key prefixed with an asterix (<code>*</code>) are <a href="#instructions">instructions</a> <%=link_icon("down")%>.
+          Pairs with a key prefixed with an asterisk (<code>*</code>) are <a href="#instructions">instructions</a> <%=link_icon("down")%>.
         </p>
       </div>
     </div>
@@ -926,26 +926,74 @@
     <div class="sectionh3" id="custom-methods">
       <h3 id="custom-methods-title">Method</h3>
       <p>
-        Custom methods can be created using the key <code>*m</code> or <code>*method</code>, all methods must have an ID represented by <code>*id</code> or <code>*i</code>. Methods can also optionally have a name set using the key <code>*name</code> or <code>*n</code>. Custom methods can only be composed using core methods with the <code>*transform</code> or <code>*t</code> key.
+        Custom methods can be created using the key <code>*m</code> or <code>*method</code>. 
       </p>
-      <p>
-        For example, this method could be created to hyphenate a name:
-      </p>
-      <%=code_with_note('code-custom-method-example',"
-        *method(
-          <span>## The method can be called by it\'s ID or name</span>
-          *id=hy
-          *name=hyphenate
-          <span>## The value of the object that the method is called on is transformed using the following methods:</span>
-          *transform=`replace( ,-)`
-        )
+      <div class="sectionh4" id="method-instructions">
+        <h4 id="method-instructions-title">Method Instructions</h4>
+        <p>
+          This is a list of the recognised method instructions:
+        </p>
+        <table class="fields">
+          <thead>
+            <tr>
+              <th style="width:40px">
+                <span class="nm">Instruction&nbsp;ID</span>
+                <span class="m">Instruction ID</span>
+              </th>
+              <th style="width:140px">
+                <span class="nm">Instruction&nbsp;Name</span>
+                <span class="m">Insutrction Name</span>
+              </th>
+              <th style="width:140px">Required</th>
+              <th>Instruction Description</th>
+            </tr>
+          </thead>
+          <tr>
+            <td class="id-header">*i</td>
+            <td>*id</td>
+            <td>Yes</td>
+            <td>
+              <span class="nm">When within a method object, the ID of the method</span>
+              <span class="m">The ID of the method</span>
+            </td>
+          </tr>
+          <tr>
+            <td class="id-header">*n</td>
+            <td>*name</td>
+            <td>No</td>
+            <td>
+              <span class="nm">When within a method object, the name of the method</span>
+              <span class="m">The name of the method</span>
+            </td>
+          </tr>
+          <tr>
+            <td class="id-header">*t</td>
+            <td>*transform</td>
+            <td>Yes</td>
+            <td>
+              A method or method chain showing how to transform values</span>
+            </td>
+          </tr>
+        </table>      
+        <p>
+          For example, this method could be created to hyphenate a name:
+        </p>
+        <%=code_with_note('code-custom-method-example',"
+          *method(
+            <span>## The method can be called by it\'s ID or name</span>
+            *id=hy
+            *name=hyphenate
+            <span>## The value of the object that the method is called on is transformed using the following methods:</span>
+            *transform=`replace( ,-)`
+          )
 
-        _name = John Smith
-        hyphenated_name = %name.hy
+          _name = John Smith
+          hyphenated_name = %name.hy
 
-        <span>## or, more character efficient:</span>
-        <span>## *m(*i=hy;*n=hyphenate;*t=`r( ,-)`);_name=John Smith;hyphenated_name=%name.hy</span>",
-      'Defining a custom method.')%>
+          <span>## or, more character efficient:</span>
+          <span>## *m(*i=hy;*n=hyphenate;*t=`r( ,-)`);_name=John Smith;hyphenated_name=%name.hy</span>",
+        'Defining a custom method.')%>
+      </div>
     </div>
     <div class="sectionh3" id="syntax-version">      
       <h3 id="syntax-version-title">Syntax Version</h3>
@@ -963,7 +1011,7 @@
       Classes can help make object description more efficient. A class is defined by assigning a map to the key <code>*c</code> or <code>*class</code>.
     </p>
     <div class="sectionh3" id="class-instructions">
-      <h3 id="classes-title">Class Instructions</h3>
+      <h3 id="class-instructions-title">Class Instructions</h3>
       <p>
         Classes have their own set of instructions. If the key of a pair in a MODL object matches a class ID or class name, the pair is transformed according to the class definition. If the class has a name, it will be used as the key for the output object.
       </p>
@@ -973,11 +1021,14 @@
       <p>
         Objects with a superclass inherit all standard (non-instructional) pairs defined in parent classes in the class hierarchy. 
       </p>
+      <p>
+        This is a list of the recognised class instructions:
+      </p>
       <table class="fields">
         <thead>
           <tr>
-            <th style="width:40px">Instruction&nbsp;ID</th>
-            <th style="width:140px">Instruction&nbsp;Name</th>
+            <th style="width:40px"><span class="nm">Instruction&nbsp;ID<span class="m">ID</span></th>
+            <th style="width:140px"><span class="nm">Instruction&nbsp;Name<span class="m">Name</span></th>
             <th style="width:140px">Required</th>
             <th>Instruction Description</th>
           </tr>
@@ -986,19 +1037,28 @@
           <td class="id-header">*i</td>
           <td>*id</td>
           <td>Yes</td>
-          <td>When within a class object, the ID of the class</td>
+          <td>
+            <span class="nm">When within a class object, the ID of the class</span>
+            <span class="m">The ID of the class</span>
+          </td>
         </tr>
         <tr>
           <td class="id-header">*n</td>
           <td>*name</td>
           <td>No</td>
-          <td>When within a class object, the name of the class</td>
+          <td>
+            <span class="nm">When within a class object, the name of the class</span>
+            <span class="m">The name of the class</span>
+          </td>
         </tr>
         <tr>
           <td class="id-header">*s</td>
           <td>*superclass</td>
           <td>No</td>
-          <td>When within a class object, the ID or name of the parent of the class</td>
+          <td>
+            <span class="nm">When within a class object, the parent of the class</span>
+            <span class="m">The ID or name of the parent of the class</span>
+          </td>
         </tr>
         <tr>
           <td class="id-header">*a</td>
