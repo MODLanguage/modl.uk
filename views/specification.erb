@@ -100,7 +100,7 @@
       <li><a href="#map">map</a> <%=link_icon("down")%></li>
       <li><a href="#pair">pair</a> <%=link_icon("down")%></li>
       <li><a href="#array">array</a> <%=link_icon("down")%></li>
-      <li><a href="#conditional">conditional</a> <%=link_icon("down")%></li>
+      <li><a href="#conditionals">conditional</a> <%=link_icon("down")%></li>
     </ul>
     <p>
       and four primitive types:
@@ -173,7 +173,7 @@
       <div class="sectionh4" id="pair">
       <h4 id="pair-title">Pair</h4>
         <p>
-          Pairs are the primary building block of MODL objects and consist of a value assigned to a <a href="#valid-keys">valid key</a> <%=link_icon("down")%>. They can be used in a number of ways to increase character efficiency. Orphan pairs (not within a map) are allowed for character efficiency. 
+          Pairs are the primary building block of MODL objects and consist of a value assigned to a <a href="#keys">valid key</a> <%=link_icon("down")%>. They can be used in a number of ways to increase character efficiency. Orphan pairs (not within a map) are allowed for character efficiency. 
         </p>
         <h5 id="standard-pair">Standard Pair</h5>
         <p>
@@ -327,7 +327,7 @@
         <%=code_with_note('code-null-example','
           conventional_null = null
           <span>## or, more character efficient:</span>
-          <span>## unconventional_null=000</span>',
+          unconventional_null=000',
 
         'An example null value.')
         %>
@@ -395,7 +395,7 @@
       <span>## This comment is allowed</span>
       car(
         <span>## So is this one</span>
-        make=Bentley
+        make=Bentley ## This one too
         model=Continental GT
         styles[
           <span>## Inside arrays is fine too</span>
@@ -463,12 +463,12 @@
     <div class="sectionh3" id="deep-object-referencing">
       <h3 id="deep-object-referencing-title">Deep Object Referencing</h3>
       <p>
-        Using deep object referencing, it's possible to reference values within an object using the right chevron. Here's an example referencing an item in an array:
+        Using deep object referencing, it's possible to reference values within an object using the dot (<code>.</code>). Here's an example referencing an item in an array:
       </p>
       <%=run_reminder%>
       <%=code_with_note('code-deep-object-referencing','
         _test=[1;2;3]
-        second_value=%test>1',
+        second_value=%test.1',
 
       'An example using deep object referencing on an array.')
       %>
@@ -477,12 +477,12 @@
       </p>
       <%=code_with_note('code-deep-object-referencing2','
         _test=(one=1;two=2)
-        second_value=%test>two',
+        second_value=%test.two',
 
       'An example using deep object referencing on a map.')
       %>
       <p>
-        There's no limit to the level of referencing.
+        There's no limit to the level of referencing. 
       </p>
     </div>      
     <div class="sectionh3" id="object-index">
@@ -511,7 +511,7 @@
   <div class="sectionh2" id="methods">
     <h2 id="methods-title">Methods</h2>
     <p>
-      Methods can be applied to object references, this can be useful in circumstances where a string is used multiple times but with varying case or spacing. Take the following example:
+      Methods can be applied to any string – either a graved string or a string value of an object references. This can be useful in circumstances where a string is used multiple times but with varying case or spacing. Take the following example:
     </p>
     <%=code_with_note('code-casemodification1','
       (
@@ -536,7 +536,7 @@
       'An object using methods to change variable case.')
     %>
     <p>
-      Methods can also be applied to strings, this is useful for <a href="#encoding-for-ascii-systems">encoding data for ASCII systems</a> <%=link_icon("down")%>.
+      Methods can be applied to grave strings strings, this is useful for <a href="#encoding-for-ascii-systems">encoding data for ASCII systems</a> <%=link_icon("down")%>.
     </p>   
     <p>
       The following methods are available, where <code>%x</code> is an object previously described:
@@ -595,7 +595,7 @@
       </tr>
       <tr>
         <td class="id-header">p<span style="font-weight:normal;"></span></td>
-        <td><a href="#encoding-for-ascii-systems">punydecode</a> <%=link_icon("external")%></td>
+        <td><a href="#encoding-for-ascii-systems">punydecode</a> <%=link_icon("down")%></td>
         <td>`%x.p`</td>
         <td class="nm">
           <code>e1afmkfd</code> => <code>пример</code>
@@ -801,6 +801,7 @@
           Sometimes you may need to check if a variable is one of a selection of possible values. If you wanted to check if the user country was US, GB of AU using the OR operator <code>|</code> you could do it like this:
         </p>
         <%=code_with_note('code-variable-assumption1','
+          _country=gb
           {
             <span class="syntax-highlighter">country = us | country = gb | country = au</span>?
               support_number=+441270123456
@@ -814,6 +815,7 @@
           Or to be more character efficient you can use variable assumption, like this:
         </p>
         <%=code_with_note('code-variable-assumption2','
+          _country=gb
           {
             <span class="syntax-highlighter">country=us|gb|au</span>?
               support_number=+441270123456
@@ -1152,7 +1154,7 @@
         )
         <span class="syntax-highlighter">e=Mr:John Smith:Sales Director:john.smith@example.com</span>
         ',
-        'The assign key in a class.',nil,true,false)
+        'The assign key in a class.',nil,true,true)
       %>
       <p>
         The output object is identical to that shown at the end of the previous section:
@@ -1302,7 +1304,7 @@
         <strong>Square Brackets</strong>: The left square bracket <code>[</code> indicates the start of an <a href="#array">array</a> <%=link_icon("up")%>, the right square bracket <code>]</code> indicates the end.
       </li>
       <li>
-        <strong>Braces</strong>: The left brace <code>{</code> indicates the start of a <a href="#conditional">conditional</a> <%=link_icon("up")%>, the right brace <code>}</code> indicates the end.
+        <strong>Braces</strong>: The left brace <code>{</code> indicates the start of a <a href="#conditionals">conditional</a> <%=link_icon("up")%>, the right brace <code>}</code> indicates the end.
       </li>
       <li>
         <strong>Semi-colon</strong> <code>;</code> is used in a <a href="#map">map</a> <%=link_icon("up")%> to separate <a href="#pair">pairs</a> <%=link_icon("up")%> and used in an <a href="#array">array</a> <%=link_icon("up")%> to separate items.
@@ -1314,7 +1316,7 @@
         <strong>Equals</strong> <code>=</code> is used to separate the key from a value in a <a href="#pair">pair</a> <%=link_icon("up")%>.
       </li>
       <li>
-        <strong>Grave accents</strong> <code>`</code> are used for <a href="#setting-and-using-variables">variable interpolation</a> <%=link_icon("up")%> and passing strings to methods.
+        <strong>Grave accents</strong> <code>`</code> are used for string interpolation involving <a href="#object-referencing">object references</a> <%=link_icon("up")%> and for passing strings to methods.
       </li>
       <li>
         <strong>Double quotes</strong> <code>"</code> are used for <a href="#literals">literals</a> <%=link_icon("up")%>.
@@ -1323,13 +1325,16 @@
         <strong>Backslash and tilde</strong> (<code>\</code> and <code>~</code> respectively) are escape characters and can be used before any reserved character to escape it's reserved use. To use a backlash or tilde in a MODL object, simply use two: <code>\\</code>, <code>~~</code>, <code>\~</code> or <code>~\</code>.
       </li>
       <li>
+        <strong>Dot</strong> (<code>.</code>) is used for <a href="#deep-object-referencing">deep object referencing</a> <%=link_icon("up")%> and to transform a string using a <a href="#methods">method</a> <%=link_icon("up")%>.
+      </li>
+      <li>
         <strong>Inside conditional statements</strong>, these characters have special significance and must be escaped: 
         <ul class="reserved">
           <li>
-            <strong>Question mark</strong> <code>?</code> is used to split a <a href="#condition-test">condition test</a> <%=link_icon("up")%> from it's return value in a <a href="#conditional">conditional</a>. <%=link_icon("up")%>
+            <strong>Question mark</strong> <code>?</code> is used to split a <a href="#conditional-tests">condition test</a> <%=link_icon("up")%> from it's return value in a <a href="#conditionals">conditional</a>. <%=link_icon("up")%>
           </li>
           <li>
-            <strong>Slash</strong> <code>/</code> is used to split the condition return value from the next condition test in a <a href="#conditional">conditional</a>. <%=link_icon("up")%>
+            <strong>Slash</strong> <code>/</code> is used to split the condition return value from the next condition test in a <a href="#conditionals">conditional</a>. <%=link_icon("up")%>
           </li>
           <li>
             <strong>Pipe</strong> <code>|</code> is used as an OR operator within a condition test.

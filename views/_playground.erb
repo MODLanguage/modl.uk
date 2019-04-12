@@ -2,6 +2,12 @@
 function convertToJSON(){
   $("#json").html("");
   modl = $("#modl").val();
+  
+  console.log(modl);
+  deep_referencing_catch= /{?\n?\s*`?%?[a-zA-z_][a-zA-z0-9_]*(\.|>)[a-zA-z0-9_]*/.test(modl);
+  if(deep_referencing_catch){
+    console.log("caught!");
+  }
   if(modl==""){
     return displayError({"responseText":"MODL string was empty"});
   }
@@ -23,7 +29,12 @@ function convertToJSON(){
 function displayJson(jsonResponse){
   jsonResponse = JSON.stringify(jsonResponse, null, 4);
   $("#json").html(jsonResponse);
-  $("#status").html("Valid MODL");
+  if(deep_referencing_catch){
+    $("#status").html("Note: In this tool, deep referencing uses the <code>></code> character instead of the <code>.</code> character. We're in the process of updating it, sorry for any confusion.");
+  }
+  else{
+    $("#status").html("Valid MODL");
+  }
   $("#status").removeClass("error");
   $("#status").addClass("success");
 }
@@ -32,7 +43,12 @@ function displayError(jsonError){
   if(jsonErrorMessage=="\n"){
     jsonErrorMessage = "JSON response was blank."
   }
-  $("#status").html(jsonErrorMessage);
+  if(deep_referencing_catch){
+    $("#status").html("Note: In this tool, deep referencing uses the <code>></code> character instead of the <code>.</code> character. We're in the process of updating it, sorry for any confusion.<br>Error: "+jsonErrorMessage);
+  }
+  else{
+    $("#status").html(jsonErrorMessage);
+  }
   $("#status").removeClass("success");
   $("#status").addClass("error");
 }
