@@ -13,6 +13,9 @@ def compare_formats(header,code_samples)
   most_line_breaks = 0
   for code_sample in code_samples
     code_sample = remove_indenting(code_sample)
+    code_sample = code_sample.gsub("<span>","") 
+    code_sample = code_sample.gsub("</span>","") 
+    code_sample = code_sample.gsub('\"','"')     
     this_length = code_sample.length
     if this_length < shortest_option
       shortest_option = this_length

@@ -3,10 +3,13 @@ function convertToJSON(){
   $("#json").html("");
   modl = $("#modl").val();
   
-  console.log(modl);
-  deep_referencing_catch= /{?\n?\s*`?%?[a-zA-z_][a-zA-z0-9_]*(\.|>)[a-zA-z0-9_]*/.test(modl);
-  if(deep_referencing_catch){
-    console.log("caught!");
+  deep_referencing_conditional_catch= /{\n?\s*`?%?[a-zA-z_][a-zA-z0-9_]*(\.|>)[a-zA-z0-9_]*/.test(modl);
+  deep_referencing_use_catch= /\n?\s*`?%[a-zA-z_][a-zA-z0-9_]*(\.|>)[a-zA-z0-9_]*/.test(modl);
+  if(deep_referencing_conditional_catch || deep_referencing_use_catch){
+    deep_referencing_catch = true;
+  }
+  else{
+    deep_referencing_catch = false;
   }
   if(modl==""){
     return displayError({"responseText":"MODL string was empty"});

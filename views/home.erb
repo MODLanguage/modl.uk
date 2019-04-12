@@ -45,7 +45,7 @@
     </p>
     <%=compare_formats('String',['"x": "a"','x: a','x=a'])%>
     <%=compare_formats('Number',['"x":1','x: 1','x=1'])%>
-    <%=compare_formats('Array',['"x":[1,2,3]',"x:\n - 1\n - 2\n - 3",'x[1;2;3]'])%>
+    <%=compare_formats('Array',['"x":[1,2,3]',"x:\n - 1\n - 2\n - 3",'x=1:2:3'])%>
     <%=compare_formats('Object / Map',['"x":{"y":"z"}',"x:\n 'y': z",'x(y=z)'])%>
     <%=compare_formats('True',['"x":true','x: y','x=01'])%>
     <%=compare_formats('False',['"x":false','x: n','x=00'])%>
@@ -115,7 +115,7 @@
                 Abbrev=ISO 8879\:1986
                 GlossDef(
                   para=A meta-markup language, used to create markup languages such as DocBook.
-                  GlossSeeAlso[GML;XML]
+                  GlossSeeAlso=GML:XML
                 )
                 GlossSee=markup
               )
@@ -187,7 +187,7 @@
                 Abbrev=ISO 8879\:1986
                 GlossDef(
                   para=A meta-markup <span>%1</span>, used to create markup <span>%1</span>s such as DocBook.
-                  GlossSeeAlso[GML;XML]
+                  GlossSeeAlso=GML:XML
                 )
                 GlossSee=markup
               )
@@ -208,26 +208,26 @@
     </p>
     <%
     json_single_object = '{"g":{"t":"example glossary","d":{"t":"S","l":{"e":{"i":"SGML","s":"SGML","gt":"Standard Generalized Markup Language","a":"SGML","ab":"ISO 8879:1986","gd":{"p":"A meta-markup language, used to create markup languages such as DocBook.","sa":["GML","XML"]},"gs":"markup"}}}}}'
-    yaml_single_object = '
-      ---
-      g:
-        t: example glossary
-        d:
-          t: S
-          l:
-            e:
-              i: <span>&s SGML</span>
-              s: <span>*s</span>
-              gt: Standard Generalized Markup Language
-              a: <span>*s</span>
-              ab: ISO 8879:1986
-              gd:
-                p: A meta-markup language, used to create markup languages such as DocBook.
-                GlossSeeAlso:
-                - GML
-                - XML
-              gs: markup'
-    modl_single_object = '?=SGML:language;g(t=example glossary;d(t=S;l(e(i=%0;s=%0;gt=Standard Generalized Markup %1.i;a=%0;ab=ISO 8879\:1986;gd(p=A meta-markup %1, used to create markup %1s such as DocBook.;sa=[GML;XML]);gs=markup))))'
+yaml_single_object = '
+---
+g:
+  t: example glossary
+  d:
+    t: S
+    l:
+      e:
+        i: &s SGML
+        s: *s
+        gt: Standard Generalized Markup Language
+        a: *s
+        ab: ISO 8879:1986
+        gd:
+          p: A meta-markup language, used to create markup languages such as DocBook.
+          GlossSeeAlso:
+          - GML
+          - XML
+        gs: markup'
+    modl_single_object = '?=SGML:language;g(t=example glossary;d(t=S;l(e(i=%0;s=%0;gt=Standard Generalized Markup %1.i;a=%0;ab=ISO 8879\:1986;gd(p=A meta-markup %1, used to create markup %1s such as DocBook.;sa=GML:XML);gs=markup))))'
     %>
     <%=compare_language("objects-minified",
       [ json_single_object, yaml_single_object, modl_single_object ],70,true,false)%> 
@@ -235,7 +235,7 @@
       We've had to make significant sacrifices in readability to achieve these character savings. This makes our object difficult for developers to work with. MODL interpreters can automatically unpack this data, returning it to it's original developer friendly state using classes, which we'll come to in a moment. 
     </p>
     <p>
-      As a data serialisation format for storing a single object, we've demonstrated that MODL is more character efficient than JSON and YAML – in this example we've seen a 23% reduction when compared to JSON and over 50% reduction compared to YAML.
+      As a data serialisation format for storing a single object, we've demonstrated that MODL is more character efficient than JSON and YAML – in this example we've seen a 24% reduction when compared to JSON and over 40% reduction compared to YAML.
     </p>
     <%=compare_formats('Storing a Single Object',[json_single_object,yaml_single_object,modl_single_object])%>
     <br>
@@ -383,7 +383,10 @@
   'A MODL class',nil,true,false)
   %>
     <p>
-      In MODL, asterisk prefixed keys provide instructions to the interpreter and never appear in the output object. In the class above, we're instructing the interpreter to create a new <code>class</code> with the <code>id=l</code> and <code>name=language</code>. We're telling it that this class is a child of the <code>map</code> class. We're also telling it how to <code>assign</code> values that are passed to it by multi-value pairs. Now we can describe our languages like this:
+      In MODL, asterisk prefixed keys provide instructions to the interpreter and never appear in the output object. In the class above, we're instructing the interpreter to create a new <code>class</code> with the <code>id=l</code> and <code>name=language</code>. We're telling it that this class is a child of the <code>map</code> class. We're also telling it how to <code>assign</code> values that are passed to it by an array.
+    </p>
+    <p>
+      Now we can describe our languages like this:
     </p>
     <%=code_with_note('using-classes','
     *class(
@@ -412,9 +415,9 @@
     ',
     'A MODL class minified',nil,true,false)
     %>    
-    <h5>Importing a Class File</h5>
+    <h5>Loading a Class File</h5>
     <p>
-      We've seen how to instruct the interpreter to create a class, we can also instruct the interpreter to import another MODL file using the key <code>*IMPORT</code> or <code>*I</code>. MODL imports can be used for any MODL file. In this example, we're defining our classes in a separate file so we can easily re-use them. We'll call our file <code>c.modl</code>, we can import it simply using <code>*I=c</code> since the interpreter automatically uses the .modl extension if one hasn't been provided.
+      We've seen how to instruct the interpreter to create a class, we can also instruct the interpreter to load another MODL file using the key <code>*load</code> or <code>*l</code>. In&nbsp;this example, we're defining our classes in a separate file so we can easily re-use them. We'll call our file <code>c.modl</code>, we can import it simply using <code>*l=c</code> since the interpreter automatically uses the .modl extension if one hasn't been provided.
     </p>
     <p>
       Let's compare the JSON and YAML minified objects with MODL using an imported class and object referencing to reduce repetition of data: 
@@ -466,7 +469,7 @@
           - number
           - boolean
           - 'null'"
-    modl_multiple_objects = '*I=c;?=object:array:string:number:boolean:language;[l=JSON:JavaScript %0.i Notation:2001:false:"https://www.json.org":[%0;%1]:[%2;%3;%4;"null"];l=YAML:YAML Ain\'t Markup %5.i:2001:true:"http://www.yaml.org":[mappings;sequences]:[%2;%3;date;%4;"null"];l=MODL:Minimal %0.i Description %5.i:2018:false:"http://www.modl.uk":[[pair;map;%1;conditional]:[%2;%3;%4;"null"]]'
+    modl_multiple_objects = '*l=c;?=object:array:string:number:boolean:language;[l=JSON:JavaScript %0.i Notation:2001:false:"https://www.json.org":[%0;%1]:[%2;%3;%4;"null"];l=YAML:YAML Ain\'t Markup %5.i:2001:true:"http://www.yaml.org":[mappings;sequences]:[%2;%3;date;%4;"null"];l=MODL:Minimal %0.i Description %5.i:2018:false:"http://www.modl.uk":[pair;map;%1;conditional]:[%2;%3;%4;"null"]]'
     %>
     <%=compare_language("multiple-objects-minified",
       [json_multiple_objects,yaml_multiple_objects,modl_multiple_objects],70,true,false)
@@ -483,9 +486,14 @@
     <div class="sectionh4" id="modl-input">
       <h4 id="modl-input-title">MODL Input</h4>
       <p>
-        As we saw above, the MODL input to describe our three languages is 364 characters with an imported MODL class file. It's 468 characters to include the class definition in the file itself. Here it is using the import:
+        As we saw above, the MODL input to describe our three languages is 363 characters with an imported MODL class file. It's 468 characters to include the class definition in the file itself. Here it is using the import:
       </p>
-      <%=code_with_note("modl-multiple-objects",modl_multiple_objects,"MODL Input (364 characters)",nil,true,false)%>
+      <%=code_with_note("modl-multiple-objects",modl_multiple_objects,"MODL Input (363 characters)",nil,true,false)%>
+      <p>After being processed by the MODL interpreter, the output object is unpacked and developer friendly.</p>      
+      <%=compare_formats("Developer Friendly Objects",
+        [json_df,yaml_df,modl_multiple_objects])
+      %>
+      <p>&nbsp;</p>
       <h4 id="json-output-title">MODL / JSON Output</h4>
       <p>
         After being processed by the MODL interpreter, the output object is unpacked and developer friendly.
@@ -526,10 +534,6 @@
           ]'
         ],640,true,false)
       %>  
-      <%=compare_formats("Developer Friendly Objects",
-        [json_df,yaml_df,modl_multiple_objects])
-      %>  
-      <br>
     </div>
   </div>
 </div>
