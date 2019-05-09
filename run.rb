@@ -1,4 +1,5 @@
 require 'sinatra'
+require 'modl/interpreter'
 
 def compare_formats(header,code_samples)
   ## Change spaces for hyphens, removes slashes, ampersands and exclamations
@@ -316,6 +317,11 @@ end
 post '/mini-playground' do
   @page_style = true
   erb :mini_playground, :layout => false
+end
+
+post '/playground-process' do
+  content_type :json
+  erb :playground_process, :layout => false
 end
 
 get '/library-alerts' do

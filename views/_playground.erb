@@ -3,41 +3,23 @@ function convertToJSON(){
   $("#json").html("");
   modl = $("#modl").val();
   
-  deep_referencing_conditional_catch= /{\n?\s*`?%?[a-zA-z_][a-zA-z0-9_]*(\.|>)[a-zA-z0-9_]*/.test(modl);
-  deep_referencing_use_catch= /\n?\s*`?%[a-zA-z_][a-zA-z0-9_]*(\.|>)[a-zA-z0-9_]*/.test(modl);
-  if(deep_referencing_conditional_catch || deep_referencing_use_catch){
-    deep_referencing_catch = true;
-  }
-  else{
-    deep_referencing_catch = false;
-  }
-  if(modl==""){
-    return displayError({"responseText":"MODL string was empty"});
-  }
-  else{
-    modlData = { modl: modl }
-    $.ajax({
-      type: "POST",
-      url: "https://api.modl.uk",
-      data: modlData,
-      success: function(data){
-        displayJson(data);
-      },
-      error: function(error){
-        displayError(error);
-      }
-    });
-  }
+  modlData = { modl: modl }
+  $.ajax({
+    type: "POST",
+    url: "/playground-process",
+    data: modlData,
+    success: function(data){
+      displayJson(data);
+    },
+    error: function(error){
+      displayError(error);
+    }
+  });
 }
 function displayJson(jsonResponse){
   jsonResponse = JSON.stringify(jsonResponse, null, 4);
   $("#json").html(jsonResponse);
-  if(deep_referencing_catch){
-    $("#status").html("Note: In this tool, deep referencing uses the <code>></code> character instead of the <code>.</code> character. We're in the process of updating it, sorry for any confusion.");
-  }
-  else{
-    $("#status").html("Valid MODL");
-  }
+  $("#status").html("Valid MODL");
   $("#status").removeClass("error");
   $("#status").addClass("success");
 }
@@ -45,9 +27,6 @@ function displayError(jsonError){
   jsonErrorMessage = jsonError.responseText;
   if(jsonErrorMessage=="\n"){
     jsonErrorMessage = "JSON response was blank."
-  }
-  if(deep_referencing_catch){
-    $("#status").html("Note: In this tool, deep referencing uses the <code>></code> character instead of the <code>.</code> character. We're in the process of updating it, sorry for any confusion.<br>Error: "+jsonErrorMessage);
   }
   else{
     $("#status").html(jsonErrorMessage);

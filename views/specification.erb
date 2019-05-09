@@ -131,7 +131,7 @@
           <%=run_reminder%>
           <%=code_with_note('code-example-map','
             (
-              make = Bentley
+              make = Bentley;
               model = Continental GT
             )
 
@@ -153,7 +153,7 @@
         </p>
         <%=code_with_note('code-example-array','
           [
-            fastback
+            fastback;
             convertible
           ]
 
@@ -193,7 +193,7 @@
         </p>
         <%=code_with_note('code-map-pair','
           car(
-            make = Bentley
+            make = Bentley;
             model = Continental GT
           )
 
@@ -207,7 +207,7 @@
         </p>
         <%=code_with_note('code-map-pair-bigger','
           car=(
-            make=Bentley
+            make=Bentley;
             model=Continental GT
           )',
 
@@ -219,7 +219,7 @@
         </p>
         <%=code_with_note('code-array-pair','
             style[
-              fastback
+              fastback;
               convertible
             ]
 
@@ -233,7 +233,7 @@
         </p>
         <%=code_with_note('code-map-pair2','
           style=[
-            fastback
+            fastback;
             convertible
           ]',
 
@@ -246,7 +246,7 @@
           Conditions are explained in <a href="#conditionals">detail later</a> <%=link_icon("down")%>. In the meantime, here is a simple conditional with logic based on the value of <code>_country</code>:
         </p>
           <%=code_with_note('code-simple-conditional','
-            _country = gb
+            _country = gb;
             <span>## The value of the "support_contact" key is set to a conditional value:</span>
             support_contact = {
               <span>## Does the data in the key "country" equal "gb"?</span>
@@ -260,7 +260,7 @@
               /?
               <span>## If not, assign the value "none"?</span>
                 None
-            }
+            };
 
             <span>## or, more character efficient:</span>
             <span>## _country=gb;support_contact={country=gb?John Smith/country=us?John Doe/?None}</span>',
@@ -300,7 +300,7 @@
         </p>
         <%=code_with_note('code-true-example','
           (
-            conventional_true = true
+            conventional_true = true;
             unconventional_true=01
           )',
 
@@ -312,7 +312,7 @@
         </p>
         <%=code_with_note('code-false-example','
           (
-            conventional_false = false
+            conventional_false = false;
             unconventional_false=00
           )',
 
@@ -325,9 +325,11 @@
           Null is represented as <code>null</code>, <code>NULL</code> or <code>000</code>. Like true and false, <code>000</code> is an invalid number and unlikely to be required as a string so alongside true and false it is the most character efficient way to represent null unambiguously.
         </p>
         <%=code_with_note('code-null-example','
-          conventional_null = null
-          <span>## or, more character efficient:</span>
-          unconventional_null=000',
+          (
+            conventional_null = null;
+            <span>## or, more character efficient:</span>
+            unconventional_null=000
+          )',
 
         'An example null value.')
         %>
@@ -351,12 +353,12 @@
           </p>
           <%=code_with_note('code-mutable-example','
             <span>## This mutable value with a lower (or mixed) case key can be changed:</span>
-            mutable_key = 1
+            mutable_key = 1;
             <span>## This immutable value with an uppercase key can only be set once:</span>
-            IMMUTABLE_KEY = 1
+            IMMUTABLE_KEY = 1;
 
             <span>## No problem:</span>
-            mutable_key = 2
+            mutable_key = 2;
             <span>## Results in ERROR:</span>
             IMMUTABLE_KEY = 2',
 
@@ -395,13 +397,13 @@
       <span>## This comment is allowed</span>
       car(
         <span>## So is this one</span>
-        make=Bentley ## This one too
-        model=Continental GT
+        make=Bentley; ## This one too
+        model=Continental GT;
         styles[
           <span>## Inside arrays is fine too</span>
-          fastback
+          fastback;
           convertible <span>## Even at the end of lines</span>
-        ]
+        ];
         price={
           <span>## And inside conditionals</span>
           c=gb? <span>## At the end of tests</span>
@@ -424,14 +426,14 @@
       MODL can reference any object previously described in the same file, an object can be described once and referenced multiple times. Objects are referenced using percent-prefixing. For character efficiency it's possible to omit the <code>_</code> when referencing hidden objects, as shown in the second example below:
     </p>
       <%=code_with_note('code-setvars','
-        <span class="syntax-highlighter">_manufacturer=Bentley</span>
+        <span class="syntax-highlighter">_manufacturer=Bentley</span>;
 
         car(
-          make=<span class="syntax-highlighter">%_manufacturer</span>
+          make=<span class="syntax-highlighter">%_manufacturer</span>;
           model=Continental
-        )
+        );
         car(
-          make=<span class="syntax-highlighter">%manufacturer</span>
+          make=<span class="syntax-highlighter">%manufacturer</span>;
           model=Bentayga
         )',
 
@@ -441,25 +443,16 @@
         Percent prefixing is character efficient because it has no terminator. In circumstances where the variable needs to be interpolated without spacing, the variable can be enclosed in grave accents <code>`</code>. Take the following example:
       </p>
       <%=code_with_note('code-setvars2','
-        test=foo
+        test=foo;
 
         <span>## Set value 1 to use the value of the variable "test"</span>
-        value1=%test
+        value1=%test;
         <span>## Set value 2 to use the value of the variable "test" appended with "bar"</span>
-        value2=<span class="syntax-highlighter">`%test`</span>bar
+        value2=<span class="syntax-highlighter">`%test`</span>bar;
         <span>## resulting in "foobar"</span>',
 
       'An example using object referencing surrounded in graves.')
       %>
-      <!--<p>
-        An object can not reference itself, for example this invalid:
-      </p>
-      <%=code_with_note('code-selfref','
-        test=foo
-        test=%test bar
-        <span class="syntax-highlighter">=> ERROR</span>',
-      'A self referential assignment example – invalid.')
-      %>-->
     <div class="sectionh3" id="deep-object-referencing">
       <h3 id="deep-object-referencing-title">Deep Object Referencing</h3>
       <p>
@@ -467,7 +460,7 @@
       </p>
       <%=run_reminder%>
       <%=code_with_note('code-deep-object-referencing','
-        _test=[1;2;3]
+        _test=[1;2;3];
         second_value=%test.1',
 
       'An example using deep object referencing on an array.')
@@ -476,7 +469,7 @@
         Here's an example referencing the value of a pair within a map:
       </p>
       <%=code_with_note('code-deep-object-referencing2','
-        _test=(one=1;two=2)
+        _test=(one=1;two=2);
         second_value=%test.two',
 
       'An example using deep object referencing on a map.')
@@ -492,10 +485,10 @@
       </p>
       <%=code_with_note('object-index-example','
         <span>## We create an object index using an array, assigning "foo" to index 0 and "bar" to index 1:</span>
-        ?=foo:bar
+        ?=foo:bar;
 
         <span>## We can reference the values using the index</span>
-        test=%0 <span>## We\'ve assigned "foo" to the key "test"</span>
+        test=%0; <span>## We\'ve assigned "foo" to the key "test"</span>
         test2=%1 <span>## We\'ve assigned "bar" to the key "test2"</span>',
 
       'An example using the character efficient object index.')
@@ -515,8 +508,8 @@
     </p>
     <%=code_with_note('code-casemodification1','
       (
-        name = TESTING
-        description = This is an object testing variables
+        name = TESTING;
+        description = This is an object testing variables;
         value1 = Testing123
       )',
 
@@ -526,10 +519,10 @@
       We can describe this object more efficiently using built-in MODL methods – <code>u</code> (upcase), <code>d</code> (downcase) and <code>s</code> (sentence). Here's the same object using methods to reduce the size of the object:
     </p>
     <%=code_with_note('code-casemodification2','
-      <span class="syntax-highlighter">_v=testing</span>
+      <span class="syntax-highlighter">_v=testing;</span>
       (
-        name = <span class="syntax-highlighter">%v.u</span>
-        description = This is an object <span class="syntax-highlighter">%v</span> variables
+        name = <span class="syntax-highlighter">%v.u</span>;
+        description = This is an object <span class="syntax-highlighter">%v</span> variables;
         value = <span class="syntax-highlighter">`%v.s`</span>123
       )',
 
@@ -639,7 +632,7 @@
         Conditionals are made up of a test (e.g. <code>country=gb</code>) and it's return value (e.g. <code>John Smith</code>) separated by a question mark <code>?</code>. Each condition is separated by a slash <code>/</code>. In this example a variable called <code>country</code> is tested:
       </p>
       <%=code_with_note('code-conditional2','
-        country = gb
+        country = gb;
         <span>## The value of the "support_contact" key is set to a conditional value:</span>
         support_contact = {
           <span>## Does the data in the key "country" equal "gb"?</span>
@@ -664,7 +657,7 @@
         As you can see from the character efficient version above, it's possible to omit <code>%</code> when using an object reference in a conditional test, it's also possible to omit <code>_</code> from hidden objects. After interpretation, our MODL object looks like this:
       </p>
       <%=code_with_note('code-conditional-output','
-        country = gb
+        country = gb;
         support_contact = John Smith',
 
       'The object after interpretation')
@@ -801,7 +794,7 @@
           Sometimes you may need to check if a variable is one of a selection of possible values. If you wanted to check if the user country was US, GB of AU using the OR operator <code>|</code> you could do it like this:
         </p>
         <%=code_with_note('code-variable-assumption1','
-          _country=gb
+          _country=gb;
           {
             <span class="syntax-highlighter">country = us | country = gb | country = au</span>?
               support_number=+441270123456
@@ -815,9 +808,9 @@
           Or to be more character efficient you can use variable assumption, like this:
         </p>
         <%=code_with_note('code-variable-assumption2','
-          _country=gb
+          _country=gb;
           {
-            <span class="syntax-highlighter">country=us|gb|au</span>?
+            <span class="syntax-highlighter">country=us/gb/au</span>?
               support_number=+441270123456
             /?
               support_number=+141612345678
@@ -853,7 +846,7 @@
           For character efficiency, a conditional used to return a value can omit the return value and  return the boolean result of the conditional test itself. For example:
         </p>
         <%=code_with_note('code-conditional-boolean-return','
-          _country=uk
+          _country=uk;
           british={country.u=GB|UK?}
           <span>## outputs true</span>',
 
@@ -876,9 +869,9 @@
         Multiple files can be loaded at the same point by providing the file URIs in an array, or at multiple different points in the file by using the instruction multiple times. Loads can also be chained. This example shows one file being loaded:
       </p>
       <%=code_with_note('code-load-example','
-        <span class="syntax-highlighter">*load = example-classes.modl</span>
+        <span class="syntax-highlighter">*load = example-classes.modl</span>;
         example(
-          value1 = one
+          value1 = one;
           value2 = two
         )
 
@@ -890,9 +883,9 @@
         In the following example, the <code>*LOAD</code> / <code>*L</code> key is uppercase and therefore is <a href="#mutable-immutable-values">immutable</a> <%=link_icon("up")%> – indicating that only one load is allowed and the file being loaded cannot include any further loads:
       </p>
       <%=code_with_note('code-load-example2','
-        <span class="syntax-highlighter">*LOAD = example-classes.modl</span>
+        <span class="syntax-highlighter">*LOAD = example-classes.modl</span>;
         example(
-          value1 = one
+          value1 = one;
           value2 = two
         )
 
@@ -904,10 +897,10 @@
         It's also possible to use <a href="#object-referencing">object references</a> <%=link_icon("up")%> in URIs, like this:
       </p>
       <%=code_with_note('code-load-example3','
-        <span class="syntax-highlighter">_country=gb
-        *LOAD = example-classes-%country.modl</span>
+        <span class="syntax-highlighter">_country=gb;
+        *LOAD = example-classes-%country.modl</span>;
         example(
-          value1 = one
+          value1 = one;
           value2 = two
         )',
         'An example file loading another MODL file called example-classes-gb.modl.',nil,true,false)
@@ -983,13 +976,13 @@
         <%=code_with_note('code-custom-method-example',"
           *method(
             <span>## The method can be called by it\'s ID or name</span>
-            *id=hy
-            *name=hyphenate
+            *id=hy;
+            *name=hyphenate;
             <span>## The value of the object that the method is called on is transformed using the following methods:</span>
             *transform=`replace( ,-)`
           )
 
-          _name = John Smith
+          _name = John Smith;
           hyphenated_name = %name.hy
 
           <span>## or, more character efficient:</span>
@@ -1077,17 +1070,17 @@
       </p>
     <%=code_with_note('code-example-class','
       *class(
-        *id=e
-        *name=employee
+        *id=e;
+        *name=employee;
         <span>## *superclass tells the interpreter what type of object to create</span>
-        *superclass=map
+        *superclass=map;
         <span>## *assign tells the interpreter how to assign the values of an array with the key e</span>
         *assign=[
           [title;name;job_title]
-        ]
+        ];
         <span>## Any other pairs are automatically appended to every object with this class</span>
         actions=[call;email]
-      )
+      );
 
       <span>## This simple array is transformed into a map by the class defined above</span>
       e=Mr:John Smith:Sales Director',
@@ -1100,11 +1093,11 @@
     </p>
     <%=code_with_note('code-example-class-output','
       employee(
-        title = Mr
-        name = John Smith
-        job_title = Sales Director
+        title = Mr;
+        name = John Smith;
+        job_title = Sales Director;
         actions = [
-          call
+          call;
           email
         ]
       )',
@@ -1121,12 +1114,13 @@
       </p>
       <%=code_with_note('code-assign-key','
         *class(
-          *id=e
-          *name=employee
+          *id=e;
+          *name=employee;
           <span class="syntax-highlighter">*assign=[</span>
-            <span class="syntax-highlighter">[name]</span>
-            <span class="syntax-highlighter">[title;name]</span>
-            <span class="syntax-highlighter">[title;name;job_title]</span>
+            <span class="syntax-highlighter">[name]</span>;
+            <span class="syntax-highlighter">[title;name]</span>;
+            <span class="syntax-highlighter">[title;name;job_title]</span>;
+            <span class="syntax-highlighter">[title;name;job_title;email]</span>
           <span class="syntax-highlighter">]</span>
         )',
         'Key assignment in a class.',nil,true,false)
@@ -1144,14 +1138,15 @@
       </p>
       <%=code_with_note('code-assign-key-example','
         *class(
-          *id=e
-          *name=employee
+          *id=e;
+          *name=employee;
           *assign=[
-            [name]
-            [title;name]
-            [title;name;job_title]
+            [name];
+            [title;name];
+            [title;name;job_title];
+            [title;name;job_title;email]
           ]
-        )
+        );
         <span class="syntax-highlighter">e=Mr:John Smith:Sales Director:john.smith@example.com</span>
         ',
         'The assign key in a class.',nil,true,true)
@@ -1161,11 +1156,11 @@
       </p>
     <%=code_with_note('code-example-class-output','
       employee(
-        title = Mr
-        name = John Smith
-        job_title = Sales Director
+        title = Mr;
+        name = John Smith;
+        job_title = Sales Director;
         actions = [
-          call
+          call;
           email
         ]
       )',
@@ -1180,23 +1175,23 @@
       </p>
       <%=code_with_note('code-class-inheritance','
         *class(
-          *id=p
-          *name=person
-          *superclass=map
+          *id=p;
+          *name=person;
+          *superclass=map;
           actions=[call;email]
-        )
+        );
         *class(
-          *id=c
-          *name=customer
-          *superclass=person
+          *id=c;
+          *name=customer;
+          *superclass=person;
           *assign=[
             [title;name;email]
           ]
-        )
+        );
         *class(
-          *id=e
-          *name=employee
-          *superclass=person
+          *id=e;
+          *name=employee;
+          *superclass=person;
           *assign=[
             [title;name;job_title;email]
           ]
@@ -1217,11 +1212,11 @@
         To aid in character efficiency, it's recommended to define classes in an external file that you can <a href="#load">load</a> <%=link_icon("up")%>. If we move our class definitions over to a separate file called <code>classes.modl</code> and store it in the same local directory we can load it and describe multiple objects:
       </p>
       <%=code_with_note('code-class-definition-file-load','
-        <span class="syntax-highlighter">*LOAD=classes.modl</span>
+        <span class="syntax-highlighter">*LOAD=classes.modl</span>;
         <span>## An employee:</span>
-        e=Mr:John Smith:Sales Director:john.smith@example.com
+        e=Mr:John Smith:Sales Director:john.smith@example.com;
         <span>## A customer:</span>
-        c=Mr:Joe Bloggs:joe.bloggs@example.com
+        c=Mr:Joe Bloggs:joe.bloggs@example.com;
         <span>## Another customer:</span>
         c=Mrs:Jane Wilson:jane.wilson@example.com',
       'Loading classes from an external file.',nil,true,false)
@@ -1232,28 +1227,28 @@
         <%=code_with_note('code-output-object-example','
         [
           employee(
-            title=Mr
-            name=John Smith
-            job_title=Sales Director
-            email=john.smith@example.com
+            title=Mr;
+            name=John Smith;
+            job_title=Sales Director;
+            email=john.smith@example.com;
             actions=[
               call
               email
             ]
-          )
+          );
           customer(
-            title=Mr
-            name=Joe Bloggs
-            email=joe.bloggs@example.com
+            title=Mr;
+            name=Joe Bloggs;
+            email=joe.bloggs@example.com;
             actions=[
               call
               email
             ]            
-          )
+          );
           customer(
-            title=Mrs
-            name=Jane Wilson
-            email=jane.wilson@example.com
+            title=Mrs;
+            name=Jane Wilson;
+            email=jane.wilson@example.com;
             actions=[
               call
               email

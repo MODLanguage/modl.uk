@@ -12,19 +12,19 @@
     <span>## A pair with the key \'car\' is assigned a value containing a map</span>
     car(
       <span>## The map is made up of pairs</span>
-      make=Bentley
-      model=Continental GT <span>## Comments can be added anywhere</span>
+      make=Bentley;
+      model=Continental GT;<span>## Comments can be added anywhere</span>
       styles[
         <span>## A pair with the key \'styles\' is assigned a value containing an array, it contains two items</span>
-        fastback
+        fastback;
         convertible
-      ]
+      ];
     )',
 
   'An example MODL object',nil,true,false)
   %>
   <p>
-   MODL can be minified by removing comments and using semi-colons to separate pairs and array items (where JSON has commas): 
+   MODL can be minified by removing newlines and comments: 
   </p>
   <%=code_with_note('example-modl-object-code-min','
     car(make=Bentley;model=Continental GT;styles[fastback;convertible])',
@@ -103,20 +103,20 @@
                 GlossSee: markup',
         '
         glossary(
-          title=example glossary
+          title=example glossary;
           GlossDiv(
-            title=S
+            title=S;
             GlossList(
               GlossEntry(
-                ID=SGML
-                SortAs=SGML
-                GlossTerm=Standard Generalized Markup Language
-                Acronym=SGML
-                Abbrev=ISO 8879\:1986
+                ID=SGML;
+                SortAs=SGML;
+                GlossTerm=Standard Generalized Markup Language;
+                Acronym=SGML;
+                Abbrev=ISO 8879\:1986;
                 GlossDef(
-                  para=A meta-markup language, used to create markup languages such as DocBook.
+                  para=A meta-markup language, used to create markup languages such as DocBook.;
                   GlossSeeAlso=GML:XML
-                )
+                );
                 GlossSee=markup
               )
             )
@@ -173,22 +173,22 @@
                   - XML
                 GlossSee: markup',
         '
-        <span>?=SGML:language</span>
+        <span>?=SGML:language;</span>
         glossary(
-          title=example glossary
+          title=example glossary;
           GlossDiv(
-            title=S
+            title=S;
             GlossList(
               GlossEntry(
-                ID=<span>%0</span>
-                SortAs=<span>%0</span>
-                GlossTerm=Standard Generalized Markup <span>%1.i</span>
-                Acronym=<span>%0</span>
-                Abbrev=ISO 8879\:1986
+                ID=<span>%0</span>;
+                SortAs=<span>%0</span>;
+                GlossTerm=Standard Generalized Markup <span>%1.i</span>;
+                Acronym=<span>%0</span>;
+                Abbrev=ISO 8879\:1986;
                 GlossDef(
-                  para=A meta-markup <span>%1</span>, used to create markup <span>%1</span>s such as DocBook.
+                  para=A meta-markup <span>%1</span>, used to create markup <span>%1</span>s such as DocBook.;
                   GlossSeeAlso=GML:XML
-                )
+                );
                 GlossSee=markup
               )
             )
@@ -330,30 +330,30 @@ g:
     modl_df = '
       [
         language(
-          name=JSON
-          full_name=JavaScript Object Notation
-          launch_year=2001
-          requires_spacing=false
-          spec_url="https://www.json.org"
-          structures=[object;array]
+          name=JSON;
+          full_name=JavaScript Object Notation;
+          launch_year=2001;
+          requires_spacing=false;
+          spec_url="https://www.json.org";
+          structures=[object;array];
           primitives=[string;number;boolean;"null"]
-        )
+        );
         language(
-          name=YAML
-          full_name=YAML Ain\'t Markup Language
-          launch_year=2001
-          requires_spacing=true
-          spec_url="https://www.yaml.org"
-          structures=[mappings;sequences]
+          name=YAML;
+          full_name=YAML Ain\'t Markup Language;
+          launch_year=2001;
+          requires_spacing=true;
+          spec_url="https://www.yaml.org";
+          structures=[mappings;sequences];
           primitives=[string;number;date;boolean;"null"]
-        )
+        );
         language(
-          name=MODL
-          full_name=Minimal Object Description Language
-          launch_year=2018
-          requires_spacing=false
-          spec_url="https://www.modl.uk"
-          structures=[pair;map;array;conditional]
+          name=MODL;
+          full_name=Minimal Object Description Language;
+          launch_year=2018;
+          requires_spacing=false;
+          spec_url="https://www.modl.uk";
+          structures=[pair;map;array;conditional];
           primitives=[string;number;boolean;"null"]
         )
       ]'
@@ -371,10 +371,10 @@ g:
     </p>
     <%=code_with_note('example-modl-file-code','
     *class(
-      *id=l
-      *name=language
-      *superclass=map
-      *assign=[
+      *id=l;
+      *name=language;
+      *superclass=map;
+      *assign[
         [name;full_name;launch_year;requires_spacing;spec_url;structures;primitives]
       ]
     )
@@ -390,16 +390,16 @@ g:
     </p>
     <%=code_with_note('using-classes','
     *class(
-      *id=l
-      *name=language
-      *superclass=map
-      *assign=[
+      *id=l;
+      *name=language;
+      *superclass=map;
+      *assign[
         [name;full_name;launch_year;requires_spacing;spec_url;structures;primitives]
       ]
-    )
+    );
     [
-      l=JSON:JavaScript Object Notation:2001:false:"https://www.json.org":[object;array]:[string;number;boolean;"null"]
-      l=YAML:YAML Ain\'t Markup Language:2001:true:"https://www.yaml.org":[mappings;sequences]:[string;number;date;boolean;"null"]
+      l=JSON:JavaScript Object Notation:2001:false:"https://www.json.org":[object;array]:[string;number;boolean;"null"];
+      l=YAML:YAML Ain\'t Markup Language:2001:true:"https://www.yaml.org":[mappings;sequences]:[string;number;date;boolean;"null"];
       l=MODL:Minimal Object Description Language:2018:false:"https://www.modl.uk":[pair;map;array;conditional]:[string;number;boolean;"null"]
     ]
     ',
@@ -505,30 +505,30 @@ g:
           '
           [
             language(
-              name=JSON
-              full_name=JavaScript Object Notation
-              launch_year=2001
-              requires_spacing=false
-              spec_url="https://www.json.org"
-              structures=[object;array]
+              name=JSON;
+              full_name=JavaScript Object Notation;
+              launch_year=2001;
+              requires_spacing=false;
+              spec_url="https://www.json.org";
+              structures=[object;array];
               primitives=[string;number;boolean;"null"]
-            )
+            );
             language(
-              name=YAML
-              full_name=YAML Ain\'t Markup Language
-              launch_year=2001
-              requires_spacing=true
-              spec_url="https://www.yaml.org"
-              structures=[mappings;sequences]
+              name=YAML;
+              full_name=YAML Ain\'t Markup Language;
+              launch_year=2001;
+              requires_spacing=true;
+              spec_url="https://www.yaml.org";
+              structures=[mappings;sequences];
               primitives=[string;number;date;boolean;"null"]
-            )
+            );
             language(
-              name=MODL
-              full_name=Minimal Object Description Language
-              launch_year=2018
-              requires_spacing=false
-              spec_url="https://www.modl.uk"
-              structures=[pair;map;array;conditional]
+              name=MODL;
+              full_name=Minimal Object Description Language;
+              launch_year=2018;
+              requires_spacing=false;
+              spec_url="https://www.modl.uk";
+              structures=[pair;map;array;conditional];
               primitives=[string;number;boolean;"null"]
             )
           ]'
