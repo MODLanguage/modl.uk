@@ -8,18 +8,47 @@
     If you would like to create a library, you can use the <a href="https://github.com/MODLanguage/grammar-antlr4" target="_blank">ANTLR4 grammar</a>. <%=link_icon("external")%>
   </p>
 </div>
+<div id="ruby-library" class="sectionh2">
+  <h2>Ruby <img src="/images/ruby.png" style="width:25px;height:25px;margin-left:5px;"></h2>
+  <p>
+    The Ruby interpreter is available on <a href="https://github.com/MODLanguage/ruby-interpreter" target="_blank">GitHub</a> <%=link_icon("external")%> and as a <a href="https://rubygems.org/gems/modl" target="_blank">RubyGem</a>. <%=link_icon("external")%>
+  </p>
+  <p>
+    To install the gem add this to your Gemfile:
+  </p>
+  <%=code_with_note("note",'
+    gem "modl"',
+    "Ruby: Add the RubyGem to the Gemfile.",false,true,false)
+  %>
+  <p>
+    Then run Bundler:
+  </p>
+  <%=code_with_note("note",'
+    $ bundle install',
+    "Ruby: Install the RubyGem.",false,true,false)
+  %>
+  <p>
+    You can parse MODL like this:
+  </p>  
+  <%=code_with_note("note",'
+    require = "modl"
+    modl_string = "test(message=Hello World)"
+    result = MODL.parse(modl_string)',
+    "Ruby: Interpret a MODL object.",false,true,false)
+  %>
+</div>
 <div id="java-library" class="sectionh2">
   <h2>Java <img src="/images/java-logo.png" style="width:25px;height:33px;margin-left:5px;"></h2>
   <p>
-    The Java interpreter is available on GitHub: <a href="http://www.github.com/MODLanguage/java-interpreter" target="_blank">http://www.github.com/MODLanguage/java-interpreter</a>. <%=link_icon("external")%>
+    The Java interpreter is available on <a href="http://www.github.com/MODLanguage/java-interpreter" target="_blank">GitHub</a>. <%=link_icon("external")%>
   </p>
   <p>
-    This library doesn't include an API for accessing the MODL object yet (coming soon) but does provide the option of converting the MODL object to JSON – which can then be accessed using the Java JSON API. To convert MODL to a JSON string:
+    This library is a little behind the latest version and is due to be updated in the coming weeks. It doesn't include an API for accessing the MODL object yet but does provide the option of converting the MODL object to JSON – which can then be accessed using the Java JSON API. To convert MODL to JSON:
   </p>
   <%=code_with_note("note",'
     String input = "test(message=Hello World)";
     String json = ConfigInterpreter.parseToJson(input);',
-    "Java: Convert the MODL input to JSON output.")
+    "Java: Convert the MODL input to JSON output.",false,true,false)
   %>
   <p>
     The library also includes a useful HTTP wrapper.
@@ -42,7 +71,7 @@
         cd java-interpreter
 
         ./gradlew run",
-        "Commands to clone the git repository from GitHub and start the server using Gradle.")
+        "Commands to clone the git repository from GitHub and start the server using Gradle.",false,true,false)
     %>
     <h4>Using the HTTP server</h4>
     <p>

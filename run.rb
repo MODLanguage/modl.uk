@@ -1,5 +1,5 @@
 require 'sinatra'
-require 'modl/interpreter'
+require 'modl'
 
 def compare_formats(header,code_samples)
   ## Change spaces for hyphens, removes slashes, ampersands and exclamations

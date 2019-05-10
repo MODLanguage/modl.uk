@@ -500,6 +500,20 @@
         All objects described in MODL are global, they can be referenced anywhere else in the object.
       </p>
     </div>    
+    <div class="sectionh3" id="referencing-instructions">
+      <h3 id="referencing-instructions-title">Referencing Instruction Objects</h3>
+      <p>
+        <a href="#instructions">Instruction objects</a> <%=link_icon("down")%> can be referenced like this:
+      </p>
+      <%=code_with_note('object-index-example','
+        print_classes=%*class',
+
+      'Assign the class instruction to the key "print_classes".')
+      %>
+      <p>
+        This is covered in more detail <a href="#working-with-instructions">later</a>. <%=link_icon("down")%>
+      </p> 
+    </div>    
   </div>
   <div class="sectionh2" id="methods">
     <h2 id="methods-title">Methods</h2>
@@ -858,7 +872,7 @@
   <div class="sectionh2" id="instructions">
   <h2 id="instructions-title">Instructions</h2>
     <p>
-      An instruction is set using an asterisk-prefixed key, these are processed by the interpreter first. Instructions never appear in the output object.
+      An instruction is set using an asterisk-prefixed key, these are processed by the interpreter first. Instructions don't appear in the output object but can be <a href="#working-with-instructions">referenced</a> <%=link_icon("down")%> elsewhere in the MODL file.
     </p>
     <div class="sectionh3" id="load">
       <h3 id="load-title">Load</h3>
@@ -998,6 +1012,54 @@
       <p>
         The current version is 1, revisions will be extremely rare with very careful consideration given to any breaking change.
       </p>
+    </div>
+    <div class="sectionh3" id="working-with-instructions">      
+      <h3 id="working-with-instructions-title">Working With Instructions</h3>
+      <p>
+        Any instruction can be referenced using percent prefixing, for example we can output all classes like this: 
+      </p>
+      <%=code_with_note('code-custom-method-example',"
+          *class(
+            *id=e;
+            *name=employee;
+            ## *superclass tells the interpreter what type of object to create
+            *superclass=map;
+            ## *assign tells the interpreter how to assign the values of an array with the key e
+            *assign=[
+              [title;name;job_title]
+            ];
+            ## Any other pairs are automatically appended to every object with this class
+            actions=[call;email]
+          );
+
+          <span class='syntax-highlighter'>show_classes = %*class</span>",
+        'Referencing a class')%>
+      <p>
+        Referencing classes is useful for tools that are used to create and edit MODL records. Interpreters should output each instance of an instruction in an array, an example JSON representation is shown below:
+      </p>
+      <%=code_with_note('code-custom-method-example','
+          {
+            "show_classes": [
+              {
+                "e": {
+                  "name": "employee",
+                  "superclass": "map",
+                  "assign": [
+                    [
+                      "title",
+                      "name",
+                      "job_title"
+                    ]
+                  ],
+                  "actions": [
+                      "call",
+                      "email"
+                  ]
+                }
+              }
+            ]
+          }',
+        'The output when referencing a class')%>
     </div>
   </div>
   <div class="sectionh2" id="classes">
@@ -1174,8 +1236,8 @@
     'The output from our example file.')
     %>      
     </div>
-    <div class="sectionh3" id="expecting-keys">
-    <h3 id="expecting-keys-title">Expecting Keys</h3>
+    <div class="sectionh3" id="expected-keys">
+    <h3 id="expected-keys-title">Expected Keys</h3>
       <p>
         Classes can include a list of expected keys using the instruction <code>*expect</code> or <code>*e</code>, this instruction can be ignored by interpreters but is useful for tools that are used to create or edit MODL objects.
       </p>
