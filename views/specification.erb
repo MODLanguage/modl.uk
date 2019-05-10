@@ -1061,6 +1061,12 @@
           <td>No</td>
           <td>Instructing how the class should assign keys to values</td>
         </tr>
+        <tr>
+          <td class="id-header">*e</td>
+          <td>*expect</td>
+          <td>No</td>
+          <td>Instructing the class which keys to expect</td>
+        </tr>
       </table>
     </div>
     <div class="sectionh3" id="class-example">
@@ -1168,6 +1174,28 @@
     'The output from our example file.')
     %>      
     </div>
+    <div class="sectionh3" id="expecting-keys">
+    <h3 id="expecting-keys-title">Expecting Keys</h3>
+      <p>
+        Classes can include a list of expected keys using the instruction <code>*expect</code> or <code>*e</code>, this instruction can be ignored by interpreters but is useful for tools that are used to create or edit MODL objects.
+      </p>
+      <%=code_with_note('code-assign-key','
+        *class(
+          *id=e;
+          *name=employee;
+          *assign=[
+            [name];
+            [title;name];
+            [title;name;job_title];
+            [title;name;job_title;email]
+          ];
+          <span class="syntax-highlighter">*expect=[</span>
+            <span class="syntax-highlighter">[title;name;job_title;email]</span>
+          <span class="syntax-highlighter">]</span>
+        )',
+        'Key assignment in a class.',nil,true,false)
+      %>
+    </div>    
     <div id="class-inheritance" class="sectionh3">
     <h3 id="class-inheritance-title">Class Inheritance</h3>
       <p>
