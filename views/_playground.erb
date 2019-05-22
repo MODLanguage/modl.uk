@@ -6,7 +6,7 @@ function convertToJSON(){
   modlData = { modl: modl }
   $.ajax({
     type: "POST",
-    url: "/playground-process",
+    url: "<%=@process_url%>",
     data: modlData,
     success: function(data){
       displayJson(data);

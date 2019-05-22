@@ -1,5 +1,10 @@
 <%
 @default_text = "Click 'Convert to JSON' when your MODL string is complete."
+@process_url = "/playground-process"
+
+if params[:version] == "java" then
+  @process_url = "https://api.modl.uk"
+end
 %>
 <script>
 $(document).delegate('#modl', 'keydown', function(e) {
