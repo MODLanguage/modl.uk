@@ -186,7 +186,7 @@
                 Acronym=<span>%0</span>;
                 Abbrev=ISO 8879\:1986;
                 GlossDef(
-                  para=A meta-markup <span>%1</span>, used to create markup <span>%1</span>s such as DocBook.;
+                  para=A meta-markup <span>%1%</span>, used to create markup <span>%1%</span>s such as DocBook.;
                   GlossSeeAlso=GML:XML
                 );
                 GlossSee=markup
@@ -197,7 +197,7 @@
       ],nil,true,false)
     %>
     <p>
-      In the MODL object above you will notice percent prefixed numbers <code>%0</code> and <code>%1</code>, these represent references to the object index. The object index is defined on the first line with the key <code>?</code>. You may also notice the reference <code>%1.i</code> this instructs the interpreter to run the method <code>i</code> on the second object in the index.
+      In the MODL object above you will notice percent prefixed numbers <code>%0</code>, <code>%1</code> and also the percent encapsulated number <code>%1%</code>, these represent references to the object index. The object index is defined on the first line with the key <code>?</code>. The reference <code>%1.i</code> instructs the interpreter to run the method <code>i</code> on the second object in the index, which capitalises the first letter of the reference value.
     </p>
     <p>
       The character efficiency gains in this example are negligible but reducing repeating data can clearly help make larger objects more character efficient.
@@ -227,7 +227,7 @@ g:
           - GML
           - XML
         gs: markup'
-    modl_single_object = '?=SGML:language;g(t=example glossary;d(t=S;l(e(i=%0;s=%0;gt=Standard Generalized Markup %1.i;a=%0;ab=ISO 8879\:1986;gd(p=A meta-markup %1, used to create markup %1s such as DocBook.;sa=GML:XML);gs=markup))))'
+    modl_single_object = '?=SGML:language;g(t=example glossary;d(t=S;l(e(i=%0;s=%0;gt=Standard Generalized Markup %1.i;a=%0;ab=ISO 8879\:1986;gd(p=A meta-markup %1%, used to create markup %1%s such as DocBook.;sa=GML:XML);gs=markup))))'
     %>
     <%=compare_language("objects-minified",
       [ json_single_object, yaml_single_object, modl_single_object ],70,true,false)%> 

@@ -254,7 +254,7 @@
                 <span>## Yes, assign the value "Joe Bloggs" to the key "support_contact"</span>
                 Joe Bloggs
               <span>## If not, does it equal "us"?</span>
-              /_%country=us?
+              /%_country=us?
                 <span>## Yes, assign the value "John Doe" to the key "support_contact"</span>
                 John Doe
               /?
@@ -301,6 +301,7 @@
         <%=code_with_note('code-true-example','
           (
             conventional_true = true;
+            <span>## or, more character efficient:</span>
             unconventional_true=01
           )',
 
@@ -313,6 +314,7 @@
         <%=code_with_note('code-false-example','
           (
             conventional_false = false;
+            <span>## or, more character efficient:</span>
             unconventional_false=00
           )',
 
@@ -344,7 +346,7 @@
     <div class="sectionh3" id="keys">
       <h3 id="keys-title">Keys</h3>
       <p>
-        Pair keys must be a string: they may contain numbers, may start with a number but must not be made up of solely numbers. The question mark <code>?</code> key is reserved for the <a href="#object-index">object index</a> <%=link_icon("down")%>. Uppercase keys are immmutable, underscore  prefixed and asterisk prefixed keys are allowed but have special meaning.
+        Pair keys must be a string: they may contain numbers, may start with a number but must not be made up of solely numbers. They may not include a space or percent sign (<code>%</code>). The question mark <code>?</code> key is reserved for the <a href="#object-index">object index</a> <%=link_icon("down")%>. Uppercase keys are immmutable, underscore  prefixed and asterisk prefixed keys are allowed but have special meaning.
       </p>
       <div class="sectionh4" id="mutable-immutable-values">
        <h4 id="mutable-immutable-values-title">Mutable / Immutable Values</h4>
@@ -423,7 +425,7 @@
   <div class="sectionh2" id="object-referencing">
   <h2 id="object-referencing-title">Object Referencing</h2>
     <p>
-      MODL can reference any object previously described in the same file, an object can be described once and referenced multiple times. Objects are referenced using percent-prefixing. For character efficiency it's possible to omit the <code>_</code> when referencing hidden objects, as shown in the second example below:
+      MODL can reference any object previously described in the same file. An object can be described once and referenced multiple times. Objects are referenced using percent encapsulation (<code>%like-this%</code>). For character efficiency, it's possible to omit the trailing percent (<code>%</code>) when it's at the of a value or followed by a space. It's also possible to omit the underscore (<code>_</code>) when referencing hidden objects, as shown in the second example below:
     </p>
       <%=code_with_note('code-setvars','
         <span class="syntax-highlighter">_manufacturer=Bentley</span>;
@@ -440,7 +442,7 @@
       'An example using object referencing.')
       %>
       <p>
-        Percent prefixing is character efficient because it has no terminator. In circumstances where the variable needs to be interpolated without spacing, the variable can be enclosed in grave accents <code>`</code>. Take the following example:
+        In circumstances where the variable needs to be interpolated without a space, it must be fully percent encapulated:
       </p>
       <%=code_with_note('code-setvars2','
         test=foo;
@@ -448,10 +450,10 @@
         <span>## Set value 1 to use the value of the variable "test"</span>
         value1=%test;
         <span>## Set value 2 to use the value of the variable "test" appended with "bar"</span>
-        value2=<span class="syntax-highlighter">`%test`</span>bar;
+        value2=<span class="syntax-highlighter">%test%</span>bar;
         <span>## resulting in "foobar"</span>',
 
-      'An example using object referencing surrounded in graves.')
+      'An example using object referencing, which is percent encapsulated.')
       %>
     <div class="sectionh3" id="deep-object-referencing">
       <h3 id="deep-object-referencing-title">Deep Object Referencing</h3>
@@ -461,7 +463,8 @@
       <%=run_reminder%>
       <%=code_with_note('code-deep-object-referencing','
         _test=[1;2;3];
-        second_value=%test.1',
+        second_value=%test.1
+        <span>## results in: 2</span>',
 
       'An example using deep object referencing on an array.')
       %>
@@ -470,13 +473,20 @@
       </p>
       <%=code_with_note('code-deep-object-referencing2','
         _test=(one=1;two=2);
-        second_value=%test.two',
+        second_value=%test.two
+        <span>## results in: 2</span>',
 
       'An example using deep object referencing on a map.')
       %>
       <p>
-        There's no limit to the level of referencing. 
+        There's no limit to the level of referencing. As with any object referencing, if the reference needs to be interpolated without a space it must be percent encapulated:
       </p>
+      <%=code_with_note('code-deep-object-referencing3','
+        _weights=(low=10;mid=20;high=30);
+        this_weight=<span class=\'syntax-highlighter\'>%weights.high%</span>kg
+        <span>## results in: 30kg</span>',
+      'An example using deep object referencing on a map.')
+      %>
     </div>      
     <div class="sectionh3" id="object-index">
       <h3 id="object-index-title">Object Index</h3>
@@ -537,13 +547,13 @@
       (
         name = <span class="syntax-highlighter">%v.u</span>;
         description = This is an object <span class="syntax-highlighter">%v</span> variables;
-        value = <span class="syntax-highlighter">`%v.s`</span>123
+        value = <span class="syntax-highlighter">%v.s%</span>123
       )',
 
       'An object using methods to change variable case.')
     %>
     <p>
-      Methods can be applied to grave strings strings, this is useful for <a href="#encoding-for-ascii-systems">encoding data for ASCII systems</a> <%=link_icon("down")%>.
+      Methods can be applied to graved strings, this is useful for <a href="#encoding-for-ascii-systems">encoding data for ASCII systems</a> <%=link_icon("down")%>.
     </p>   
     <p>
       The following methods are available, where <code>%x</code> is an object previously described:
@@ -603,33 +613,33 @@
       <tr>
         <td class="id-header">p<span style="font-weight:normal;"></span></td>
         <td><a href="#encoding-for-ascii-systems">punydecode</a> <%=link_icon("down")%></td>
-        <td>`%x.p`</td>
+        <td>%x.p</td>
         <td class="nm">
           <code>e1afmkfd</code> => <code>пример</code>
         </td>
       </tr>
       <tr>
-        <td class="id-header">r<span style="font-weight:normal;">(<em>this</em>,<em>that</em>)</span></td>
+        <td class="id-header">r<span style="font-weight:normal;">&lt;<em>this</em>,<em>that</em>&gt;</span></td>
         <td>replace</td>
-        <td>`%x.r(test,foo)`</td>
+        <td>%x.r&lt;test,foo&gt;</td>
         <td class="nm">
           <code><%=var1%></code> => <code><%=var1.gsub("test","foo")%></code>
         </td>
       </tr>
       <tr>
-        <td class="id-header">t<span style="font-weight:normal;">(<em>this</em>)</span></td>
+        <td class="id-header">t<span style="font-weight:normal;">&lt;<em>this</em>&gt;</span></td>
         <td>trim</td>
-        <td>`%x.t(REF)`</td>
+        <td>%x.t<REF></td>
         <td class="nm">
           <code><%=var1%></code> => <code>Here's a&nbsp;</code>
         </td>
       </tr>
     </table>
     <p>
-      Methods that take arguments (<code>replace</code> and <code>trim</code>) must be called with graves, e.g. <code>`%string.replace(this,that)`</code>. To replace with an empty string, use an empty graved string: <code>`%string.replace(foo,``)`</code>.
+      Methods that take arguments (<code>replace</code> and <code>trim</code>) must be called with chevrons, e.g. <code>%string.replace&lt;this,that&gt;</code>. To replace with an empty string, use an empty graved string: <code>%string.replace&lt;foo,``&gt;</code>.
     </p>
     <p>
-      Methods can be chained, e.g. <code>`%string.replace(this,that).upcase`</code> and it's also possible to define <a href="#custom-methods">custom methods</a>. <%=link_icon("down")%>
+      Methods can be chained, e.g. <code>%string.replace&lt;this,that&gt;.upcase</code> and it's also possible to define <a href="#custom-methods">custom methods</a>. <%=link_icon("down")%>
     </p>
   </div>  
   <div class="sectionh2" id="conditionals">
@@ -912,7 +922,7 @@
       </p>
       <%=code_with_note('code-load-example3','
         <span class="syntax-highlighter">_country=gb;
-        *LOAD = example-classes-%country.modl</span>;
+        *LOAD = example-classes-%country%.modl</span>;
         example(
           value1 = one;
           value2 = two
@@ -922,7 +932,7 @@
       <div class="sectionh4" id="file-caching">
       <h4 id="file-caching-title">File caching</h4>
         <p>
-          It's recommended that interpreters cache loaded files for one hour by default. To force an interpreter to fetch and parse the file each time the MODL is interpreted, add an exclamation mark (<code>!</code>) to the end of the URI.
+          It's recommended that interpreters cache loaded files for one hour by default. To force an interpreter to fetch and parse the file each time the MODL is interpreted, add an exclamation mark (<code>!</code>) to the end of the URI. If for any reason the interpreter is unable to load the file, but it exists in cache, the cached version should be used for up to 7 days.
         </p>
       </div>
     </div>
@@ -1576,16 +1586,10 @@
       </li>
       <li>Dealing with strings:
         <ol type="a" class="subrules">
-          <li>Find all parts of the string that are enclosed in graves, e.g <code>`test`</code> where neither of the graves is prefixed with an escape character (<code>~</code> or <code>\</code>).</li>
-          <li>If the graved string is followed by a dot, assume the graved string is the subject and the text following the graved string is a method chain.
-          </li>
-          <li>If any graved strings are found loop through them in turn:
-            <ol type="i" class="subrules">
-              <li>If a part begins with <code>%</code> then run "Object Referencing".</li>
-            </ol>
-          </li>
           <li>
-            Find all non-space parts of the string that are prefixed with <code>%</code>. These are object references – run "Object Referencing".
+            Find all parts of the string that are percent encapsulated, e.g <code>%test%</code> where neither of the percents are prefixed with an escape character (<code>~</code> or <code>\</code>) and all parts that are percent prefixed but are followed by a space or at the end of a value.</li>
+          <li>
+            Loop through all parts found, these are object references – run "Object Referencing".
           </li>
           <li>
             Replace the strings as per "String Replacement".
@@ -1593,10 +1597,13 @@
         </ol>
       </li>
       <li>Punycode Decoding: Prefix the punycode encoded string with <code>xn--</code> (the letters xn and two dashes) and decode using a punycode / IDN library.</li>
-      <li>Object Referencing
+      <li>Object Referencing:
         <ol type="a" class="subrules">
           <li>
-            If the reference includes a <code>.</code> (dot / full stop / period) then the reference key should be considered everything to the left of the <code>.</code>
+            If the reference includes one or more <code>.</code> (dot / full stop / period) then the reference should be split into parts separated by dots.
+          </li>
+          <li>
+            For each part, if a referenced object is a string assume all later parts are a method call. If a referenced object corresponds to an array or map then assume all later parts refer to item positions in an array or keys in a map.
           </li>
           <li>
             If the object reference is a number and the number is within the object index bounds, replace the object reference with the value from that position in the object index.
@@ -1605,13 +1612,10 @@
             If the object is a string, replace the object reference with the value of the corresponding object. If no corresponding object is found, make no substitutions. If an object is found, this value is referred to as the subject in the following section.
           </li>
           <li>
-            If there was <code>.</code> in the original string, any part to the right of the first <code>.</code> (until the end of the part not including the end grave) is considered the method chain. Split the method chain by <code>.</code> and create an array from the methods. Methods must only be applied to strings, applying methods to non-strings must raise an error at parse time.
+            If a method chain is found, perform each in order from left to right. Methods must only be applied to strings, applying methods to non-strings must raise an error at parse time.
           </li>
           <li>
-            Loop through the array and pass the subject to the named method, transforming the subject. Repeat the process (with the transformed subject) until all methods in the chain have been applied and the subject is fully transformed.
-          </li>
-          <li>
-            Replace the part originally found (including graves) with the transformed subject. 
+            Replace the part originally found with the transformed subject. 
           </li>
         </ol>
       </li>
