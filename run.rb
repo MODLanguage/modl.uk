@@ -280,6 +280,7 @@ before do
   end
   @page_name = page_name
   @page_style = false
+  response.headers['Access-Control-Allow-Origin'] = '*'  
 end
 
 @author_name = "Elliott Brown"
@@ -329,8 +330,8 @@ get '/library-alerts' do
   erb :library_alerts
 end
 
-get '/research/2018/05/dalitz' do
-  @page_style = true
-  @author_name = "Alex Dalitz"
-  erb :research
-end
+#get '/research/2018/05/dalitz' do
+#  @page_style = true
+#  @author_name = "Alex Dalitz"
+#  erb :research
+#end

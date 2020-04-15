@@ -1,9 +1,15 @@
 <%
-@default_text = "Click 'Convert to JSON' when your MODL string is complete."
-@process_url = "/playground-process"
+@default_modl_text = "Click 'Convert to JSON' when your MODL string is complete."
+@default_json_text = "Click 'Convert to MODL' when your JSON string is complete."
 
-if params[:version] == "java" then
-  @process_url = "https://api.modl.uk"
+if params[:version] == "ruby" then
+  @version = "ruby"
+  @modl_process_url = "/playground-process"
+  @json_process_url = "https://interpreter.modl.uk/jtom/"
+else
+  @version = "java"
+  @modl_process_url = "https://interpreter.modl.uk/mtoj/"
+  @json_process_url = "https://interpreter.modl.uk/jtom/"
 end
 %>
 <script>
@@ -38,13 +44,76 @@ $(document).delegate('#modl', 'keydown', function(e) {
     this.selectionEnd = start + charRepeat;
   }
 });
+function objectSwitch(language){
+  if(language=='json'){
+    $("#language-modl").removeClass("selected-language");
+    $("#language-json").addClass("selected-language");
+    $("#json-status").show();
+    $("#modl-status").hide();
+    $("#json-input").show();
+    $("#modl-input").hide();
+  }
+  else{
+    $("#language-json").removeClass("selected-language");
+    $("#language-modl").addClass("selected-language");
+    $("#json-status").hide();
+    $("#modl-status").show();
+    $("#json-input").hide();
+    $("#modl-input").show();
+  }
+}
 </script>  
 <h1>MODL Playground</h1>
   <p>
-    You can use the tool below to experiment with MODL.
+    You can enter a MODL object and convert it to JSON, or enter a JSON object and convert it to MODL.
   </p>
-  <h3>Enter your MODL string</h3>
-  <div class="nm">
+  <h3>Enter your object</h3>
+  <style>
+  #modl{
+    width:100%;
+    height:300px;
+  }
+  #json{
+    width:100%;
+    height:300px;
+  }
+  #converted-object{
+    height:500px;
+  }
+  #language-choices{
+    list-style-type: none;
+    margin: 0;
+    margin-top:10px;
+    padding: 0;
+    width:300px;
+    float:left;
+  }
+  #language-choices li{
+    width:75px;
+    height:25px;
+    float:left;
+    padding:5px;
+    background-color:#F0F0F0;
+    border:1px solid #F4DCDC;
+    text-align:center;
+    margin-left:5px;
+    cursor: pointer;
+  }
+  .selected-language{
+    background-color:#F4DCDC !important;
+  }
+  #tab-space{
+    float:right;
+    height:25px;
+    padding:5px;
+    margin-top:5px;
+  }
+  </style>
+  <ul id="language-choices">
+    <li id="language-modl" class="selected-language" onclick="objectSwitch('modl')">MODL</li>
+    <li id="language-json" onclick="objectSwitch('json')">JSON</li>
+  </ul>
+  <div class="nm" id="tab-space">
     Tab key = 
     <select id="tabsOrSpaces">
       <option value="space-1">1 space</option>
@@ -54,14 +123,5 @@ $(document).delegate('#modl', 'keydown', function(e) {
       <option value="tab-1">1 tab</option>
       <option value="tab-2">2 tabs</option>
     </select>
-  </div>
-  <style>
-  #modl{
-    width:100%;
-    height:300px;
-  }
-  #json{
-    height:500px;
-  }
-  </style>
+  </div>  
   <%= erb :_playground %>

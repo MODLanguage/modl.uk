@@ -26,7 +26,7 @@ function playgroundSize(size){
   $("#playground-window").width(newWidth);
   $("#playground-window").height(newHeight);
   $("#playground-iframe").contents().find("#modl").height(modlHeight);
-  $("#playground-iframe").contents().find("#json").height(jsonHeight);
+  $("#playground-iframe").contents().find("#converted-object").height(jsonHeight);
 }
 
 function sendToPlayground(type,code){

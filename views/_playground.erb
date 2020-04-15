@@ -1,57 +1,109 @@
 <script>
-function convertToJSON(){
-  $("#json").html("");
-  modl = $("#modl").val();
+function convertObject(language){
+  $("#converted-object").html("");
+
+  if(language=="modl"){
+    objectToConvert =  $("#json").val();
+    processURL = "<%=@json_process_url%>";
+  }
+  else{
+    objectToConvert =  $("#modl").val();
+    processURL = "<%=@modl_process_url%>";
+  }
   
-  modlData = { modl: modl }
+  <%
+  if @version == "ruby"
+    content_type = "'application/x-www-form-urlencoded'"
+    %>
+    if(language=="json"){
+      sendData = { modl: objectToConvert };
+    }
+    else{
+      sendData = objectToConvert;
+    }
+  <%
+  else
+    content_type = "'application/json'"
+    %>
+    sendData=objectToConvert;
+  <%
+  end
+  %>
+
   $.ajax({
     type: "POST",
-    url: "<%=@process_url%>",
-    data: modlData,
+    url: processURL,
+    headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type':<%=content_type%>
+    },
+    data: sendData,
     success: function(data){
-      displayJson(data);
+      displayObject(language,data);
     },
     error: function(error){
-      displayError(error);
+      displayError(language,error);
     }
   });
 }
-function displayJson(jsonResponse){
-  jsonResponse = JSON.stringify(jsonResponse, null, 4);
-  $("#json").html(jsonResponse);
-  $("#status").html("Valid MODL");
-  $("#status").removeClass("error");
-  $("#status").addClass("success");
-}
-function displayError(jsonError){
-  jsonErrorMessage = jsonError.responseText;
-  if(jsonErrorMessage=="\n"){
-    jsonErrorMessage = "JSON response was blank."
+function displayObject(language,newObject){
+  if(language=='modl'){
+    newObject = newObject['modl'];
+    statusName = "json";
   }
   else{
-    $("#status").html(jsonErrorMessage);
+    newObject = JSON.stringify(newObject, null, 4);
+    statusName = "modl";
   }
-  $("#status").removeClass("success");
-  $("#status").addClass("error");
+  $("#converted-object").html(newObject);
+  $("#"+statusName+"-status").html("Valid Object");
+  $("#"+statusName+"-status").removeClass("error");
+  $("#"+statusName+"-status").addClass("success");
+}
+function displayError(language,objectError){
+  objectErrorMessage = objectError.responseText;
+  if(language=='json'){
+    statusDiv = 'modl-status';
+  }
+  else{
+    statusDiv = 'json-status';
+  }
+  if(objectErrorMessage=="\n"){
+    objectErrorMessage = "Converted object was blank.";
+  }
+  else{
+    $("#"+statusDiv).html(objectErrorMessage);
+  }
+  $("#"+statusDiv).removeClass("success");
+  $("#"+statusDiv).addClass("error");
 }
 </script>
-<div>
+<div id="modl-input">
   <p style="margin-bottom:0px;">
     <textarea name="modl" id="modl"><%=params[:modl]%></textarea>
   </p>
-  <div style="padding-top:5px;"><input type="button" value="Convert to JSON" style="float:right;" onclick="convertToJSON();"></div>
+  <div style="padding-top:5px;"><input type="button" value="Convert to JSON" style="float:right;" onclick="convertObject('json');">
+  </div>
+</div>
+<div id="json-input" style="display:none;">
+  <p style="margin-bottom:0px;">
+    <textarea name="json" id="json"><%=params[:json]%></textarea>
+  </p>
+  <div style="padding-top:5px;"><input type="button" value="Convert to MODL" style="float:right;" onclick="convertObject('modl');">
+  </div>
 </div>
 <div style="margin-top:10px;">
-  <h3>JSON output</h3>
-  <div id="status"><%=@default_text%></div>
+  <h3>Converted object</h3>
+  <div id="modl-status" class="status"><%=@default_modl_text%></div>
+  <div id="json-status" style="display:none" class="status"><%=@default_json_text%></div>
   <div>  
-    <pre id="json">&nbsp;</pre>
+    <pre id="converted-object">&nbsp;</pre>
   </div>
 </div>
 <%
 if !params[:modl].nil?
 %>
-  <script>convertToJSON()</script>
+  <script>convertObject()</script>
 <%
 end
 %>

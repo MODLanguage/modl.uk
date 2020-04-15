@@ -1,3 +1,12 @@
+<%
+if params[:version] == "ruby" then
+  @version = "ruby"
+  @modl_process_url = "/playground-process"
+else
+  @version = "java"
+  @modl_process_url = "https://interpreter.modl.uk/mtoj/"
+end
+%>
 <!doctype html>
 <html lang="en">
   <head>

@@ -13,10 +13,22 @@ pre {
   background-color: #bef5ad;
   color: #000; }
 
-#status {
+.status {
   padding: 5px; }
 
 #modl {
+  padding: 10px;
+  font-family: monospace;
+  whitespace: pre;
+  overflow: auto; }
+
+#json {
+  padding: 10px;
+  font-family: monospace;
+  whitespace: pre;
+  overflow: auto; }
+
+#converted-object {
   font-family: monospace;
   whitespace: pre;
   overflow: auto; }

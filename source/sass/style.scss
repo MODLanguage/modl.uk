@@ -148,8 +148,10 @@ body {
 
       // Define main body header tags
       h1 {
+        color: $dark-colour;        
         font-size: 210%;
         text-align: center;
+        margin-bottom:10px;
       }
       h2 {
         font-size: 185%;
@@ -164,9 +166,9 @@ body {
         font-size: 110%;
       }
 
-      h1, h2, h3, h4, h5 {
+      h2, h3, h4, h5 {
         color: $dark-colour;
-        margin: 0px 0px 0px 0px;
+        margin: 0px 0px 2px 0px;
       }
 
       @keyframes highlight {
