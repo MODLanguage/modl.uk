@@ -1,11 +1,6 @@
 <%
-if params[:version] == "ruby" then
-  @version = "ruby"
-  @modl_process_url = "/playground-process"
-else
-  @version = "java"
-  @modl_process_url = "https://interpreter.modl.uk/mtoj/"
-end
+@default_modl_button_text = "-> MODL"
+@default_json_button_text = "-> JSON"
 %>
 <!doctype html>
 <html lang="en">
@@ -46,6 +41,9 @@ end
     #json{
       width:100%;
       height:165px;
+    }
+    #converted-object-title {
+      display:none;
     }
     </style>
   </head>

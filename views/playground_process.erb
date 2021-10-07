@@ -1,8 +1,0 @@
-<%
-begin
-  result = JSON.pretty_generate(MODL.parse(params[:modl]))
-rescue Exception => e
-  result = e.message
-end
-%>
-<%=result%>

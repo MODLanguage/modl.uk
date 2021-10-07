@@ -2,94 +2,119 @@
 <p>
   MODL libraries will be added to this page as they are released. If you don't see a library in your programming language of choice you could build your own library based on the <a href="/specification">technical specification</a> or sign-up for <a href="library-alerts">library alerts</a>.
 </p>
-<div id="grammar" class="sectionh2">
-  <h2>Creating a Library</h2>
+<div id="typescript-library" class="sectionh2">
+  <h2>TypeScript <img src="/images/typescript-logo.png" style="width:25px;height:25px;margin-left:5px;"></h2>
   <p>
-    If you would like to create a library, you can use the <a href="https://github.com/MODLanguage/grammar-antlr4" target="_blank">ANTLR4 grammar</a>. <%=link_icon("external")%>
+    The TypeScript interpreter is available as an <a href="https://www.npmjs.com/package/modl-interpreter" target="_blank">npm module</a>. <%=link_icon("external")%>
   </p>
 </div>
-<div id="ruby-library" class="sectionh2">
-  <h2>Ruby <img src="/images/ruby.png" style="width:25px;height:25px;margin-left:5px;"></h2>
+<div id="go-library" class="sectionh2">
+  <h2>Go <img src="/images/go-logo.png" style="width:67px;height:25px;margin-left:5px;"></h2>
   <p>
-    The Ruby interpreter is available on <a href="https://github.com/MODLanguage/ruby-interpreter" target="_blank">GitHub</a> <%=link_icon("external")%> and as a <a href="https://rubygems.org/gems/modl" target="_blank">RubyGem</a>. <%=link_icon("external")%>
+    The Go interpreter is available on <a href="https://github.com/bign8/modl.go" target="_blank">GitHub</a>. <%=link_icon("external")%>
   </p>
-  <p>
-    To install the gem add this to your Gemfile:
-  </p>
-  <%=code_with_note("note",'
-    gem "modl"',
-    "Ruby: Add the RubyGem to the Gemfile.",false,true,false)
-  %>
-  <p>
-    Then run Bundler:
-  </p>
-  <%=code_with_note("note",'
-    $ bundle install',
-    "Ruby: Install the RubyGem.",false,true,false)
-  %>
-  <p>
-    You can parse MODL like this:
-  </p>  
-  <%=code_with_note("note",'
-    require = "modl"
-    modl_string = "test(message=Hello World)"
-    result = MODL.parse(modl_string)',
-    "Ruby: Interpret a MODL object.",false,true,false)
-  %>
 </div>
 <div id="java-library" class="sectionh2">
   <h2>Java <img src="/images/java-logo.png" style="width:25px;height:33px;margin-left:5px;"></h2>
   <p>
     The Java interpreter is available on <a href="http://www.github.com/MODLanguage/java-interpreter" target="_blank">GitHub</a>. <%=link_icon("external")%>
   </p>
-  <p>
-    This library is a little behind the latest version and is due to be updated in the coming weeks. It doesn't include an API for accessing the MODL object yet but does provide the option of converting the MODL object to JSON – which can then be accessed using the Java JSON API. To convert MODL to JSON:
-  </p>
-  <%=code_with_note("note",'
-    String input = "test(message=Hello World)";
-    String json = ConfigInterpreter.parseToJson(input);',
-    "Java: Convert the MODL input to JSON output.",false,true,false)
-  %>
-  <p>
-    The library also includes a useful HTTP wrapper.
-  </p>
 </div>
-<div id="other-languages" class="sectionh2">
-  <h2 id="other-languages-title">Other Languages</h2>
-  <p>
-    We're still working on other libraries. In the meantime, you could use the Java http wrapper service. You'll need Java and <a href="https://gradle.org/install/" target="_blank">Gradle</a>. <%=link_icon("external")%>
-  </p>
-  <div id="http-server">
-    <h3>Setting up the HTTP server</h3>
+<%
+old_libraries_updated = false
+if old_libraries_updated
+%>
+  <div id="ruby-library" class="sectionh2">
+    <h2>Ruby <img src="/images/ruby.png" style="width:25px;height:25px;margin-left:5px;"></h2>
     <p>
-      To install the Java library and start the HTTP server, run these commands in the directory of your choice:
+      The Ruby interpreter is available on <a href="https://github.com/MODLanguage/ruby-interpreter" target="_blank">GitHub</a> <%=link_icon("external")%> and as a <a href="https://rubygems.org/gems/modl" target="_blank">RubyGem</a>. <%=link_icon("external")%>
     </p>
-    <%=code_with_note("git-clone",
-        "
-        git clone https://github.com/MODLanguage/java-interpreter
-
-        cd java-interpreter
-
-        ./gradlew run",
-        "Commands to clone the git repository from GitHub and start the server using Gradle.",false,true,false)
+    <p>
+      To install the gem add this to your Gemfile:
+    </p>
+    <%=code_with_note("note",'
+      gem "modl"',
+      "Ruby: Add the RubyGem to the Gemfile.",false,true,false)
     %>
-    <h4>Using the HTTP server</h4>
     <p>
-      Once the server is running, you can submit data directly through the query string:<br>
-      <a href="http://0.0.0.0:8080/?modl=test(message=this is a test message)" target="_blank">http://0.0.0.0:8080/?modl=test(message=this is a test message)</a> <%=link_icon("external")%>.
+      Then run Bundler:
+    </p>
+    <%=code_with_note("note",'
+      $ bundle install',
+      "Ruby: Install the RubyGem.",false,true,false)
+    %>
+    <p>
+      You can parse MODL like this:
+    </p>  
+    <%=code_with_note("note",'
+      require = "modl"
+      modl_string = "test(message=Hello World)"
+      result = MODL.parse(modl_string)',
+      "Ruby: Interpret a MODL object.",false,true,false)
+    %>
+  </div>
+  <div id="java-library" class="sectionh2">
+    <h2>Java <img src="/images/java-logo.png" style="width:25px;height:33px;margin-left:5px;"></h2>
+    <p>
+      The Java interpreter is available on <a href="http://www.github.com/MODLanguage/java-interpreter" target="_blank">GitHub</a>. <%=link_icon("external")%>
     </p>
     <p>
-      The server converts it to JSON.
+      This library is a little behind the latest version and is due to be updated in the coming weeks. It doesn't include an API for accessing the MODL object yet but does provide the option of converting the MODL object to JSON – which can then be accessed using the Java JSON API. To convert MODL to JSON:
     </p>
-    <h4 id="java-http-client-title">Using the basic client</h4>
+    <%=code_with_note("note",'
+      String input = "test(message=Hello World)";
+      String json = ConfigInterpreter.parseToJson(input);',
+      "Java: Convert the MODL input to JSON output.",false,true,false)
+    %>
     <p>
-      There's a very basic client available in the <code>client</code> folder of the project – open the <code>client/index.html</code> file in a web browser – you can use it to send MODL to the HTTP server.
+      The library also includes a useful HTTP wrapper.
     </p>
   </div>
+  <div id="other-languages" class="sectionh2">
+    <h2 id="other-languages-title">Other Languages</h2>
+    <p>
+      We're still working on other libraries. In the meantime, you could use the Java http wrapper service. You'll need Java and <a href="https://gradle.org/install/" target="_blank">Gradle</a>. <%=link_icon("external")%>
+    </p>
+    <div id="http-server">
+      <h3>Setting up the HTTP server</h3>
+      <p>
+        To install the Java library and start the HTTP server, run these commands in the directory of your choice:
+      </p>
+      <%=code_with_note("git-clone",
+          "
+          git clone https://github.com/MODLanguage/java-interpreter
+
+          cd java-interpreter
+
+          ./gradlew run",
+          "Commands to clone the git repository from GitHub and start the server using Gradle.",false,true,false)
+      %>
+      <h4>Using the HTTP server</h4>
+      <p>
+        Once the server is running, you can submit data directly through the query string:<br>
+        <a href="http://0.0.0.0:8080/?modl=test(message=this is a test message)" target="_blank">http://0.0.0.0:8080/?modl=test(message=this is a test message)</a> <%=link_icon("external")%>.
+      </p>
+      <p>
+        The server converts it to JSON.
+      </p>
+      <h4 id="java-http-client-title">Using the basic client</h4>
+      <p>
+        There's a very basic client available in the <code>client</code> folder of the project – open the <code>client/index.html</code> file in a web browser – you can use it to send MODL to the HTTP server.
+      </p>
+    </div>
+  </div>
+<%
+end
+%>
+<div id="grammar" class="sectionh2">
+  <h2>Creating a Library</h2>
+  <p>
+    If you would like to create a library, you can use the <a href="https://github.com/MODLanguage/grammar-antlr4" target="_blank">ANTLR4 grammar</a>. <%=link_icon("external")%>
+  </p>
 </div>
 <div class="sectionh2" id="invite">
   <div style="border:1px solid #ccc;padding:20px;background-color:#fffddd">
-    If you're aware of a library that's not included on this page please let us know. If you're a developer and would like to develop a MODL library please get in touch, we'd love to hear from you. We can answer any questions you have about the specification. The best way to reach us is on <a href="http://www.twitter.com/MODLanguage" target="blank">Twitter</a> <%=link_icon("external")%>.
+    If you're aware of a library that's not included on this page please let us know. If you're a developer and would like to develop a MODL library please <a href="https://www.num.uk/about" target="_blank">get in touch</a> <%=link_icon("external")%>, we'd love to hear from you. We can answer any questions you have about the specification.
   </div>
 </div>
 <p style="padding-top:10px;">

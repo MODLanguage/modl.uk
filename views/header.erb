@@ -14,20 +14,38 @@
     </div>
   </div>
   <div class="nm nav">
-    <div class="logo-header">
-      <img src="/images/logo.png" class="logo" alt="MODL logo">
-    </div>
-    <div id="nm-navbar">
+    <!--<div class="logo-header">
+        <div class="logo-wrapper">
+          <a href="/">
+            <img src="/images/logo.png" class="logo" alt="MODL logo">
+          </a>
+        </div>
+    </div>-->
+    <div id="nm-navbar" class="nm">
       <div class="navigation-links">
         <div id="left-placeholder" style="float:left;width:40px;height:30px;">
-          <img id="navbar-logo" src="/images/logo_reversed.png" class="logo" style="display:none;float:left;margin-left:5px;" alt="MODL logo">
+          <a href="/">
+            <img id="navbar-logo" src="/images/logo-reversed.png" class="logo" style="float:left;margin-left:25px;" alt="MODL logo">
+          </a>
         </div>
         <%=erb(:navigation)%>
+        <div style="margin-top:-25px;margin-right:20px;">
+          <div class="dot"><img src="/images/num-logo.png" style="width:15px;height:15px;margin-top:5px;margin-right:5px;"></div>
+        </div>        
       </div>
+        <style>
+      .dot {
+        height: 25px;
+        width: 25px;
+        background-color: white;
+        border-radius: 50%;
+        display: inline-block;
+      }
+      </style>
     </div>
-    <div id="nm-navbar-holding">
+    <!--<div id="nm-navbar-holding">
       &nbsp;
-    </div>
+    </div>-->
   </div>
   <div class="print print-name">
     MODL

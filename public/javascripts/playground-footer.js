@@ -8,10 +8,10 @@ function postToIframe(data,url,target){
 
 function playgroundSize(size){
   if(size=="big"){
-    newWidth = 600;
-    newHeight = 750;
-    modlHeight = 234;
-    jsonHeight = 377;
+    newWidth = 400;
+    newHeight = 600;
+    modlHeight = 200;
+    jsonHeight = 260;
     $(".reduce").show();
     $(".enlarge").hide();
   }
