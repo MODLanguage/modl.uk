@@ -1,554 +1,116 @@
 <h1>Minimal&nbsp;Object Description&nbsp;Language</h1>
 <p>
-  MODL (<em>sounds like "doddle"</em>) is a compact, plain text data serialisation language for describing objects in as few characters as possible.
-  It's designed to be character efficient when stored or in transport and developer friendly to receive and work with. In this introduction we compare MODL with other data serialisation formats and demonstrate how MODL can store an identical collection of objects using 61% fewer characters than JSON.
+  MODL (<em>sounds like "doddle"</em>) is a compact data serialisation language well suited to storing objects in DNS TXT records.
 </p>
-<div class="sectionh2" id="example-modl-object">
-  <h2 id="example-modl-object-title">Example MODL Object</h2>
+<p>
+  Let's&nbsp;take a look at an example MODL object, formatted for readability:
+</p>
+<%=compare_language("objects",
+      [
+        "name=ABC Company Ltd;
+telephone[
+  (
+    number=+441234567890;
+    label=Customer Service
+  );
+  (
+    number=+441234098765;
+    label=Accounts
+  );
+  number=+441234000000  
+];
+address(
+  lines[
+    1 North Street;
+    Manchester
+  ];
+  postcode=M4 5EN
+)",
+'{
+  "name": "ABC Company Ltd",
+  "telephone": [
+    {
+      "number": "+441234567890",
+      "label": "Customer Service"
+    },
+    {
+      "number": "+441234098765",
+      "label": "Accounts"
+    },
+    {
+      "number": "+441234000000"
+    }
+  ],
+  "address": {
+    "lines": [
+      "1 North Street",
+      "Manchester"
+    ],
+    "postcode": "M4 5EN"
+  }
+}',nil
+],500,true,false)%>
+<p>
+  Click the JSON tab to see the JSON equivalent.
+</p>
+<div class="sectionh2" id="builing-blocks">
+<h2 id="building-blocks-title">Similarities with JSON</h2>
   <p>
-    This is a basic MODL example: 
+    Like JSON and most other data serialisation languages, MODL is made up of:
   </p>
-  <%=code_with_note('example-modl-object-code','
-    <span>## A pair with the key \'car\' is assigned a value containing a map</span>
-    car(
-      <span>## The map is made up of pairs</span>
-      make=Bentley;
-      model=Continental GT;<span>## Comments can be added anywhere</span>
-      styles[
-        <span>## A pair with the key \'styles\' is assigned a value containing an array, it contains two items</span>
-        fastback;
-        convertible
-      ]
-    )',
-
-  'An example MODL object',nil,true,false)
-  %>
+  <ul>
+    <li>values like <code>a</code>, <code>1</code>, <code>true</code>, <code>false</code>, <code>null</code></li>
+    <li>pairs consisting of a key and value</li>
+    <li>maps containing pairs</li>
+    <li>arrays containing values</li>
+  </ul>
   <p>
-   MODL can be minified by removing newlines and comments: 
+    MODL is designed for character efficient data serialisation and does not allow comments.
   </p>
-  <%=code_with_note('example-modl-object-code-min','
-    car(make=Bentley;model=Continental GT;styles[fastback;convertible])',
-    'An example MODL object minified',nil,true,false)
-  %>
 </div>
-<div class="sectionh2" id="data-serialisation-comparison">
-<h2 id="data-serialisation-comparison-title">Comparison vs JSON &amp; YAML</h2>
-  <p>
-    Let's compare MODL with the two most popular plain text data serialisation languages: JSON and YAML.  
-  </p>
-  <div class="sectionh3" id="data-type-comparison">
-    <h3 id="data-type-comparison-title">Data Type Comparison</h3>
+<div class="sectionh2" id="subtle-differences">
+<h2>Subtle differences to JSON</h2>
+  <div>
     <p>
-      We'll compare JSON, YAML and MODL for assigning each data type to the key <code>x</code>. 
-      In all cases, we'll use the most character efficient way to assign a value. 
-      We'll show a character count (including new line and space characters) and a percentage reduction for YAML and MODL compared to JSON.
+      MODL has the following subtle differences when compared to JSON:
     </p>
-    <%=compare_formats('String',['"x": "a"','x: a','x=a'])%>
-    <%=compare_formats('Number',['"x":1','x: 1','x=1'])%>
-    <%=compare_formats('Array',['"x":[1,2,3]',"x:\n - 1\n - 2\n - 3",'x=1:2:3'])%>
-    <%=compare_formats('Object / Map',['"x":{"y":"z"}',"x:\n 'y': z",'x(y=z)'])%>
-    <%=compare_formats('True',['"x":true','x: y','x=01'])%>
-    <%=compare_formats('False',['"x":false','x: n','x=00'])%>
-    <%=compare_formats('Null',['"x":null','x:','x=000'])%>
-    <br>
-  </div> 
-  <div class="sectionh3" id="single-object-comparison">
-    <h3 id="single-object-comparison-title">Single Object Comparison</h3>
-    <p>
-      To compare the three formats for storing a simple object, we'll use the example object from <a href="http://json.org/example" target="_blank">json.org</a> <%=link_icon("external")%>. YAML is the only format with a requirement for spacing, but for comparison each is formatted with 2 space indenting and no extra spacing.
-    </p>
-    <%=compare_language("objects",
-      [
-        '
-        {
-          "glossary":{
-            "title":"example glossary",
-            "GlossDiv":{
-              "title":"S",
-              "GlossList":{
-                "GlossEntry":{
-                  "ID":"SGML",
-                  "SortAs":"SGML",
-                  "GlossTerm":"Standard Generalized Markup Language",
-                  "Acronym":"SGML",
-                  "Abbrev":"ISO 8879:1986",
-                  "GlossDef":{
-                    "para":"A meta-markup language, used to create markup languages such as DocBook.",
-                    "GlossSeeAlso":["GML","XML"]
-                  },
-                  "GlossSee":"markup"
-                }
-              }
-            }
-          }
-        }',
-        '
-        ---
-        glossary:
-          title: example glossary
-          GlossDiv:
-            title: S
-            GlossList:
-              GlossEntry:
-                ID: SGML
-                SortAs: SGML
-                GlossTerm: Standard Generalized Markup Language
-                Acronym: SGML
-                Abbrev: ISO 8879:1986
-                GlossDef:
-                  para: A meta-markup language, used to create markup languages such as DocBook.
-                  GlossSeeAlso:
-                  - GML
-                  - XML
-                GlossSee: markup',
-        '
-        glossary(
-          title=example glossary;
-          GlossDiv(
-            title=S;
-            GlossList(
-              GlossEntry(
-                ID=SGML;
-                SortAs=SGML;
-                GlossTerm=Standard Generalized Markup Language;
-                Acronym=SGML;
-                Abbrev=ISO 8879\:1986;
-                GlossDef(
-                  para=A meta-markup language, used to create markup languages such as DocBook.;
-                  GlossSeeAlso=GML:XML
-                );
-                GlossSee=markup
-              )
-            )
-          )
-        )'
-      ],nil,true,false)
-    %>  
-    <h4>Reduce Repeating Data</h4>
-    <p>
-      One way to make an object more efficient is to reduce the repetition of data. JSON has no facility to do this but YAML can repeat nodes. MODL deals with repeating data with object referencing and the object index. For illustration, we've highlighted the parts that deal with repeating data in YAML and MODL:
-    </p> 
-    <%=compare_language("repeating-data",
-      [
-        '
-        {
-          "glossary":{
-            "title":"example glossary",
-            "GlossDiv":{
-              "title":"S",
-              "GlossList":{
-                "GlossEntry":{
-                  "ID":"SGML",
-                  "SortAs":"SGML",
-                  "GlossTerm":"Standard Generalized Markup Language",
-                  "Acronym":"SGML",
-                  "Abbrev":"ISO 8879:1986",
-                  "GlossDef":{
-                    "para":"A meta-markup language, used to create markup languages such as DocBook.",
-                    "GlossSeeAlso":["GML","XML"]
-                  },
-                  "GlossSee":"markup"
-                }
-              }
-            }
-          }
-        }',
-        '
-        ---
-        glossary:
-          title: example glossary
-          GlossDiv:
-            title: S
-            GlossList:
-              GlossEntry:
-                ID: <span>&s SGML</span>
-                SortAs: <span>*s</span>
-                GlossTerm: Standard Generalized Markup Language
-                Acronym: <span>*s</span>
-                Abbrev: ISO 8879:1986
-                GlossDef:
-                  para: A meta-markup language, used to create markup languages such as DocBook.
-                  GlossSeeAlso:
-                  - GML
-                  - XML
-                GlossSee: markup',
-        '
-        <span>?=SGML:language;</span>
-        glossary(
-          title=example glossary;
-          GlossDiv(
-            title=S;
-            GlossList(
-              GlossEntry(
-                ID=<span>%0</span>;
-                SortAs=<span>%0</span>;
-                GlossTerm=Standard Generalized Markup <span>%1.i</span>;
-                Acronym=<span>%0</span>;
-                Abbrev=ISO 8879\:1986;
-                GlossDef(
-                  para=A meta-markup <span>%1%</span>, used to create markup <span>%1%</span>s such as DocBook.;
-                  GlossSeeAlso=GML:XML
-                );
-                GlossSee=markup
-              )
-            )
-          )
-        )'
-      ],nil,true,false)
-    %>
-    <p>
-      In the MODL object above you will notice percent prefixed numbers <code>%0</code>, <code>%1</code> and also the percent encapsulated number <code>%1%</code>, these represent references to the object index. The object index is defined on the first line with the key <code>?</code>. The reference <code>%1.i</code> instructs the interpreter to run the method <code>i</code> on the second object in the index, which capitalises the first letter of the reference value.
-    </p>
-    <p>
-      The character efficiency gains in this example are negligible but reducing repeating data can clearly help make larger objects more character efficient.
-    </p>
-    <h4>Minification</h4>
-    <p>
-      It's common practice to minify objects. There are two steps in minification – reducing keys and removing spaces. We've replaced the original keys with 1 or 2 character alternatives and removed all spacing from the JSON and MODL examples. YAML requires spacing for structure so it can't be fully minified:
-    </p>
-    <%
-    json_single_object = '{"g":{"t":"example glossary","d":{"t":"S","l":{"e":{"i":"SGML","s":"SGML","gt":"Standard Generalized Markup Language","a":"SGML","ab":"ISO 8879:1986","gd":{"p":"A meta-markup language, used to create markup languages such as DocBook.","sa":["GML","XML"]},"gs":"markup"}}}}}'
-yaml_single_object = '
----
-g:
-  t: example glossary
-  d:
-    t: S
-    l:
-      e:
-        i: &s SGML
-        s: *s
-        gt: Standard Generalized Markup Language
-        a: *s
-        ab: ISO 8879:1986
-        gd:
-          p: A meta-markup language, used to create markup languages such as DocBook.
-          GlossSeeAlso:
-          - GML
-          - XML
-        gs: markup'
-    modl_single_object = '?=SGML:language;g(t=example glossary;d(t=S;l(e(i=%0;s=%0;gt=Standard Generalized Markup %1.i;a=%0;ab=ISO 8879\:1986;gd(p=A meta-markup %1%, used to create markup %1%s such as DocBook.;sa=GML:XML);gs=markup))))'
-    %>
-    <%=compare_language("objects-minified",
-      [ json_single_object, yaml_single_object, modl_single_object ],70,true,false)%> 
-    <p>
-      We've had to make significant sacrifices in readability to achieve these character savings. This makes our object difficult for developers to work with. MODL interpreters can automatically unpack this data, returning it to it's original developer friendly state using classes, which we'll come to in a moment. 
-    </p>
-    <p>
-      As a data serialisation format for storing a single object, we've demonstrated that MODL is more character efficient than JSON and YAML – in this example we've seen a 24% reduction when compared to JSON and over 40% reduction compared to YAML.
-    </p>
-    <%=compare_formats('Storing a Single Object',[json_single_object,yaml_single_object,modl_single_object])%>
-    <br>
-  </div>
-  <div class="sectionh3" id="mutliple-object-comparison">
-    <h3>Multiple Object Comparison</h3>
-    <p>
-      MODL offers even more efficiency when describing multiple objects of the same type. Using our previous example as inspiration, we'll describe the three languages that we've been comparing: JSON, YAML and MODL. First of all, we'll compare them without using MODL's class functionality:
-    </p>
-    <!-- in the following objects, the JSON launch date is given as 2001 – the date that Crockford received the first JSON message. ( source: https://youtu.be/-C-JoyNuQJs?t=2m3s )
-    -->
-    <%
-    json_df = '
-    [ {
-      "language" : {
-        "name" : "JSON",
-        "full_name" : "JavaScript Object Notation",
-        "launch_year" : 2001,
-        "requires_spacing" : false,
-        "spec_url" : "https://www.json.org",
-        "structures" : [ "object", "array" ],
-        "primitives" : [ "string", "number", "boolean", "null" ]
-      }
-      }, {
-      "language" : {
-        "name" : "YAML",
-        "full_name" : "YAML Ain\'t Markup Language",
-        "launch_year" : 2001,
-        "requires_spacing" : true,
-        "spec_url" : "https://www.yaml.org",
-        "structures" : [ "mappings", "sequences" ],
-        "primitives" : [ "string", "number", "date", "boolean", "null" ]
-      }
-      }, {
-      "language" : {
-        "name" : "MODL",
-        "full_name" : "Minimal Object Description Language",
-        "launch_year" : 2018,
-        "requires_spacing" : false,
-        "spec_url" : "https://www.modl.uk",
-        "structures" : [ "pair", "map", "array", "conditional" ],
-        "primitives" : [ "string", "number", "boolean", "null" ]
-      }
-    } ]'
-    yaml_df = "
-      ---
-      - language:
-          name: JSON
-          full_name: JavaScript Object Notation
-          launch_year: 2001
-          requires_spacing: false
-          spec_url: https://www.json.org
-          structures:
-          - object
-          - array
-          primitives:
-          - string
-          - number
-          - boolean
-          - 'null'
-      - language:
-          name: YAML
-          full_name: YAML Ain't Markup Language
-          launch_year: 2001
-          requires_spacing: true
-          spec_url: https://www.yaml.org
-          structures:
-          - mappings
-          - sequences
-          primitives:
-          - string
-          - number
-          - date
-          - boolean
-          - 'null'
-      - language:
-          name: MODL
-          full_name: Minimal Object Description Language
-          launch_year: 2018
-          requires_spacing: false
-          spec_url: https://www.modl.uk
-          structures:
-          - pair
-          - map
-          - array
-          - conditional
-          primitives:
-          - string
-          - number
-          - boolean
-          - 'null'"
-    modl_df = '
-      [
-        language(
-          name=JSON;
-          full_name=JavaScript Object Notation;
-          launch_year=2001;
-          requires_spacing=false;
-          spec_url="https://www.json.org";
-          structures=[object;array];
-          primitives=[string;number;boolean;"null"]
-        );
-        language(
-          name=YAML;
-          full_name=YAML Ain\'t Markup Language;
-          launch_year=2001;
-          requires_spacing=true;
-          spec_url="https://www.yaml.org";
-          structures=[mappings;sequences];
-          primitives=[string;number;date;boolean;"null"]
-        );
-        language(
-          name=MODL;
-          full_name=Minimal Object Description Language;
-          launch_year=2018;
-          requires_spacing=false;
-          spec_url="https://www.modl.uk";
-          structures=[pair;map;array;conditional];
-          primitives=[string;number;boolean;"null"]
-        )
-      ]'
-    %>
-    <%=compare_language("multiple-objects",
-      [
-        json_df,
-        yaml_df,
-        modl_df
-      ],610,true,false)
-    %>  
-    <h4>Classes</h4>
-    <p>
-      MODL classes allow us to define an object type, which an interpreter will use for all instances of it. Here's a class for our <code>language</code> object:
-    </p>
-    <%=code_with_note('example-modl-file-code','
-    *class(
-      *id=l;
-      *name=language;
-      *superclass=map;
-      *assign[
-        [name;full_name;launch_year;requires_spacing;spec_url;structures;primitives]
-      ]
-    )
-    ',
-
-  'A MODL class',nil,true,false)
-  %>
-    <p>
-      In MODL, asterisk prefixed keys provide instructions to the interpreter and never appear in the output object. In the class above, we're instructing the interpreter to create a new <code>class</code> with the <code>id=l</code> and <code>name=language</code>. We're telling it that this class is a child of the <code>map</code> class. We're also telling it how to <code>assign</code> values that are passed to it by an array.
-    </p>
-    <p>
-      Now we can describe our languages like this:
-    </p>
-    <%=code_with_note('using-classes','
-    *class(
-      *id=l;
-      *name=language;
-      *superclass=map;
-      *assign[
-        [name;full_name;launch_year;requires_spacing;spec_url;structures;primitives]
-      ]
-    );
-    [
-      l=JSON:JavaScript Object Notation:2001:false:"https://www.json.org":[object;array]:[string;number;boolean;"null"];
-      l=YAML:YAML Ain\'t Markup Language:2001:true:"https://www.yaml.org":[mappings;sequences]:[string;number;date;boolean;"null"];
-      l=MODL:Minimal Object Description Language:2018:false:"https://www.modl.uk":[pair;map;array;conditional]:[string;number;boolean;"null"]
-    ]
-    ',
-
-    'Describing our objects using MODL classes',nil,true,false)
-    %>
-    <h5>Minifying Classes</h5>
-    <p>
-      Classes can be minified too. Interpreters recognise <code>*c</code> as well <code>*class</code>, <code>*i</code> as well as <code>*id</code>, <code>*n</code> as well as <code>*name</code>, <code>*s</code> as well as <code>*superclass</code> and <code>*a</code> as well as <code>*assign</code>. Here is our class minified:
-    </p>
-    <%=code_with_note('minified-class','
-    *c(*i=l;*n=language;*s=map;*a=[[name;full_name;launch_year;requires_spacing;spec_url;structures;primitives]])
-    ',
-    'A MODL class minified',nil,true,false)
-    %>    
-    <h5>Loading a Class File</h5>
-    <p>
-      We've seen how to instruct the interpreter to create a class, we can also instruct the interpreter to load another MODL file using the key <code>*load</code> or <code>*l</code>. In&nbsp;this example, we're defining our classes in a separate file so we can easily re-use them. We'll call our file <code>c.modl</code>, we can import it simply using <code>*l=c</code> since the interpreter automatically uses the .modl extension if one hasn't been provided.
-    </p>
-    <p>
-      Let's compare the JSON and YAML minified objects with MODL using an imported class and object referencing to reduce repetition of data: 
-    </p>
-    <%
-    json_multiple_objects = '[{"l":{"n":"JSON","f":"JavaScript Object Notation","l":2001,"r":false,"su":"https://www.json.org","s":["object","array"],"p":["string","number","boolean","null"]}},{"l":{"n":"YAML","f":"YAML Ain\'t Markup Language","l":2001,"r":true,"su":"https://www.yaml.org","s":["mappings","sequences"],"p":["string","number","date","boolean","null" ]}},{"l":{"n":"MODL","f":"Minimal Object Description Language","l":2018,"r":false,"su":"https://www.modl.uk","s":["pair","map","array","conditional"],"p" :["string","number","boolean","null"]}}]'
-    yaml_multiple_objects = "
-      ---
-      - l:
-          n: JSON
-          f: JavaScript Object Notation
-          l: 2001
-          r: false
-          su: https://www.json.org
-          s:
-          - object
-          - array
-          p:
-          - string
-          - number
-          - boolean
-          - 'null'
-      - language:
-          n: YAML
-          f: YAML Ain't Markup Language
-          l: 2001
-          r: true
-          su: https://www.yaml.org
-          s:
-          - mappings
-          - sequences
-          p:
-          - string
-          - number
-          - date
-          - boolean
-          - 'null'
-      - language:
-          n: MODL
-          f: Minimal Object Description Language
-          l: 2018
-          r: false
-          su: https://www.modl.uk
-          s:
-          - map
-          - array
-          p:
-          - string
-          - number
-          - boolean
-          - 'null'"
-    modl_multiple_objects = '*l=c;?=object:array:string:number:boolean:language;[l=JSON:JavaScript %0.i Notation:2001:false:"https://www.json.org":[%0;%1]:[%2;%3;%4;"null"];l=YAML:YAML Ain\'t Markup %5.i:2001:true:"http://www.yaml.org":[mappings;sequences]:[%2;%3;date;%4;"null"];l=MODL:Minimal %0.i Description %5.i:2018:false:"http://www.modl.uk":[pair;map;%1;conditional]:[%2;%3;%4;"null"]]'
-    %>
-    <%=compare_language("multiple-objects-minified",
-      [json_multiple_objects,yaml_multiple_objects,modl_multiple_objects],70,true,false)
-    %>
-    <%=compare_formats("Storing Multiple Objects",
-      [json_multiple_objects,yaml_multiple_objects,modl_multiple_objects])
-    %><br>
-  </div>
-  <div class="sectionh3" id="minified-and-developer-friendly">
-    <h3 id="minified-and-developer-friendly-title">Minified and Developer Friendly</h3>
-    <p>
-      In the section above, we looked at how classes can make objects more efficient, they also make output developer friendly. MODL interpreters can output unpacked MODL (pretty printed with original keys) but can also output JSON. To round up, let's look at an input object and an output object.
-    </p>
-    <div class="sectionh4" id="modl-input">
-      <h4 id="modl-input-title">MODL Input</h4>
-      <p>
-        As we saw above, the MODL input to describe our three languages is 363 characters with an imported MODL class file. It's 468 characters to include the class definition in the file itself. Here it is using the import:
-      </p>
-      <%=code_with_note("modl-multiple-objects",modl_multiple_objects,"MODL Input (363 characters)",nil,true,false)%>
-      <p>After being processed by the MODL interpreter, the output object is unpacked and developer friendly.</p>      
-      <%=compare_formats("Developer Friendly Objects",
-        [json_df,yaml_df,modl_multiple_objects])
-      %>
-      <p>&nbsp;</p>
-      <h4 id="json-output-title">MODL / JSON Output</h4>
-      <p>
-        After being processed by the MODL interpreter, the output object is unpacked and developer friendly.
-      </p>
-      <%=compare_language("multiple-objects-output",
-        [
-          json_df,
-          nil,
-          '
-          [
-            language(
-              name=JSON;
-              full_name=JavaScript Object Notation;
-              launch_year=2001;
-              requires_spacing=false;
-              spec_url="https://www.json.org";
-              structures=[object;array];
-              primitives=[string;number;boolean;"null"]
-            );
-            language(
-              name=YAML;
-              full_name=YAML Ain\'t Markup Language;
-              launch_year=2001;
-              requires_spacing=true;
-              spec_url="https://www.yaml.org";
-              structures=[mappings;sequences];
-              primitives=[string;number;date;boolean;"null"]
-            );
-            language(
-              name=MODL;
-              full_name=Minimal Object Description Language;
-              launch_year=2018;
-              requires_spacing=false;
-              spec_url="https://www.modl.uk";
-              structures=[pair;map;array;conditional];
-              primitives=[string;number;boolean;"null"]
-            )
-          ]'
-        ],640,true,false)
-      %>  
-    </div>
+    <ul>
+      <li>MODL uses an equals (<code>=</code>) to split a key and value, whereas JSON uses a colon (<code>:</code>)</li>
+      <li>MODL uses a semi-colon (<code>;</code>) as a separator, whereas JSON uses a comma (<code>,</code>)</li>
+      <li>It is not necessary to quote keys or values – types are inferred</li>
+      <li>Values can be quoted using <code>`graves`</code> as well as <code>"quotes"</code></li>
+    </ul>
   </div>
 </div>
-<div class="sectionh2" id="added-functionality">
-  <h2 id="added-functionality-title">Added Functionality</h2>
+<div class="sectionh2" id="significant-differences">
+<h2 id="differences-title">Significant differences to JSON</h2>
   <p>
-    MODL offers extra functionality that typical data serialisation formats don't, including the ability to describe an object conditionally. For detailed information about how MODL works, read the <em>Technical Specification</em>. To get started on your own project take a look at the <em>Developer Libraries</em>.
+    MODL has the following significant differences when compared to JSON, in the pursuit of character-efficiency:
+  </p>
+  <ul>
+    <li>
+      It is not necessary to split a key and value with <code>=</code> if the value is a map or an array, e.g:<br><code>colours[red;blue]</code> and <code>colours=[red;blue]</code> are both valid MODL
+    </li>
+    <li>
+      Pairs can be expressed outside of a map at the top level, where they are considered pairs in the same map
+    </li>
+    <li>
+      Pairs can be expressed as values in an array, where each pair is considered an individual map with a single pair
+    </li>
+  </ul>
+</div>
+<div class="sectionh2" id="learn-more">
+  <h2 id="learn-more-title">Learn More</h2>
+  <p>
+    To experiment with MODL use the <em>MODL Playground</em>, to get started on your own project take a look at the <em>Developer Libraries</em>. For detailed information read the <em>Technical Specification</em>. 
   </p>
   <div class="row" id="button-row">
     <div class="col-4 col-s-4">
-      <a href="specification" class="button-link">
-        <div class="button first">
-          View Technical Specification
+      <a href="playground" class="button-link">
+        <div class="button first">      
+          View Playground
         </div>
-      </a>      
+      </a>
     </div>
     <div class="col-4 col-s-4">
       <a href="libraries" class="button-link">
@@ -558,11 +120,14 @@ g:
       </a>
     </div>  
     <div class="col-4 col-s-4">
-      <a href="playground" class="button-link">
-        <div class="button third">      
-          View MODL Playground
+      <a href="specification" class="button-link">
+        <div class="button third">
+          View Technical Specification
         </div>
-      </a>
-    </div>  
+      </a>      
+    </div>
+    <div>
+      &nbsp;
+    </div>
   </div>
 </div>

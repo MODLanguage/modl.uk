@@ -1,19 +1,11 @@
 <%
 @default_modl_text = "Click 'Convert to JSON' when your MODL string is complete."
 @default_json_text = "Click 'Convert to MODL' when your JSON string is complete."
-
-if params[:version] == "ruby" then
-  @version = "ruby"
-  @modl_process_url = "/playground-process"
-  @json_process_url = "https://interpreter.modl.uk/jtom/"
-else
-  @version = "java"
-  @modl_process_url = "https://interpreter.modl.uk/mtoj/"
-  @json_process_url = "https://interpreter.modl.uk/jtom/"
-end
+@default_modl_button_text = "Convert to MODL"
+@default_json_button_text = "Convert to JSON"
 %>
 <script>
-$(document).delegate('#modl', 'keydown', function(e) {
+$(document).delegate('.language-input', 'keydown', function(e) {
   $("#status").html("<%=@default_text%>");
   $("#status").removeClass("success error");
   var keyCode = e.keyCode || e.which;
@@ -44,6 +36,7 @@ $(document).delegate('#modl', 'keydown', function(e) {
     this.selectionEnd = start + charRepeat;
   }
 });
+
 function objectSwitch(language){
   if(language=='json'){
     $("#language-modl").removeClass("selected-language");
@@ -90,7 +83,7 @@ function objectSwitch(language){
   }
   #language-choices li{
     width:75px;
-    height:25px;
+    height:35px;
     float:left;
     padding:5px;
     background-color:#F0F0F0;

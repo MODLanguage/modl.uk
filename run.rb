@@ -1,5 +1,4 @@
 require 'sinatra'
-require 'modl'
 
 def compare_formats(header,code_samples)
   ## Change spaces for hyphens, removes slashes, ampersands and exclamations
@@ -93,7 +92,7 @@ def run_reminder()
   "<p class='reminder'>Tip: Wherever you see the run icon (<img src='/images/run-icon.png' alt='run icon'>) you can click the icon to run the code in a mini playground window.</p>"
 end
 
-def compare_language(divname,code_array,div_height=nil,show_copy=nil,show_run=nil,selected_code="modl")
+def compare_language(divname,code_array,div_height=nil,show_copy=nil,show_run=nil,selected_code="modl",show_count=false)
   most_newlines = 0
   for code in code_array
     if code!=nil
@@ -110,11 +109,12 @@ def compare_language(divname,code_array,div_height=nil,show_copy=nil,show_run=ni
   code_array.each_with_index do |code,i|
     code_name = ""
     if i == 0 then
-      code_name = "json"
-    elsif i == 1 then
-      code_name = "yaml"
-    elsif i == 2 then
       code_name = "modl"
+    elsif i == 1 then
+      code_name = "json"
+      show_run = false
+    elsif i == 2 then
+      code_name = "yaml"
     end
 
     if code_name == selected_code then
@@ -147,10 +147,16 @@ def compare_language(divname,code_array,div_height=nil,show_copy=nil,show_run=ni
         extra_newlines = ""
       end
 
+      if show_count then
+        count_string = '<span class="nm">&nbsp;(' + character_count.to_s + ' chars)</span></li>'
+      else
+        count_string = ''
+      end
+
       output <<   '<div class="print print-header">' + code_name.upcase + '</div><div id="' + divname + '-' + code_name + '-code" class="code-shown ' + code_name + '-code"' + style_addition + '>' +
                     code_with_note(divname+"-"+code_name+"-code",code+extra_newlines,nil,div_height,show_copy,show_run) +
                   '</div>'
-      output_li << '<li id="' + divname + '-' + code_name + '" class="' + code_name + selected_addition + '"data-which="' + code_name + '">' + code_name.upcase + '<span class="nm">&nbsp;(' + character_count.to_s + ' chars)</span></li>'
+      output_li << '<li id="' + divname + '-' + code_name + '" class="' + code_name + selected_addition + '"data-which="' + code_name + '">' + code_name.upcase + count_string
       extra_newlines = newline_count - code.count("\n")
     end
   end
@@ -237,23 +243,6 @@ def link_icon(type)
   "<img src='/images/link-#{type}.png' class='link-#{type}' title='#{title}' alt='#{title}'>"
 end
 
-def print_info_alert(which,text,element,colspan)
-  if element == 'table'
-    if colspan then
-      colspan_text = ' colspan="'+colspan.to_s+'"'
-    end
-    box_start = '<tr><td '+colspan_text+' class="info-and-alert '+which+'">'
-    box_end = '</td></tr>'            
-  elsif element == 'div'
-    box_start = '<div class="info-and-alert '+which+'">'
-    box_end = '</div>'
-  end
-  print_box = box_start + '
-            <div class="icon"><img src="/images/'+which+'100.png"></div>
-            <div class="message">'+text+'</div>'
-  print_box += box_end
-end
-
 def platform_choice(divname,code)
   '<div class="platform-choice">
     <ul>
@@ -270,11 +259,33 @@ def platform_choice(divname,code)
 end
 
 before do
+
   full_route = request.env['PATH_INFO']
-  if !request.secure? && request.host != "localhost" && request.host != "0.0.0.0"
-    redirect "https://#{request.host}#{full_route}"
+  do_redirect = false
+  host_domain = request.host
+  is_local = false
+  is_aws_domain = false
+
+  if host_domain == "localhost" or host_domain == "0.0.0.0"
+    is_local = true
+  elsif host_domain == "modldotuk-env.eba-93guexca.eu-west-2.elasticbeanstalk.com"
+    is_aws_domain = true
   end
-  page_name = full_route.reverse.chop.reverse
+
+  if !request.secure? and !is_local and !is_aws_domain
+    do_redirect = true
+  else
+    if host_domain[0...4] != "www." and !is_local and !is_aws_domain
+      do_redirect = true
+      host_domain = "www.#{request.host}"
+    end
+  end
+
+  if do_redirect
+    redirect "https://#{host_domain}#{full_route}", 301
+  end
+
+  page_name = full_route.reverse.chop.reverse  
   if page_name == ""
     page_name = "home"
   end
@@ -320,18 +331,7 @@ post '/mini-playground' do
   erb :mini_playground, :layout => false
 end
 
-post '/playground-process' do
-  content_type :json
-  erb :playground_process, :layout => false
-end
-
 get '/library-alerts' do
   @page_style = true
   erb :library_alerts
 end
-
-#get '/research/2018/05/dalitz' do
-#  @page_style = true
-#  @author_name = "Alex Dalitz"
-#  erb :research
-#end

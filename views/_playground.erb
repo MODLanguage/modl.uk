@@ -1,58 +1,24 @@
+<script src="/javascripts/modlToJson.js"></script>
+<script src="/javascripts/jsonToModl.js"></script>
 <script>
-function convertObject(language){
+function convertObject(toLanguage){
   $("#converted-object").html("");
 
-  if(language=="modl"){
+  if(toLanguage=="modl"){
     objectToConvert =  $("#json").val();
-    processURL = "<%=@json_process_url%>";
+    convertJsonToModl(objectToConvert);
   }
   else{
     objectToConvert =  $("#modl").val();
-    processURL = "<%=@modl_process_url%>";
+    convertModlToJson(objectToConvert);
   }
-  
-  <%
-  if @version == "ruby"
-    content_type = "'application/x-www-form-urlencoded'"
-    %>
-    if(language=="json"){
-      sendData = { modl: objectToConvert };
-    }
-    else{
-      sendData = objectToConvert;
-    }
-  <%
-  else
-    content_type = "'application/json'"
-    %>
-    sendData=objectToConvert;
-  <%
-  end
-  %>
-
-  $.ajax({
-    type: "POST",
-    url: processURL,
-    headers: {
-        'Accept': 'application/json, text/plain, */*',
-        'Content-Type':<%=content_type%>
-    },
-    data: sendData,
-    success: function(data){
-      displayObject(language,data);
-    },
-    error: function(error){
-      displayError(language,error);
-    }
-  });
 }
+
 function displayObject(language,newObject){
   if(language=='modl'){
-    newObject = newObject['modl'];
     statusName = "json";
   }
   else{
-    newObject = JSON.stringify(newObject, null, 4);
     statusName = "modl";
   }
   $("#converted-object").html(newObject);
@@ -60,41 +26,66 @@ function displayObject(language,newObject){
   $("#"+statusName+"-status").removeClass("error");
   $("#"+statusName+"-status").addClass("success");
 }
+
 function displayError(language,objectError){
-  objectErrorMessage = objectError.responseText;
+  objectErrorMessage = objectError.message;
   if(language=='json'){
     statusDiv = 'modl-status';
   }
   else{
     statusDiv = 'json-status';
   }
-  if(objectErrorMessage=="\n"){
-    objectErrorMessage = "Converted object was blank.";
-  }
-  else{
-    $("#"+statusDiv).html(objectErrorMessage);
-  }
+  $("#"+statusDiv).html(objectErrorMessage);
   $("#"+statusDiv).removeClass("success");
   $("#"+statusDiv).addClass("error");
 }
+
+const convertModlToJson = (data) => {
+  try {
+    if (data) {
+      const expanded = MODLInterpreter.interpreter.interpretToPrettyJsonString(data);
+      //const expanded = modlInterpreter.interpretToPrettyJsonString(data);
+      displayObject("json",expanded)
+    }
+  } catch (e) {
+    displayError("json",e)
+  }
+};
+
+
+const jsonInterpreter = MODLConverter.jsonToModl;
+
+const convertJsonToModl = (data) => {
+  try {
+    if (data) {
+      jsonStr = data;
+      json = (jsonStr === '') ? {} : JSON.parse(jsonStr);
+
+      const expanded = jsonInterpreter.objectToModl(json);
+      displayObject("modl",expanded)
+    }
+  } catch (e) {
+    displayError("modl",e)
+  }
+};
 </script>
 <div id="modl-input">
   <p style="margin-bottom:0px;">
-    <textarea name="modl" id="modl"><%=params[:modl]%></textarea>
+    <textarea name="modl" id="modl" class="language-input"><%=params[:modl]%></textarea>
   </p>
-  <div style="padding-top:5px;"><input type="button" value="Convert to JSON" style="float:right;" onclick="convertObject('json');">
+  <div style="padding-top:5px;"><input type="button" value="<%=@default_json_button_text%>" style="float:right;" onclick="convertObject('json');">
   </div>
 </div>
 <div id="json-input" style="display:none;">
   <p style="margin-bottom:0px;">
-    <textarea name="json" id="json"><%=params[:json]%></textarea>
+    <textarea name="json" id="json" class="language-input"><%=params[:json]%></textarea>
   </p>
-  <div style="padding-top:5px;"><input type="button" value="Convert to MODL" style="float:right;" onclick="convertObject('modl');">
+  <div style="padding-top:5px;"><input type="button" value="<%=@default_modl_button_text%>" style="float:right;" onclick="convertObject('modl');">
   </div>
 </div>
 <div style="margin-top:10px;">
-  <h3>Converted object</h3>
-  <div id="modl-status" class="status"><%=@default_modl_text%></div>
+  <h3 id="converted-object-title">Converted object</h3>
+  <div id="modl-status" class="status" class=><%=@default_modl_text%></div>
   <div id="json-status" style="display:none" class="status"><%=@default_json_text%></div>
   <div>  
     <pre id="converted-object">&nbsp;</pre>
