@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: modl-uk-ruby
+  name: modl-uk-ruby
+  namespace: prod
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: modl-uk-ruby
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: modl-uk-ruby
+    spec:
+      containers:
+        - image: '${trigger[''artifacts''][0][''reference'']}'
+          name: modl-uk-ruby
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 30m
+              memory: 64M
+            requests:
+              cpu: 30m
+              memory: 64M
+          readinessProbe: # continually checks its still alive, if not kills it and starts a new one
+            exec:
+              command:
+                - sh
+                - -c
+                - curl --fail http://localhost:8080/
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 10
+          livenessProbe: # least important, but have it anyways
+            exec:
+              command:
+                - sh
+                - -c
+                - curl --fail http://localhost:8080/
+            initialDelaySeconds: 120
+            periodSeconds: 15
+            timeoutSeconds: 10
+          startupProbe: # check that its started successfully
+            exec:
+              command:
+                - sh
+                - -c
+                - curl --fail http://localhost:8080/
+            initialDelaySeconds: 30
+            failureThreshold: 20
+            periodSeconds: 10
+      imagePullSecrets:
+        - name: dockerhub-imagepull
