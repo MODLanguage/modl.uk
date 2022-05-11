@@ -34,7 +34,7 @@ podTemplate(
                 container('docker') {
                     sh "docker tag modl-uk-ruby ${DOCKERHUB_REPO}:${env.BRANCH_NAME}-${SHORT_COMMIT}"
                     if(env.BRANCH_NAME == 'master') {
-                        sh "docker tag num-uk-ruby ${DOCKERHUB_REPO}:latest"
+                        sh "docker tag modl-uk-ruby ${DOCKERHUB_REPO}:latest"
                     }
                 }
             }
