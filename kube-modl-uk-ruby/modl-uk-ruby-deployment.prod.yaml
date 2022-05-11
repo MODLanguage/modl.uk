@@ -29,10 +29,10 @@ spec:
           resources:
             limits:
               cpu: 30m
-              memory: 64M
+              memory: 128M
             requests:
               cpu: 30m
-              memory: 64M
+              memory: 128M
           readinessProbe: # continually checks its still alive, if not kills it and starts a new one
             exec:
               command:
