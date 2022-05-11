@@ -9,7 +9,7 @@ metadata:
   namespace: prod
 spec:
   rules:
-    - host: modl.placeholder.numserver.com
+    - host: www.modl.placeholder.numserver.com
       http:
         paths:
           - backend:
@@ -22,5 +22,5 @@ spec:
 
   tls:
     - hosts:
-        - modl.placeholder.numserver.com
+        - www.modl.placeholder.numserver.com
       secretName: modl-uk-ruby-ssl
